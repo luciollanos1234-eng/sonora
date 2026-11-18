@@ -1,0 +1,16 @@
+:root {
+  --bg: #0B0A12;
+  --surface: #13111C;
+  --surface-2: #1C1929;
+  --surface-3: #262236;
+  --border: #2A2540;
+  --text: #F5F3FF;
+  --text-muted: #A8A3C0;
+  --primary: #7C3AED;
+  --primary-light: #A855F7;
+  --primary-text: #C4B5FD;
+  --glow: #D946EF;
+  --danger: #FB7185;
+  --gradient-button: linear-gradient(135deg, #6D28D9, #9333EA);
+  --gradient-progress: linear-gradient(90deg, #7C3AED, #D946EF);
+};
