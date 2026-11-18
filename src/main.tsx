@@ -4,6 +4,7 @@ import App from './App.tsx'
 import './styles/global.css'
 import './styles/variables.css'
 
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
