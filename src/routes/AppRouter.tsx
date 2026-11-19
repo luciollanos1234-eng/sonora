@@ -1,35 +1,68 @@
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
-import { Routes, Route } from "react-router-dom";
-
+import Layout from "../components/layout/Layout";
 import Home from "../pages/Home";
 import Playlist from "../pages/Playlist";
 import About from "../pages/About";
+import NotFound from "../pages/NotFound";
 import { UIShowcase } from "../pages/UIShowcase";
 
-export const AppRouter = () => {
+const Placeholder = ({ title }: { title: string }) => (
+  <section className="p-8">
+    <h1 className="text-3xl font-bold">{title}</h1>
+  </section>
+);
+
+const PageTitle = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const titles: Record<string, string> = {
+      "/": "Inicio",
+      "/playlist": "Mi Playlist",
+      "/about": "Acerca de nosotros",
+      "/login": "Iniciar sesión",
+      "/registro": "Registro",
+      "/admin": "Administración",
+    };
+
+    const title = location.pathname.startsWith("/detalle/")
+      ? "Detalle"
+      : location.pathname === "/ui-showcase"
+        ? "UI Kit"
+        : titles[location.pathname] ?? "Página no encontrada";
+
+    document.title = `${title} · Sonora`;
+  }, [location.pathname]);
+
+  return null;
+};
+
+const AppRouter = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/Home" element={<Home />} />
+    <>
+      <PageTitle />
 
-      <Route path="/ui-showcase" element={<UIShowcase />} />
+      <Routes>
+        {/* Rutas con Layout */}
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/detalle/:id" element={<Placeholder title="Detalle de canción" />} />
+          <Route path="/playlist" element={<Playlist />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/admin" element={<Placeholder title="Administración" />} />
+          <Route path="/ui-showcase" element={<UIShowcase />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
 
-      <Route path="/playlist" element={<Playlist />} />
-      <Route path="/about" element={<About />} />
-
-      <Route
-        path="*"
-        element={
-          <main className="flex min-h-screen items-center justify-center">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold">404</h1>
-              <p>La página que buscás no existe.</p>
-            </div>
-          </main>
-        }
-      />
-    </Routes>
+        {/* Rutas sin Layout */}
+        <Route path="/login" element={<Placeholder title="Iniciar sesión" />} />
+        <Route path="/registro" element={<Placeholder title="Registro" />} />
+      </Routes>
+    </>
   );
 };
 
 export default AppRouter;
+
