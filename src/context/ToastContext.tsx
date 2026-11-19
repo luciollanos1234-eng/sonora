@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useRef,
   type ReactNode,
 } from "react";
 
@@ -23,17 +24,13 @@ const ToastContext = createContext<ToastContextType | null>(null);
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [queue, setQueue] = useState<ToastItem[]>([]);
   const [current, setCurrent] = useState<ToastItem | null>(null);
-  const [nextId, setNextId] = useState(0);
+  const idRef = useRef(0);
 
-  const showToast = useCallback((message: string) => {
-    setNextId((id) => {
-      setQueue((items) => [
-        ...items,
-        { id: id + 1, message },
-      ]);
-      return id + 1;
-    });
-  }, []);
+const showToast = useCallback((message: string) => {
+  const id = ++idRef.current;
+
+  setQueue((items) => [...items, { id, message }]);
+}, []);
 
   useEffect(() => {
     if (!current && queue.length > 0) {

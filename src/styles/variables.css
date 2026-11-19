@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
 
 :root {
-  /* COLORES */
+  /* PALETA */
   --bg: #0B0A12;
   --surface: #13111C;
   --surface-2: #1C1929;
@@ -22,7 +21,7 @@
   --font-body: 'Inter', sans-serif;
   --font-display: 'Plus Jakarta Sans', sans-serif;
 
-  /* MEDIDAS */
+  /* ESPACIADO */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -41,7 +40,15 @@
   /* ACCESIBILIDAD */
   --focus-color: #C4B5FD;
   --focus-width: 2px;
-
-  /* ESTADOS */
+  --focus-offset: 2px;
   --disabled-opacity: 0.5;
+
+  /* CONTROLES */
+  --control-height: 44px;
+  --control-padding-x: 16px;
+  --control-gap: 8px;
+
+  /* TRANSICIONES */
+  --transition-duration: 200ms;
+  --hover-brightness: 1.1;
 }
