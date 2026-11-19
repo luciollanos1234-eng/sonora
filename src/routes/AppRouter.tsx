@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom"
+import {  Route, Routes } from "react-router-dom"
 import Playlist from "../pages/Playlist"
 import About from "../pages/About"
 import Home from "../pages/Home"
