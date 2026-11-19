@@ -3,11 +3,12 @@ import { NavLink } from "react-router-dom";
 import { GoHome } from "react-icons/go";
 import { TbPlaylist } from "react-icons/tb";
 import { LuUsers } from "react-icons/lu";
+import { BiLogOut } from "react-icons/bi";
 
 const Navbar = () => {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `rounded-lg p-2 transition-colors hover:bg-gray-700 ${
-      isActive ? "bg-gray-700 text-white" : "text-gray-300"
+    `rounded-lg p-2 transition-colors hover:bg-purple-400 ${
+      isActive ? "bg-purple-500 text-white" : "text-gray-300"
     }`;
 
   return (
@@ -18,7 +19,7 @@ const Navbar = () => {
           <p className="text-xl font-bold">sonora</p>
         </div>
 
-        <NavLink to="/" className={linkClass}>
+        <NavLink to="/Home" className={linkClass}>
           <p className="flex items-center gap-2">
             <GoHome className="text-xl" />
             Inicio
@@ -36,6 +37,23 @@ const Navbar = () => {
             Acerca de Nosotros
           </p>
         </NavLink>
+        <div className="mt-auto text-gray-400 text-sm">
+          <hr />
+          <div className="mt-6 flex items-center gap-3 p-3 justify-end">
+            <div
+              aria-hidden="true"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-500 font-bold text-white"
+            >
+              <NavLink to="/Admin">U</NavLink>
+            </div>
+            <span className="min-w-0 flex-1 truncate text-sm text-white">
+              Nombre de usuario
+            </span>
+            <NavLink to="" aria-label="Cerrar sesión">
+              <BiLogOut className="text-xl" />
+            </NavLink>
+          </div>
+        </div>
       </nav>
     </header>
   );
