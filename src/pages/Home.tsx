@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FaCompactDisc } from "react-icons/fa";
 import Logo from "../assets/Favicon.sonora.png";
 
@@ -25,6 +25,98 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <section className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:gap-6">
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+        <div className="border border-gray-300 rounded-lg p-4 h-full w-full">
+          <img src={Logo} alt="sonora" className="h-32 w-32" />
+          <h4 className="card-title">Card title</h4>
+          <p className="card-text">Some quick example </p>
+          <NavLink to="/some-path">Go somewhere</NavLink>
+        </div>
+      </section>
 
       {/* ACCESO A UI KIT */}
       <Link
@@ -33,7 +125,6 @@ const Home = () => {
       >
         Probar UI Kit
       </Link>
-
     </div>
   );
 };
