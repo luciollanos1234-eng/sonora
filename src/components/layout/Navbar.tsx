@@ -27,7 +27,7 @@ const Navbar = () => {
         aria-controls="sidebar-nav"
         className="fixed left-4 top-4 z-40 flex items-center gap-2 rounded-lg bg-(--bg) p-2 text-white shadow-lg hover:bg-purple-400 lg:hidden"
       >
-        <img src={Logo} alt="sonora" className="h-10 w-10" />
+        <img src={Logo} alt="sonora" className="h-10 w-10 " />
       </button>
 
       {isOpen && (
@@ -39,7 +39,7 @@ const Navbar = () => {
         />
       )}
 
-      <aside
+      <section
         id="sidebar-nav"
         className={`fixed inset-y-0 left-0 z-50 flex h-248 w-64 shrink-0 flex-col border-r bg-(--bg) text-white transition-transform duration-300 lg:sticky lg:top-0 lg:z-auto lg:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
@@ -97,7 +97,7 @@ const Navbar = () => {
             </div>
           </div>
         </nav>
-      </aside>
+      </section>
     </>
   );
 };
