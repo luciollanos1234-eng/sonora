@@ -1,10 +1,14 @@
 
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
-export const Home = () => {
+const Home = () => {
   return (
-    <main>
-      {/* Contenido existente de Home */}
+    <div>
+      <section className="p-8">
+        <h1 className="text-3xl font-bold">
+          Inicio
+        </h1>
+      </section>
 
       <Link
         to="/ui-showcase"
@@ -23,6 +27,9 @@ export const Home = () => {
       >
         Probar UI Kit
       </Link>
-    </main>
+    </div>
   );
 };
+
+export default Home;
+
