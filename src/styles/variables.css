@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+
+:root {
+  /* COLORES */
+  --bg: #0B0A12;
+  --surface: #13111C;
+  --surface-2: #1C1929;
+  --surface-3: #262236;
+  --border: #2A2540;
+  --text: #F5F3FF;
+  --text-muted: #A8A3C0;
+  --primary: #7C3AED;
+  --primary-light: #A855F7;
+  --primary-text: #C4B5FD;
+  --glow: #D946EF;
+  --danger: #FB7185;
+
+  --gradient-button: linear-gradient(135deg, #6D28D9, #9333EA);
+  --gradient-progress: linear-gradient(90deg, #7C3AED, #D946EF);
+
+  /* TIPOGRAFÍA */
+  --font-body: 'Inter', sans-serif;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+
+  /* MEDIDAS */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* RADIOS */
+  --radius-cover: 8px;
+  --radius-control: 12px;
+  --radius-card: 18px;
+  --radius-modal: 24px;
+  --radius-pill: 999px;
+
+  /* ACCESIBILIDAD */
+  --focus-color: #C4B5FD;
+  --focus-width: 2px;
+
+  /* ESTADOS */
+  --disabled-opacity: 0.5;
+}
