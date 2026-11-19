@@ -25,8 +25,8 @@ const Home = () => {
 
   return (
     <div>
-      <section className="p-4 sm:p-8">
-        <div className="mt-4 flex min-h-40 flex-col gap-6 rounded-lg bg-linear-to-r from-purple-900 via-purple-800 to-fuchsia-700 p-4 text-white sm:flex-row sm:items-center sm:justify-between">
+      <section className="px-4 pt-6 sm:px-8 sm:pt-8">
+        <div className="flex min-h-40 flex-col gap-6 rounded-lg bg-linear-to-r from-purple-900 via-purple-800 to-fuchsia-700 p-6 text-white sm:flex-row sm:items-center sm:justify-between sm:p-8">
           <div>
             <h2 className="mb-2 text-2xl font-extrabold sm:text-3xl lg:text-4xl">
               Tu musica. Tu espacio. Tu ritmo.
@@ -48,9 +48,9 @@ const Home = () => {
 
       <section
         aria-labelledby="catalog-title"
-        className="space-y-5 px-4 pb-8 sm:px-8"
+        className="mt-8 space-y-6 px-4 pb-10 sm:px-8"
       >
-        <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <header className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1
               id="catalog-title"
@@ -63,7 +63,7 @@ const Home = () => {
               {filteredSongs.length === 1 ? "canción" : "canciones"}
             </p>
           </div>
-          <label className="flex w-full flex-col gap-2 text-sm text-[var(--text-muted)] lg:max-w-md">
+          <label className="flex w-full flex-col gap-3 text-sm text-[var(--text-muted)] lg:max-w-md">
             Buscar por canción, artista o álbum
             <input
               type="search"

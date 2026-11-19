@@ -12,7 +12,7 @@ export const GenreFilters = ({
   <div
     role="group"
     aria-label="Filtrar canciones por género"
-    className="flex flex-wrap gap-2"
+    className="flex flex-wrap gap-3"
   >
     {["Todos", ...genres].map((genre) => {
       const isSelected = selectedGenre === genre;
