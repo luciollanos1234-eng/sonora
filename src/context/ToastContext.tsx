@@ -1,49 +1,57 @@
 import {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
-  useState,
-  useRef,
+  useReducer,
   type ReactNode,
 } from "react";
-
 import { Toast } from "../components/ui/Toast";
+import { ToastContext } from "./toast-context";
 
 interface ToastItem {
-  id: number;
   message: string;
 }
 
-interface ToastContextType {
-  showToast: (message: string) => void;
+interface ToastState {
+  current: ToastItem | null;
+  queue: ToastItem[];
 }
 
-const ToastContext = createContext<ToastContextType | null>(null);
+type ToastAction =
+  | { type: "enqueue"; toast: ToastItem }
+  | { type: "dismiss" };
+
+const initialState: ToastState = {
+  current: null,
+  queue: [],
+};
+
+const toastReducer = (state: ToastState, action: ToastAction): ToastState => {
+  if (action.type === "enqueue") {
+    if (state.current === null) {
+      return { ...state, current: action.toast };
+    }
+
+    return { ...state, queue: [...state.queue, action.toast] };
+  }
+
+  const [next, ...remaining] = state.queue;
+  return { current: next ?? null, queue: remaining };
+};
 
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
-  const [queue, setQueue] = useState<ToastItem[]>([]);
-  const [current, setCurrent] = useState<ToastItem | null>(null);
-  const idRef = useRef(0);
+  const [state, dispatch] = useReducer(toastReducer, initialState);
 
-const showToast = useCallback((message: string) => {
-  const id = ++idRef.current;
+  const showToast = useCallback((message: string) => {
+    dispatch({ type: "enqueue", toast: { message } });
+  }, []);
 
-  setQueue((items) => [...items, { id, message }]);
-}, []);
+  const current = state.current;
 
   useEffect(() => {
-    if (!current && queue.length > 0) {
-      setCurrent(queue[0]);
-      setQueue((items) => items.slice(1));
-    }
-  }, [current, queue]);
-
-  useEffect(() => {
-    if (!current) return;
+    if (current === null) return;
 
     const timer = setTimeout(() => {
-      setCurrent(null);
+      dispatch({ type: "dismiss" });
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -52,18 +60,7 @@ const showToast = useCallback((message: string) => {
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-
-      {current && <Toast message={current.message} />}
+      {current !== null && <Toast message={current.message} />}
     </ToastContext.Provider>
   );
-};
-
-export const useToast = () => {
-  const context = useContext(ToastContext);
-
-  if (!context) {
-    throw new Error("useToast debe utilizarse dentro de ToastProvider");
-  }
-
-  return context;
 };

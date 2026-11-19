@@ -6,7 +6,7 @@ import { Input } from "../components/ui/Input";
 import { IconButton } from "../components/ui/IconButton";
 import { Modal } from "../components/ui/Modal";
 
-import { useToast } from "../context/ToastContext";
+import { useToast } from "../context/useToast";
 
 export const UIShowcase = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -20,8 +20,8 @@ export const UIShowcase = () => {
 
   return (
     <main className="
-      min-h-screen bg-[var(--bg)]
-      text-[var(--text)]
+      min-h-screen bg-(--bg)
+      text-(--text)
       px-6 py-12
       md:px-12
     ">
@@ -34,7 +34,7 @@ export const UIShowcase = () => {
           <Logo className="mb-8" />
 
           <h1 className="
-            font-[var(--font-display)]
+            font-[family-name:var(--font-display)]
             text-2xl md:text-[32px]
             font-extrabold
             leading-[40px]
