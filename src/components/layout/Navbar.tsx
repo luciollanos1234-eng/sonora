@@ -1,5 +1,8 @@
 import Logo from "../../assets/Favicon.sonora.png";
 import { NavLink } from "react-router-dom";
+import { GoHome } from "react-icons/go";
+import { TbPlaylist } from "react-icons/tb";
+import { LuUsers } from "react-icons/lu";
 
 const Navbar = () => {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -16,13 +19,22 @@ const Navbar = () => {
         </div>
 
         <NavLink to="/" className={linkClass}>
-          Inicio
+          <p className="flex items-center gap-2">
+            <GoHome className="text-xl" />
+            Inicio
+          </p>
         </NavLink>
         <NavLink to="/playlist" className={linkClass}>
-          Mi Playlist
+          <p className="flex items-center gap-2">
+            <TbPlaylist className="text-xl" />
+            Mi Playlist
+          </p>
         </NavLink>
         <NavLink to="/about" className={linkClass}>
-          Acerca de Nosotros
+          <p className="flex items-center gap-2">
+            <LuUsers className="text-xl" />
+            Acerca de Nosotros
+          </p>
         </NavLink>
       </nav>
     </header>
