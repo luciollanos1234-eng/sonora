@@ -8,7 +8,7 @@ import homenajeAVioletaParra from "../assets/portadas/homenaje-a-violeta-parra.p
 import randomAccessMemories from "../assets/portadas/random-access-memories.png";
 import timeOut from "../assets/portadas/time-out.png";
 import unVeranoSinTi from "../assets/portadas/un-verano-sin-ti.png";
-import fallbackCover from "../assets/respaldo.png";
+import fallbackCover from "../assets/portadas/respaldo.png";
 
 import type { Song, User } from "../types";
 
