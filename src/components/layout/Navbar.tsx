@@ -61,7 +61,7 @@ const Navbar = () => {
             </button>
           </div>
 
-          <NavLink to="/Home" className={linkClass} onClick={closeMenu}>
+          <NavLink to="/" className={linkClass} onClick={closeMenu}>
             <span className="flex items-center gap-2">
               <GoHome className="text-xl" />
               Inicio
@@ -84,7 +84,7 @@ const Navbar = () => {
             <hr />
             <div className="mt-6 flex items-center gap-3 p-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-500 font-bold text-white">
-                <NavLink to="/Admin" onClick={closeMenu}>
+                <NavLink to="/admin" onClick={closeMenu}>
                   U
                 </NavLink>
               </div>

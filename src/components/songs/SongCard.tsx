@@ -1,5 +1,5 @@
 import type { Song } from "../../types";
-import { Cover } from "./Cover";
+import Cover from "./Cover";
 
 interface SongCardProps {
   song: Song;

@@ -1,15 +1,23 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './styles/global.css'
-import './styles/variables.css'
-import { BrowserRouter } from 'react-router-dom'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
+import App from "./App";
+import { initializeStorage } from "./data/initialize";
 
-createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
+import "./styles/global.css";
+import "./styles/variables.css";
+
+const startApp = async () => {
+  await initializeStorage();
+
+  createRoot(document.getElementById("root")!).render(
     <StrictMode>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </StrictMode>
-  </BrowserRouter>
-)
+  );
+};
+
+startApp();

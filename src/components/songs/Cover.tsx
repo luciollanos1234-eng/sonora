@@ -1,14 +1,23 @@
+import { useState } from "react";
+import fallbackCover from "../../assets/portadas/respaldo.png";
+
 interface CoverProps {
   src: string;
   alt: string;
+  className?: string;
 }
 
-export const Cover = ({ src, alt }: CoverProps) => (
-  <img
-    src={src}
-    alt={alt}
-    loading="lazy"
-    decoding="async"
-    className="aspect-square w-full rounded-[var(--radius-cover)] object-cover"
-  />
-);
+const Cover = ({ src, alt, className = "" }: CoverProps) => {
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <img
+      src={hasError || !src ? fallbackCover : src}
+      alt={alt}
+      className={className}
+      onError={() => setHasError(true)}
+    />
+  );
+};
+
+export default Cover;
