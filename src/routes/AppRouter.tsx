@@ -1,12 +1,15 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useAuth } from "../context/useAuth";
 
 import Layout from "../components/layout/Layout";
+import ProtectedRoute from "../components/layout/ProtectedRoute";
 import Home from "../pages/Home";
 import Playlist from "../pages/Playlist";
 import About from "../pages/About";
 import NotFound from "../pages/NotFound";
 import Detail from "../pages/Detail";
+import Login from "../pages/Login";
 import { UIShowcase } from "../pages/UIShowcase";
 
 const Placeholder = ({ title }: { title: string }) => (
@@ -41,6 +44,8 @@ const PageTitle = () => {
 };
 
 const AppRouter = () => {
+  const { user } = useAuth();
+
   return (
     <>
       <PageTitle />
@@ -50,16 +55,34 @@ const AppRouter = () => {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/detalle/:id" element={<Detail />} />
-          <Route path="/playlist" element={<Playlist />} />
+          <Route
+            path="/playlist"
+            element={
+              <ProtectedRoute>
+                <Playlist />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/about" element={<About />} />
-          <Route path="/admin" element={<Placeholder title="Administración" />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requireAdmin>
+                <Placeholder title="Administración" />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/ui-showcase" element={<UIShowcase />} />
           <Route path="*" element={<NotFound />} />
         </Route>
 
         {/* Rutas sin Layout */}
-        <Route path="/login" element={<Placeholder title="Iniciar sesión" />} />
-        <Route path="/registro" element={<Placeholder title="Registro" />} />
+        {/* Con sesión abierta, login y registro llevan al inicio (Login lo resuelve adentro) */}
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/registro"
+          element={user ? <Navigate to="/" replace /> : <Placeholder title="Registro" />}
+        />
       </Routes>
     </>
   );
