@@ -63,7 +63,14 @@ const AppRouter = () => {
             }
           />
           <Route path="/about" element={<About />} />
-          <Route path="/admin" element={<Placeholder title="Administración" />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requireAdmin>
+                <Placeholder title="Administración" />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/ui-showcase" element={<UIShowcase />} />
           <Route path="*" element={<NotFound />} />
         </Route>
