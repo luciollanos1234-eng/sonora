@@ -3,6 +3,7 @@ import type { UserSession } from "../types";
 
 export interface AuthContextType {
   user: UserSession | null;
+  login: (email: string, password: string) => UserSession | null;
   logout: () => void;
 }
 
