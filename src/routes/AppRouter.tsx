@@ -1,5 +1,6 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useAuth } from "../context/useAuth";
 
 import Layout from "../components/layout/Layout";
 import Home from "../pages/Home";
@@ -41,6 +42,8 @@ const PageTitle = () => {
 };
 
 const AppRouter = () => {
+  const { user } = useAuth();
+
   return (
     <>
       <PageTitle />
@@ -58,8 +61,12 @@ const AppRouter = () => {
         </Route>
 
         {/* Rutas sin Layout */}
+        {/* Con sesión abierta, login y registro llevan al inicio (Login lo resuelve adentro) */}
         <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Placeholder title="Registro" />} />
+        <Route
+          path="/registro"
+          element={user ? <Navigate to="/" replace /> : <Placeholder title="Registro" />}
+        />
       </Routes>
     </>
   );

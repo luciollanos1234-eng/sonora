@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { FiAlertCircle, FiChevronLeft } from "react-icons/fi";
+import { Link, Navigate } from "react-router-dom";
+import { FiAlertCircle, FiChevronLeft, FiEye, FiEyeOff } from "react-icons/fi";
 
 import { Logo } from "../components/ui/Logo";
 import { Button } from "../components/ui/Button";
@@ -13,8 +13,10 @@ interface LoginForm {
 }
 
 const Login = () => {
-  const { login } = useAuth();
+  const { user, login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState(false);
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
 
   const {
     register,
@@ -30,8 +32,17 @@ const Login = () => {
       // Un solo aviso: no decimos si falló el email o la contraseña
       setLoginError(true);
       setValue("password", "");
+      return;
     }
+
+    setJustLoggedIn(true);
   };
+
+  // Con sesión: si recién ingresó, el admin va al panel; si no, todos al inicio
+  if (user) {
+    const destino = justLoggedIn && user.role === "admin" ? "/admin" : "/";
+    return <Navigate to={destino} replace />;
+  }
 
   const fieldClass = (hasError: boolean) => `
     flex items-center gap-3 min-h-11 px-4
@@ -112,13 +123,22 @@ const Login = () => {
             <div className={fieldClass(loginError || !!errors.password)}>
               <input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 placeholder="Tu contraseña"
                 aria-invalid={loginError || !!errors.password}
                 className={inputClass}
                 {...register("password", { required: "Ingresá tu contraseña" })}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                className="flex shrink-0 items-center gap-1 text-xs font-semibold text-[var(--primary-text)]"
+              >
+                {showPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+                {showPassword ? "Ocultar" : "Mostrar"}
+              </button>
             </div>
             {errors.password && (
               <p className="text-sm text-[var(--danger)]">{errors.password.message}</p>
