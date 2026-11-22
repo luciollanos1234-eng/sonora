@@ -1,13 +1,17 @@
 import { Link, useParams } from "react-router-dom";
-import { FiChevronLeft, FiDisc, FiCalendar, FiTag, FiClock } from "react-icons/fi";
+import { FiChevronLeft, FiDisc, FiCalendar, FiTag, FiClock, FiPause, FiPlay } from "react-icons/fi";
 import { getSongs } from "../data/initialize";
 import Cover from "../components/songs/Cover";
 import { formatTime } from "../utils/formatTime";
+import { Button } from "../components/ui/Button";
+import { usePlayer } from "../context/usePlayer";
 
 const Detail = () => {
   const { id } = useParams();
   // Busca la canción por el id de la URL en sonora_songs
   const song = getSongs().find((s) => s.id === id);
+  const { currentSong, isPlaying, playSong, pause } = usePlayer();
+  const isThisPlaying = !!song && currentSong?.id === song.id && isPlaying;
 
   return (
     <section className="px-4 py-6 sm:px-8">
@@ -68,6 +72,16 @@ const Detail = () => {
                 </div>
               </div>
             </dl>
+
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <Button
+                onClick={() => (isThisPlaying ? pause() : playSong(song))}
+                className="rounded-[var(--radius-pill)] px-6"
+              >
+                {isThisPlaying ? <FiPause aria-hidden="true" /> : <FiPlay aria-hidden="true" />}
+                {isThisPlaying ? "Pausar" : "Reproducir"}
+              </Button>
+            </div>
           </div>
         </div>
       ) : (
