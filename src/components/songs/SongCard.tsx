@@ -1,4 +1,5 @@
 import type { Song } from "../../types";
+import { Link } from "react-router-dom";
 import Cover from "./Cover";
 import { FiPause, FiPlay } from "react-icons/fi";
 import { usePlayer } from "../../context/usePlayer";
@@ -37,7 +38,9 @@ export const SongCard = ({ song }: SongCardProps) => {
       <div className="mt-5 flex items-start justify-between gap-4">
         <div className="min-w-0">
           <h3 className="truncate font-semibold text-[var(--text)]" title={song.title}>
-            {song.title}
+            <Link to={`/detalle/${song.id}`} className="hover:underline">
+              {song.title}
+            </Link>
           </h3>
           <p className="mt-2 truncate text-sm text-[var(--text-muted)]" title={song.artist}>
             {song.artist}

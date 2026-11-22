@@ -5,11 +5,21 @@ import Cover from "../components/songs/Cover";
 import { formatTime } from "../utils/formatTime";
 import { Button } from "../components/ui/Button";
 import { usePlayer } from "../context/usePlayer";
+import { SongCard } from "../components/songs/SongCard";
 
 const Detail = () => {
   const { id } = useParams();
+  const songs = getSongs();
   // Busca la canción por el id de la URL en sonora_songs
-  const song = getSongs().find((s) => s.id === id);
+  const song = songs.find((s) => s.id === id);
+
+  // Primero las del mismo género o artista, sin repetir la actual
+  const similar = song
+    ? songs.filter((s) => s.id !== song.id && (s.genre === song.genre || s.artist === song.artist))
+    : [];
+  // Después el resto, para completar hasta 5
+  const others = song ? songs.filter((s) => s.id !== song.id && !similar.includes(s)) : [];
+  const recommended = [...similar, ...others].slice(0, 5);
   const { currentSong, isPlaying, playSong, pause } = usePlayer();
   const isThisPlaying = !!song && currentSong?.id === song.id && isPlaying;
 
@@ -84,7 +94,22 @@ const Detail = () => {
             </div>
           </div>
         </div>
-      ) : (
+      ) : null}
+
+      {song && (
+        <section aria-labelledby="recomendadas" className="mt-12">
+          <h2 id="recomendadas" className="mb-5 text-xl font-bold">
+            También te puede gustar
+          </h2>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            {recommended.map((item) => (
+              <SongCard key={item.id} song={item} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {!song && (
         /* Canción inexistente o borrada desde Admin */
         <div className="mx-auto mt-12 flex max-w-md flex-col items-center text-center">
           <div aria-hidden="true" className="relative flex size-32 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]">
