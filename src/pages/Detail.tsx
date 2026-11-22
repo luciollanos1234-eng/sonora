@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FiChevronLeft, FiDisc, FiCalendar, FiTag, FiClock, FiPause, FiPlay, FiSearch } from "react-icons/fi";
 import { getSongs } from "../data/initialize";
@@ -20,6 +21,13 @@ const Detail = () => {
   // Después el resto, para completar hasta 5
   const others = song ? songs.filter((s) => s.id !== song.id && !similar.includes(s)) : [];
   const recommended = [...similar, ...others].slice(0, 5);
+
+  // El título de la pestaña es el nombre de la canción; al cambiar de detalle vuelve arriba
+  const songTitle = song?.title;
+  useEffect(() => {
+    document.title = songTitle ? `${songTitle} · Sonora` : "Canción no encontrada · Sonora";
+    window.scrollTo(0, 0);
+  }, [id, songTitle]);
   const { currentSong, isPlaying, playSong, pause } = usePlayer();
   const isThisPlaying = !!song && currentSong?.id === song.id && isPlaying;
 
