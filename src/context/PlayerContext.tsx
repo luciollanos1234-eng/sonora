@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useState, useRef, type ReactNode } from "react";
 import ReactPlayer from "react-player";
 import type { Song } from "../types";
 import { getSongs } from "../data/initialize";
@@ -9,12 +9,18 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.8);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  // useRef guarda el elemento de audio del ReactPlayer para leer y mover el tiempo
+  // (no está en el temario: solo se usa acá)
+  const playerRef = useRef<HTMLVideoElement>(null);
 
   // Pone a sonar una canción y la lista desde donde se eligió
   const playSong = (song: Song, list: Song[] = queue) => {
     setQueue(list);
     setCurrentSong(song);
     setIsPlaying(true);
+    setProgress(0);
   };
 
   const play = () => {
@@ -31,6 +37,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     if (currentIndex !== -1 && currentIndex < queue.length - 1) {
       setCurrentSong(queue[currentIndex + 1]);
       setIsPlaying(true);
+      setProgress(0);
     } else {
       setIsPlaying(false);
     }
@@ -41,7 +48,16 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     if (currentIndex !== -1 && currentIndex > 0) {
       setCurrentSong(queue[currentIndex - 1]);
       setIsPlaying(true);
+      setProgress(0);
     }
+  };
+
+  // Mueve el audio al segundo elegido en la barra de progreso
+  const seek = (seconds: number) => {
+    if (playerRef.current) {
+      playerRef.current.currentTime = seconds;
+    }
+    setProgress(seconds);
   };
 
   return (
@@ -57,6 +73,9 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         pause,
         next,
         prev,
+        progress,
+        duration,
+        seek,
       }}
     >
       {children}
@@ -64,10 +83,13 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
       {/* Un solo reproductor oculto: los controles son los de Sonora */}
       {currentSong?.audioUrl && (
         <ReactPlayer
+          ref={playerRef}
           src={currentSong.audioUrl}
           playing={isPlaying}
           volume={volume}
           onEnded={next}
+          onTimeUpdate={(e) => setProgress(e.currentTarget.currentTime)}
+          onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
           width={0}
           height={0}
           style={{ display: "none" }}

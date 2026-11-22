@@ -12,6 +12,9 @@ export interface PlayerContextType {
   pause: () => void;
   next: () => void;
   prev: () => void;
+  progress: number;
+  duration: number;
+  seek: (seconds: number) => void;
 }
 
 export const PlayerContext = createContext<PlayerContextType | null>(null);
