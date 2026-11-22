@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { FiChevronLeft } from "react-icons/fi";
+import { FiAlertCircle, FiChevronLeft } from "react-icons/fi";
 
 import { Logo } from "../components/ui/Logo";
 import { Button } from "../components/ui/Button";
@@ -13,15 +14,23 @@ interface LoginForm {
 
 const Login = () => {
   const { login } = useAuth();
+  const [loginError, setLoginError] = useState(false);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginForm>();
 
   const onSubmit = (data: LoginForm) => {
-    login(data.email, data.password);
+    const session = login(data.email, data.password);
+
+    if (!session) {
+      // Un solo aviso: no decimos si falló el email o la contraseña
+      setLoginError(true);
+      setValue("password", "");
+    }
   };
 
   const fieldClass = (hasError: boolean) => `
@@ -57,18 +66,33 @@ const Login = () => {
           </p>
         </div>
 
+        {loginError && (
+          <div
+            role="alert"
+            className="mt-6 flex gap-3 rounded-[var(--radius-control)] border border-[var(--danger)]/40 bg-[var(--danger)]/10 p-4 text-sm"
+          >
+            <FiAlertCircle aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--danger)]" />
+            <div>
+              <p className="font-semibold">No pudimos iniciar sesión</p>
+              <p className="mt-1 text-[var(--text-muted)]">
+                El email o la contraseña no coinciden. Revisalos y probá de nuevo.
+              </p>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="mt-6 flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label htmlFor="email" className="text-sm font-semibold">
               Email
             </label>
-            <div className={fieldClass(!!errors.email)}>
+            <div className={fieldClass(loginError || !!errors.email)}>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
                 placeholder="tu@email.com"
-                aria-invalid={!!errors.email}
+                aria-invalid={loginError || !!errors.email}
                 className={inputClass}
                 {...register("email", {
                   required: "Ingresá tu email",
@@ -85,13 +109,13 @@ const Login = () => {
             <label htmlFor="password" className="text-sm font-semibold">
               Contraseña
             </label>
-            <div className={fieldClass(!!errors.password)}>
+            <div className={fieldClass(loginError || !!errors.password)}>
               <input
                 id="password"
                 type="password"
                 autoComplete="current-password"
                 placeholder="Tu contraseña"
-                aria-invalid={!!errors.password}
+                aria-invalid={loginError || !!errors.password}
                 className={inputClass}
                 {...register("password", { required: "Ingresá tu contraseña" })}
               />
