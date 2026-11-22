@@ -31,8 +31,9 @@ const Detail = () => {
   const { currentSong, isPlaying, playSong, pause } = usePlayer();
   const isThisPlaying = !!song && currentSong?.id === song.id && isPlaying;
 
+  // En celular deja lugar arriba para el botón del menú
   return (
-    <section className="px-4 py-6 sm:px-8">
+    <section className="px-4 pb-6 pt-20 sm:px-8 lg:pt-6">
       <Link
         to="/"
         className="inline-flex items-center gap-1 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold hover:bg-[var(--surface-2)]"
@@ -43,7 +44,7 @@ const Detail = () => {
 
       {song ? (
         <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-end">
-          <div className="relative w-full max-w-xs shrink-0">
+          <div className="relative mx-auto w-full max-w-[260px] shrink-0 sm:max-w-xs md:mx-0">
             <div aria-hidden="true" className="absolute inset-4 rounded-[var(--radius-card)] bg-[var(--primary)] opacity-40 blur-3xl" />
             <Cover src={song.cover} alt={`Portada de ${song.album}`} className="relative aspect-square w-full rounded-[var(--radius-card)] object-cover shadow-2xl" />
           </div>
@@ -109,7 +110,7 @@ const Detail = () => {
           <h2 id="recomendadas" className="mb-5 text-xl font-bold">
             También te puede gustar
           </h2>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {recommended.map((item) => (
               <SongCard key={item.id} song={item} />
             ))}
