@@ -37,8 +37,10 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
 
   // Pone a sonar una canción y la lista desde donde se eligió
   const playSong = (song: Song, list: Song[] = queue) => {
+    // Usa la versión guardada de la canción, que es la que tiene el audio de iTunes
+    const saved = getSongs().find((s) => s.id === song.id) ?? song;
     setQueue(list);
-    setCurrentSong(song);
+    setCurrentSong(saved);
     setIsPlaying(true);
     setProgress(0);
     setAudioError(false);
