@@ -1,12 +1,15 @@
-import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { FiChevronLeft, FiDisc, FiCalendar, FiTag, FiClock, FiPause, FiPlay, FiSearch } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { FiChevronLeft, FiDisc, FiCalendar, FiTag, FiClock, FiPause, FiPlay, FiPlus, FiSearch } from "react-icons/fi";
 import { getSongs } from "../data/initialize";
 import Cover from "../components/songs/Cover";
 import { formatTime } from "../utils/formatTime";
 import { Button } from "../components/ui/Button";
 import { usePlayer } from "../context/usePlayer";
 import { SongCard } from "../components/songs/SongCard";
+import { useAuth } from "../context/useAuth";
+import { useToast } from "../context/useToast";
+import { getPlaylist, toggleSongInPlaylist } from "../utils/playlists";
 
 const Detail = () => {
   const { id } = useParams();
@@ -30,6 +33,27 @@ const Detail = () => {
   }, [id, songTitle]);
   const { currentSong, isPlaying, playSong, pause } = usePlayer();
   const isThisPlaying = !!song && currentSong?.id === song.id && isPlaying;
+  const { user } = useAuth();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Ids de la playlist del usuario (vacía si no hay sesión)
+  const [playlist, setPlaylist] = useState<string[]>(() => (user ? getPlaylist(user.userId) : []));
+  const inPlaylist = !!song && !!user && playlist.includes(song.id);
+
+  // Sin sesión lleva al login y después vuelve a esta canción
+  const handlePlaylist = () => {
+    if (!song) return;
+
+    if (!user) {
+      navigate("/login", { state: { from: location.pathname } });
+      return;
+    }
+
+    setPlaylist(toggleSongInPlaylist(user.userId, song.id));
+    showToast(inPlaylist ? "Quitada de Mi Playlist" : "Agregada a Mi Playlist");
+  };
 
   // En celular deja lugar arriba para el botón del menú
   return (
@@ -92,13 +116,21 @@ const Detail = () => {
               </div>
             </dl>
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button
                 onClick={() => (isThisPlaying ? pause() : playSong(song))}
-                className="rounded-[var(--radius-pill)] px-6"
+                className="whitespace-nowrap rounded-[var(--radius-pill)] px-6"
               >
                 {isThisPlaying ? <FiPause aria-hidden="true" /> : <FiPlay aria-hidden="true" />}
                 {isThisPlaying ? "Pausar" : "Reproducir"}
+              </Button>
+              <Button
+                variant={inPlaylist ? "added" : "outline"}
+                onClick={handlePlaylist}
+                className="whitespace-nowrap rounded-[var(--radius-pill)] px-6"
+              >
+                {!inPlaylist && <FiPlus aria-hidden="true" />}
+                {inPlaylist ? "En Mi Playlist · Quitar" : "Agregar a Mi Playlist"}
               </Button>
             </div>
           </div>
