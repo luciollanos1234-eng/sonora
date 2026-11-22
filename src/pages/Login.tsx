@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { FiAlertCircle, FiChevronLeft, FiEye, FiEyeOff } from "react-icons/fi";
 
 import { Logo } from "../components/ui/Logo";
@@ -14,6 +14,9 @@ interface LoginForm {
 
 const Login = () => {
   const { user, login } = useAuth();
+  const location = useLocation();
+  // ProtectedRoute guarda en el state la página que se quería ver
+  const from = (location.state as { from?: string } | null)?.from;
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [justLoggedIn, setJustLoggedIn] = useState(false);
@@ -38,9 +41,16 @@ const Login = () => {
     setJustLoggedIn(true);
   };
 
-  // Con sesión: si recién ingresó, el admin va al panel; si no, todos al inicio
+  // Si recién ingresó vuelve a la página que quería ver; si no, admin al panel y el resto al inicio
   if (user) {
-    const destino = justLoggedIn && user.role === "admin" ? "/admin" : "/";
+    let destino = "/";
+
+    if (justLoggedIn && from) {
+      destino = from;
+    } else if (justLoggedIn && user.role === "admin") {
+      destino = "/admin";
+    }
+
     return <Navigate to={destino} replace />;
   }
 
