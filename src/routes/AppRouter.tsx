@@ -8,6 +8,7 @@ import Playlist from "../pages/Playlist";
 import About from "../pages/About";
 import NotFound from "../pages/NotFound";
 import Login from "../pages/Login";
+import Register from "../pages/Register";
 import { UIShowcase } from "../pages/UIShowcase";
 
 const Placeholder = ({ title }: { title: string }) => (
@@ -65,7 +66,7 @@ const AppRouter = () => {
         <Route path="/login" element={<Login />} />
         <Route
           path="/registro"
-          element={user ? <Navigate to="/" replace /> : <Placeholder title="Registro" />}
+          element={user ? <Navigate to="/" replace /> : <Register />}
         />
       </Routes>
     </>
