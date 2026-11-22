@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import ReactPlayer from "react-player";
 import type { Song } from "../types";
 import { getSongs } from "../data/initialize";
 import { PlayerContext } from "./player-context";
@@ -7,6 +8,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const [queue, setQueue] = useState<Song[]>(() => getSongs());
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.8);
 
   // Pone a sonar una canción y la lista desde donde se eligió
   const playSong = (song: Song, list: Song[] = queue) => {
@@ -48,6 +50,8 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         currentSong,
         queue,
         isPlaying,
+        volume,
+        setVolume,
         playSong,
         play,
         pause,
@@ -56,6 +60,19 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
+
+      {/* Un solo reproductor oculto: los controles son los de Sonora */}
+      {currentSong?.audioUrl && (
+        <ReactPlayer
+          src={currentSong.audioUrl}
+          playing={isPlaying}
+          volume={volume}
+          onEnded={next}
+          width={0}
+          height={0}
+          style={{ display: "none" }}
+        />
+      )}
     </PlayerContext.Provider>
   );
 };
