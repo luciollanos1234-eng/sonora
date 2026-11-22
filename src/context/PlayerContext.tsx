@@ -1,4 +1,4 @@
-import { useState, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import ReactPlayer from "react-player";
 import type { Song } from "../types";
 import { getSongs } from "../data/initialize";
@@ -11,6 +11,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const [volume, setVolume] = useState(0.8);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [audioError, setAudioError] = useState(false);
   // useRef guarda el elemento de audio del ReactPlayer para leer y mover el tiempo
   // (no está en el temario: solo se usa acá)
   const playerRef = useRef<HTMLVideoElement>(null);
@@ -21,6 +22,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     setCurrentSong(song);
     setIsPlaying(true);
     setProgress(0);
+    setAudioError(false);
   };
 
   const play = () => {
@@ -38,6 +40,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
       setCurrentSong(queue[currentIndex + 1]);
       setIsPlaying(true);
       setProgress(0);
+      setAudioError(false);
     } else {
       setIsPlaying(false);
     }
@@ -49,6 +52,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
       setCurrentSong(queue[currentIndex - 1]);
       setIsPlaying(true);
       setProgress(0);
+      setAudioError(false);
     }
   };
 
@@ -59,6 +63,28 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     }
     setProgress(seconds);
   };
+
+  // Sin archivo o con error de audio, el progreso se simula con la duración de la canción
+  const simulated = !currentSong?.audioUrl || audioError;
+  // duration de la canción viene en milisegundos; si no hay, usamos 30 s
+  const simulatedDuration = currentSong?.duration ? Math.round(currentSong.duration / 1000) : 30;
+
+  // Cada segundo suma 1 al progreso; al llegar al final pasa a la siguiente
+  useEffect(() => {
+    if (!isPlaying || !simulated) return;
+
+    const timer = setTimeout(() => {
+      if (progress + 1 >= simulatedDuration) {
+        next();
+      } else {
+        setProgress(progress + 1);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+    // next cambia en cada render; el efecto ya se vuelve a correr cuando cambia progress
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlaying, simulated, progress, simulatedDuration]);
 
   return (
     <PlayerContext.Provider
@@ -74,14 +100,14 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         next,
         prev,
         progress,
-        duration,
+        duration: simulated ? simulatedDuration : duration,
         seek,
       }}
     >
       {children}
 
       {/* Un solo reproductor oculto: los controles son los de Sonora */}
-      {currentSong?.audioUrl && (
+      {currentSong?.audioUrl && !audioError && (
         <ReactPlayer
           ref={playerRef}
           src={currentSong.audioUrl}
@@ -93,6 +119,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
           width={0}
           height={0}
           style={{ display: "none" }}
+          onError={() => setAudioError(true)}
         />
       )}
     </PlayerContext.Provider>
