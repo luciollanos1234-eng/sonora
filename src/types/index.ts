@@ -33,3 +33,8 @@ export interface PlayerPrefs {
   repeat: boolean;
   shuffle: boolean;
 }
+
+export interface UserPlaylist {
+  userId: string;
+  songIds: string[];
+}
