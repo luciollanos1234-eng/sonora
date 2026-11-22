@@ -6,6 +6,7 @@ import Home from "../pages/Home";
 import Playlist from "../pages/Playlist";
 import About from "../pages/About";
 import NotFound from "../pages/NotFound";
+import Login from "../pages/Login";
 import { UIShowcase } from "../pages/UIShowcase";
 
 const Placeholder = ({ title }: { title: string }) => (
@@ -57,7 +58,7 @@ const AppRouter = () => {
         </Route>
 
         {/* Rutas sin Layout */}
-        <Route path="/login" element={<Placeholder title="Iniciar sesión" />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Placeholder title="Registro" />} />
       </Routes>
     </>
