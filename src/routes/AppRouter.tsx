@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "../context/useAuth";
 
 import Layout from "../components/layout/Layout";
+import ProtectedRoute from "../components/layout/ProtectedRoute";
 import Home from "../pages/Home";
 import Playlist from "../pages/Playlist";
 import About from "../pages/About";
@@ -53,7 +54,14 @@ const AppRouter = () => {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/detalle/:id" element={<Placeholder title="Detalle de canción" />} />
-          <Route path="/playlist" element={<Playlist />} />
+          <Route
+            path="/playlist"
+            element={
+              <ProtectedRoute>
+                <Playlist />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/about" element={<About />} />
           <Route path="/admin" element={<Placeholder title="Administración" />} />
           <Route path="/ui-showcase" element={<UIShowcase />} />
