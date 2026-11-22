@@ -37,10 +37,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return session;
   };
 
+  // Devuelve null si el email ya está registrado
+  const register = (name: string, email: string, password: string) => {
+    const users = getUsers();
+
+    if (users.some((u) => cleanEmail(u.email) === cleanEmail(email))) {
+      return null;
+    }
+
+    const newUser: User = {
+      id: crypto.randomUUID(),
+      name: name.trim(),
+      email: cleanEmail(email),
+      password,
+      role: "user",
+    };
+
+    writeStorage(STORAGE_KEYS.users, [...users, newUser]);
+
+    const session = toSession(newUser);
+    saveSession(session);
+    return session;
+  };
+
   const logout = () => saveSession(null);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
