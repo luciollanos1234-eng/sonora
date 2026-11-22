@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { FiChevronLeft, FiDisc, FiCalendar, FiTag, FiClock, FiPause, FiPlay } from "react-icons/fi";
+import { FiChevronLeft, FiDisc, FiCalendar, FiTag, FiClock, FiPause, FiPlay, FiSearch } from "react-icons/fi";
 import { getSongs } from "../data/initialize";
 import Cover from "../components/songs/Cover";
 import { formatTime } from "../utils/formatTime";
@@ -85,7 +85,32 @@ const Detail = () => {
           </div>
         </div>
       ) : (
-        <p className="mt-8 text-[var(--text-muted)]">No encontramos esta canción.</p>
+        /* Canción inexistente o borrada desde Admin */
+        <div className="mx-auto mt-12 flex max-w-md flex-col items-center text-center">
+          <div aria-hidden="true" className="relative flex size-32 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]">
+            <div className="absolute inset-3 rounded-full border border-[var(--border)]" />
+            <div className="absolute inset-6 rounded-full border border-[var(--border)]" />
+            <span className="size-8 rounded-full bg-[var(--primary)]" />
+            <span className="absolute -right-2 -top-2 flex size-10 items-center justify-center rounded-full bg-[var(--surface-3)] text-lg font-bold text-[var(--primary-text)]">?</span>
+          </div>
+          <h1 className="mt-8 text-2xl font-extrabold sm:text-3xl">No encontramos esta canción</h1>
+          <p className="mt-3 text-sm text-[var(--text-muted)]">Puede que la hayan quitado del catálogo o que el enlace esté mal escrito.</p>
+          <div className="mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <Link
+              to="/"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-[image:var(--gradient-button)] px-6 text-sm font-semibold text-[var(--text)] hover:brightness-110"
+            >
+              Volver al catálogo
+            </Link>
+            <Link
+              to="/"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-[var(--surface-2)] px-6 text-sm font-semibold text-[var(--text)] hover:bg-[var(--surface-3)]"
+            >
+              <FiSearch aria-hidden="true" />
+              Buscar otra canción
+            </Link>
+          </div>
+        </div>
       )}
     </section>
   );
