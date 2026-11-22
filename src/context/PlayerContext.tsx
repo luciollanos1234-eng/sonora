@@ -1,20 +1,39 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import ReactPlayer from "react-player";
-import type { Song } from "../types";
+import type { PlayerPrefs, Song } from "../types";
 import { getSongs } from "../data/initialize";
+import { STORAGE_KEYS, readStorage, writeStorage } from "../utils/storage";
 import { PlayerContext } from "./player-context";
+
+const readPrefs = () => readStorage<PlayerPrefs | null>(STORAGE_KEYS.prefs, null);
 
 export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const [queue, setQueue] = useState<Song[]>(() => getSongs());
-  const [currentSong, setCurrentSong] = useState<Song | null>(null);
+  // Al recargar vuelve la última canción, en pausa
+  const [currentSong, setCurrentSong] = useState<Song | null>(
+    () => getSongs().find((s) => s.id === readPrefs()?.lastSongId) ?? null
+  );
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.8);
+  const [volume, setVolume] = useState(() => readPrefs()?.volume ?? 0.8);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [audioError, setAudioError] = useState(false);
   // useRef guarda el elemento de audio del ReactPlayer para leer y mover el tiempo
   // (no está en el temario: solo se usa acá)
   const playerRef = useRef<HTMLVideoElement>(null);
+
+  // Guarda volumen y última canción (nunca el audio)
+  useEffect(() => {
+    const prefs = readPrefs();
+    writeStorage(STORAGE_KEYS.prefs, {
+      muted: false,
+      repeat: false,
+      shuffle: false,
+      ...prefs,
+      volume,
+      lastSongId: currentSong?.id,
+    });
+  }, [volume, currentSong]);
 
   // Pone a sonar una canción y la lista desde donde se eligió
   const playSong = (song: Song, list: Song[] = queue) => {
