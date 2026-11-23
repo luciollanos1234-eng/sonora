@@ -56,8 +56,9 @@ const isSession = (value: unknown): value is UserSession | null => {
   );
 };
 
-const isPlaylistArray = (value: unknown): value is unknown[] => {
-  return Array.isArray(value);
+// sonora_playlists es un objeto: { [userId]: [songId] }
+const isPlaylists = (value: unknown): value is Record<string, string[]> => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 };
 
 const isPlayerPrefs = (value: unknown): value is PlayerPrefs => {
@@ -114,11 +115,11 @@ export const initializeStorage = async (): Promise<void> => {
 
   const validPlaylists = hasValidStorage(
     STORAGE_KEYS.playlists,
-    isPlaylistArray
+    isPlaylists
   );
 
   if (!validPlaylists) {
-    writeStorage(STORAGE_KEYS.playlists, []);
+    writeStorage(STORAGE_KEYS.playlists, {});
   }
 
   const validPrefs = hasValidStorage(

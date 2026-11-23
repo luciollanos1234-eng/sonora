@@ -3,10 +3,12 @@ import { useEffect } from "react";
 import { useAuth } from "../context/useAuth";
 
 import Layout from "../components/layout/Layout";
+import ProtectedRoute from "../components/layout/ProtectedRoute";
 import Home from "../pages/Home";
 import Playlist from "../pages/Playlist";
 import About from "../pages/About";
 import NotFound from "../pages/NotFound";
+import Detail from "../pages/Detail";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import { UIShowcase } from "../pages/UIShowcase";
@@ -53,10 +55,24 @@ const AppRouter = () => {
         {/* Rutas con Layout */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/detalle/:id" element={<Placeholder title="Detalle de canción" />} />
-          <Route path="/playlist" element={<Playlist />} />
+          <Route path="/detalle/:id" element={<Detail />} />
+          <Route
+            path="/playlist"
+            element={
+              <ProtectedRoute>
+                <Playlist />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/about" element={<About />} />
-          <Route path="/admin" element={<Placeholder title="Administración" />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requireAdmin>
+                <Placeholder title="Administración" />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/ui-showcase" element={<UIShowcase />} />
           <Route path="*" element={<NotFound />} />
         </Route>
