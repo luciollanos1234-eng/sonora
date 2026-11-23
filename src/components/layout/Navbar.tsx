@@ -81,6 +81,14 @@ const Navbar = () => {
               Acerca de Nosotros
             </span>
           </NavLink>
+          {user?.role === "admin" && (
+            <NavLink to="/admin" className={linkClass} onClick={closeMenu}>
+              <span className="flex items-center gap-2">
+                <LuUsers className="text-xl" />
+                Administración
+              </span>
+            </NavLink>
+          )}
 
           <div className="mt-auto text-sm text-gray-400">
             <hr />
@@ -88,13 +96,7 @@ const Navbar = () => {
             {user ? (
               <div className="mt-6 flex items-center gap-3 p-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-500 font-bold text-white">
-                  {user.role === "admin" ? (
-                    <NavLink to="/admin" onClick={closeMenu}>
-                      {user.name.charAt(0).toUpperCase()}
-                    </NavLink>
-                  ) : (
-                    user.name.charAt(0).toUpperCase()
-                  )}
+                  {user.name.charAt(0).toUpperCase()}
                 </div>
                 <span className="min-w-0 flex-1 truncate text-white">
                   {user.name}

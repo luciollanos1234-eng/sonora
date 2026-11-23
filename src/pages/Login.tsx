@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, Navigate, useLocation } from "react-router-dom";
-import { FiAlertCircle, FiChevronLeft, FiEye, FiEyeOff } from "react-icons/fi";
 
 import { Button } from "../components/ui/Button";
 import AuthCard from "../components/auth/AuthCard";
@@ -19,7 +18,6 @@ const Login = () => {
   const location = useLocation();
   // ProtectedRoute guarda en el state la página que se quería ver
   const from = (location.state as { from?: string } | null)?.from;
-  const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [justLoggedIn, setJustLoggedIn] = useState(false);
 
