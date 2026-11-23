@@ -11,13 +11,8 @@ import NotFound from "../pages/NotFound";
 import Detail from "../pages/Detail";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Admin from "../pages/Admin";
 import { UIShowcase } from "../pages/UIShowcase";
-
-const Placeholder = ({ title }: { title: string }) => (
-  <section className="p-8">
-    <h1 className="text-3xl font-bold">{title}</h1>
-  </section>
-);
 
 const PageTitle = () => {
   const location = useLocation();
@@ -69,7 +64,7 @@ const AppRouter = () => {
             path="/admin"
             element={
               <ProtectedRoute requireAdmin>
-                <Placeholder title="Administración" />
+                <Admin />
               </ProtectedRoute>
             }
           />
