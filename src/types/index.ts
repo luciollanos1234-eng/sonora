@@ -32,4 +32,5 @@ export interface PlayerPrefs {
   muted: boolean;
   repeat: boolean;
   shuffle: boolean;
+  lastSongId?: string;
 }
