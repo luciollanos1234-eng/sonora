@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { BiLogOut } from "react-icons/bi";
+import { BiLogIn, BiLogOut } from "react-icons/bi";
 import { GoHome } from "react-icons/go";
 import { LuUsers } from "react-icons/lu";
 import { MdClose } from "react-icons/md";
 import { TbPlaylist } from "react-icons/tb";
 import Logo from "../../assets/Favicon.sonora.png";
+import { useAuth } from "../../context/useAuth";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   const closeMenu = () => setIsOpen(false);
 
@@ -82,19 +84,41 @@ const Navbar = () => {
 
           <div className="mt-auto text-sm text-gray-400">
             <hr />
-            <div className="mt-6 flex items-center gap-3 p-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-500 font-bold text-white">
-                <NavLink to="/admin" onClick={closeMenu}>
-                  U
-                </NavLink>
+            {/* Con sesión: nombre y salir. Sin sesión: menú de visitante */}
+            {user ? (
+              <div className="mt-6 flex items-center gap-3 p-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-500 font-bold text-white">
+                  {user.role === "admin" ? (
+                    <NavLink to="/admin" onClick={closeMenu}>
+                      {user.name.charAt(0).toUpperCase()}
+                    </NavLink>
+                  ) : (
+                    user.name.charAt(0).toUpperCase()
+                  )}
+                </div>
+                <span className="min-w-0 flex-1 truncate text-white">
+                  {user.name}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Cerrar sesión"
+                  onClick={() => {
+                    logout();
+                    closeMenu();
+                  }}
+                  className="rounded p-1 hover:bg-purple-400"
+                >
+                  <BiLogOut className="text-xl" />
+                </button>
               </div>
-              <span className="min-w-0 flex-1 truncate text-white">
-                Nombre de usuario
-              </span>
-              <NavLink to="" aria-label="Cerrar sesión" onClick={closeMenu}>
-                <BiLogOut className="text-xl" />
+            ) : (
+              <NavLink to="/login" className={linkClass} onClick={closeMenu}>
+                <span className="mt-4 flex items-center gap-2">
+                  <BiLogIn className="text-xl" />
+                  Iniciar sesión
+                </span>
               </NavLink>
-            </div>
+            )}
           </div>
         </nav>
       </section>

@@ -18,6 +18,8 @@ export interface User {
   email: string;
   password: string;
   role: UserRole;
+  // Fecha en formato ISO; el admin del seed no la tiene
+  fechaRegistro?: string;
 }
 
 export interface UserSession {
@@ -32,6 +34,7 @@ export interface PlayerPrefs {
   muted: boolean;
   repeat: boolean;
   shuffle: boolean;
+  lastSongId?: string;
 }
 
 export interface UserPlaylist {
