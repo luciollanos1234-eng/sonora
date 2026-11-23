@@ -8,6 +8,7 @@ import Home from "../pages/Home";
 import Playlist from "../pages/Playlist";
 import About from "../pages/About";
 import NotFound from "../pages/NotFound";
+import Detail from "../pages/Detail";
 import Login from "../pages/Login";
 import { UIShowcase } from "../pages/UIShowcase";
 
@@ -53,7 +54,7 @@ const AppRouter = () => {
         {/* Rutas con Layout */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/detalle/:id" element={<Placeholder title="Detalle de canción" />} />
+          <Route path="/detalle/:id" element={<Detail />} />
           <Route
             path="/playlist"
             element={

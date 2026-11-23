@@ -2,6 +2,7 @@
 import { ToastProvider } from "./context/ToastContext";
 import { PlayerProvider } from "./context/PlayerContext";
 import { AuthProvider } from "./context/AuthContext";
+import { PlayerProvider } from "./context/PlayerContext";
 import AppRouter from "./routes/AppRouter";
 
 function App() {
@@ -11,7 +12,9 @@ function App() {
         <AppRouter />
       </PlayerProvider>
       <AuthProvider>
-        <AppRouter />
+        <PlayerProvider>
+          <AppRouter />
+        </PlayerProvider>
       </AuthProvider>
     </ToastProvider>
   );
