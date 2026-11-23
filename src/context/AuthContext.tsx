@@ -64,10 +64,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => saveSession(null);
-
+https://github.com/luciollanos1234-eng/sonora/pull/13/conflict?name=src%252Fcontext%252FAuthContext.tsx&ancestor_oid=e69de29bb2d1d6434b8b29ae775ad8c2e48c5391&base_oid=5ba9d988d529abf506ec3733c06ca311f116c56b&head_oid=c80a16b82a98c9efbdcca979a4bdc57919032cfc
   return (
     <AuthContext.Provider value={{ user, login, register, logout, emailExists }}>
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("useAuth debe utilizarse dentro de AuthProvider");
+  }
+
+  return context;
 };

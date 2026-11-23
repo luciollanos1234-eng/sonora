@@ -1,3 +1,6 @@
+
+import { FaCheck } from "react-icons/fa";
+
 interface GenreFiltersProps {
   genres: string[];
   selectedGenre: string;
@@ -8,30 +11,37 @@ export const GenreFilters = ({
   genres,
   selectedGenre,
   onGenreChange,
-}: GenreFiltersProps) => (
-  <div
-    role="group"
-    aria-label="Filtrar canciones por género"
-    className="flex flex-wrap gap-3"
-  >
-    {["Todos", ...genres].map((genre) => {
-      const isSelected = selectedGenre === genre;
+}: GenreFiltersProps) => {
+  const allGenres = ["Todos", ...genres];
 
-      return (
-        <button
-          key={genre}
-          type="button"
-          aria-pressed={isSelected}
-          onClick={() => onGenreChange(genre)}
-          className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-            isSelected
-              ? "border-transparent bg-[var(--primary)] text-[var(--text)]"
-              : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] hover:bg-[var(--surface-2)]"
-          }`}
-        >
-          {genre}
-        </button>
-      );
-    })}
-  </div>
-);
+  return (
+    <div className="-mx-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+      <div
+        role="group"
+        aria-label="Filtrar canciones por género"
+        className="flex w-max min-w-full gap-2"
+      >
+        {allGenres.map((genre) => {
+          const isSelected = selectedGenre === genre;
+
+          return (
+            <button
+              key={genre}
+              type="button"
+              aria-pressed={isSelected}
+              onClick={() => onGenreChange(genre)}
+              className={`flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)] ${
+                isSelected
+                  ? "border-transparent bg-[var(--primary-text)] text-[var(--bg)]"
+                  : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] hover:border-[var(--primary)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
+              }`}
+            >
+              {isSelected && <FaCheck size={10} aria-hidden="true" />}
+              {genre}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

@@ -36,3 +36,8 @@ export interface PlayerPrefs {
   shuffle: boolean;
   lastSongId?: string;
 }
+
+export interface UserPlaylist {
+  userId: string;
+  songIds: string[];
+}
