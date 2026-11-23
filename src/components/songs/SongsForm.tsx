@@ -27,7 +27,7 @@ export const SongsForm = ({ onSave, fallbackCover }: SongsFormProps) => {
   } = useForm<SongFormValues>();
 
   const submit = (values: SongFormValues) => {
-    const id = `${values.title}-${Date.now()}`
+    const id = `${values.title}-${crypto.randomUUID()}`
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
