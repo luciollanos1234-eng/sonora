@@ -37,13 +37,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return session;
   };
 
+  // El registro la usa para avisar antes de enviar
+  const emailExists = (email: string) =>
+    getUsers().some((u) => cleanEmail(u.email) === cleanEmail(email));
+
   // Devuelve null si el email ya está registrado
   const register = (name: string, email: string, password: string) => {
-    const users = getUsers();
+    if (emailExists(email)) return null;
 
-    if (users.some((u) => cleanEmail(u.email) === cleanEmail(email))) {
-      return null;
-    }
+    const users = getUsers();
 
     const newUser: User = {
       id: crypto.randomUUID(),
@@ -51,6 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       email: cleanEmail(email),
       password,
       role: "user",
+      fechaRegistro: new Date().toISOString(),
     };
 
     writeStorage(STORAGE_KEYS.users, [...users, newUser]);
@@ -63,7 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => saveSession(null);
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout, emailExists }}>
       {children}
     </AuthContext.Provider>
   );

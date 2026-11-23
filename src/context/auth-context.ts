@@ -6,6 +6,7 @@ export interface AuthContextType {
   login: (email: string, password: string) => UserSession | null;
   register: (name: string, email: string, password: string) => UserSession | null;
   logout: () => void;
+  emailExists: (email: string) => boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
