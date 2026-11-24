@@ -36,7 +36,8 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   }, [volume, currentSong]);
 
   // Pone a sonar una canción y la lista desde donde se eligió
-  const playSong = (song: Song, list: Song[] = queue) => {
+  // La lista se lee de nuevo para incluir lo que se agregó o borró desde Admin
+  const playSong = (song: Song, list: Song[] = getSongs()) => {
     // Usa la versión guardada de la canción, que es la que tiene el audio de iTunes
     const saved = getSongs().find((s) => s.id === song.id) ?? song;
     setQueue(list);
@@ -121,7 +122,9 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         next,
         prev,
         progress,
-        duration: simulated ? simulatedDuration : duration,
+        isPreview: !simulated,
+        // Sin canción elegida no hay duración que mostrar
+        duration: !currentSong ? 0 : simulated ? simulatedDuration : duration,
         seek,
       }}
     >
@@ -135,8 +138,8 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
           playing={isPlaying}
           volume={volume}
           onEnded={next}
-          onTimeUpdate={(e) => setProgress(e.currentTarget.currentTime)}
-          onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+          onTimeUpdate={() => setProgress(playerRef.current?.currentTime ?? 0)}
+          onLoadedMetadata={() => setDuration(playerRef.current?.duration ?? 0)}
           width={0}
           height={0}
           style={{ display: "none" }}

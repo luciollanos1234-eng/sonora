@@ -5,6 +5,8 @@ export interface PlayerContextType {
   currentSong: Song | null;
   queue: Song[];
   isPlaying: boolean;
+  // true si suena el preview de iTunes (no el progreso simulado)
+  isPreview: boolean;
   volume: number;
   setVolume: (value: number) => void;
   playSong: (song: Song, list?: Song[]) => void;

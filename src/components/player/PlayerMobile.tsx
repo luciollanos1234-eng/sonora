@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FiChevronDown,
@@ -18,6 +18,7 @@ const PlayerMobile = () => {
   const {
     currentSong,
     isPlaying,
+    isPreview,
     play,
     pause,
     next,
@@ -29,6 +30,18 @@ const PlayerMobile = () => {
     setVolume,
   } = usePlayer();
   const [isOpen, setIsOpen] = useState(false);
+
+  // Escape cierra la pantalla completa
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
 
   // Porcentaje para la línea de progreso de la barra compacta
   const percent = duration ? Math.min(progress / duration, 1) * 100 : 0;
@@ -97,6 +110,8 @@ const PlayerMobile = () => {
             <IconButton
               aria-label="Cerrar reproductor"
               variant="outline"
+              // Al abrir, el foco pasa adentro de la pantalla completa
+              autoFocus
               onClick={() => setIsOpen(false)}
             >
               <FiChevronDown aria-hidden="true" className="text-xl" />
@@ -139,7 +154,7 @@ const PlayerMobile = () => {
               <span>{formatTime(progress)}</span>
               <span>{formatTime(duration)}</span>
             </div>
-            {currentSong.audioUrl && (
+            {isPreview && (
               <p className="mt-2 text-center text-[11px] text-[var(--text-muted)]">
                 Vista previa de 30 s · cortesía de iTunes
               </p>

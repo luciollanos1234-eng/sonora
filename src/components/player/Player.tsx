@@ -10,6 +10,7 @@ const Player = () => {
   const {
     currentSong,
     isPlaying,
+    isPreview,
     play,
     pause,
     next,
@@ -89,7 +90,7 @@ const Player = () => {
           <span className="w-10 tabular-nums">{formatTime(duration)}</span>
         </div>
 
-        {currentSong?.audioUrl && (
+        {isPreview && (
           <p className="text-[11px] text-[var(--text-muted)]">
             Vista previa de 30 s · cortesía de iTunes
           </p>
@@ -107,6 +108,7 @@ const Player = () => {
           step={0.01}
           value={volume}
           onChange={(e) => setVolume(Number(e.target.value))}
+          disabled={!currentSong}
           className="w-28 accent-[var(--primary-light)]"
         />
       </div>
