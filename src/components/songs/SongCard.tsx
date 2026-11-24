@@ -72,25 +72,25 @@ export const SongCard = ({ song }: SongCardProps) => {
                 ? `Pausar ${song.title}`
                 : `Reproducir ${song.title}`
             }
-            className="absolute bottom-3 right-3 flex size-11 items-center justify-center rounded-full bg-[var(--primary)] text-white shadow-lg transition hover:scale-105 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="absolute bottom-3 right-3 flex size-11 items-center justify-center rounded-full bg-[var(--primary)] text-[var(--text)] shadow-lg transition hover:scale-105 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
           >
             {isPlayingThisSong ? <FaPause /> : <FaPlay />}
           </button>
 
           {isPlayingThisSong && (
-            <span className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-black/75 px-3 py-2 text-xs font-semibold text-white">
+            <span className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-[var(--bg)]/80 px-3 py-2 text-xs font-semibold text-[var(--text)]">
               <span className="flex h-3 items-end gap-0.5" aria-hidden="true">
-                <span className="h-2 w-0.5 animate-pulse bg-purple-300" />
-                <span className="h-3 w-0.5 animate-pulse bg-purple-300 [animation-delay:150ms]" />
-                <span className="h-1.5 w-0.5 animate-pulse bg-purple-300 [animation-delay:300ms]" />
+                <span className="h-2 w-0.5 animate-pulse bg-[var(--primary-text)]" />
+                <span className="h-3 w-0.5 animate-pulse bg-[var(--primary-text)] [animation-delay:150ms]" />
+                <span className="h-1.5 w-0.5 animate-pulse bg-[var(--primary-text)] [animation-delay:300ms]" />
               </span>
               Sonando
             </span>
           )}
         </div>
 
-        <div className="mt-4 flex min-w-0 items-start justify-between gap-3">
-          <div className="min-w-0">
+        <div className="mt-4 flex min-w-0 flex-col items-start gap-2">
+          <div className="w-full min-w-0">
             <h3
               className="truncate font-semibold text-[var(--text)]"
               title={song.title}
@@ -157,7 +157,7 @@ export const SongCard = ({ song }: SongCardProps) => {
         <Link
           to="/login"
           onClick={() => setLoginModalOpen(false)}
-          className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--primary)] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-110"
+          className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--primary)] px-5 py-2 text-sm font-semibold text-[var(--text)] transition hover:brightness-110"
         >
           Ir a iniciar sesión
         </Link>

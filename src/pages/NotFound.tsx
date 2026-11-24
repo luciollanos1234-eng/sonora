@@ -9,21 +9,21 @@ const NotFound = () => {
 
         {/* Ilustración 404 */}
         <div className="mb-6 flex items-center justify-center gap-3 sm:gap-5">
-          <span className="text-7xl font-extrabold leading-none text-violet-300 sm:text-8xl lg:text-9xl">
+          <span className="text-7xl font-extrabold leading-none text-[var(--primary-text)] sm:text-8xl lg:text-9xl">
             4
           </span>
 
-          <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-violet-500/20 bg-[radial-gradient(circle,#38245f_0%,#171321_55%,#0b0a12_100%)] shadow-[0_0_30px_rgba(124,58,237,0.12)] sm:h-28 sm:w-28">
-            <div className="absolute inset-2 rounded-full border border-violet-400/10" />
-            <div className="absolute inset-4 rounded-full border border-violet-400/10" />
-            <div className="absolute inset-6 rounded-full border border-violet-400/10" />
+          <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] shadow-2xl sm:h-28 sm:w-28">
+            <div className="absolute inset-2 rounded-full border border-[var(--border)]" />
+            <div className="absolute inset-4 rounded-full border border-[var(--border)]" />
+            <div className="absolute inset-6 rounded-full border border-[var(--border)]" />
 
-            <FaCompactDisc className="relative z-10 text-4xl text-violet-500/70" />
+            <FaCompactDisc className="relative z-10 text-4xl text-[var(--primary)]" />
 
-            <div className="absolute left-1/2 top-0 h-12 w-1 -translate-x-1/2 rotate-12 rounded-full bg-black/70" />
+            <div className="absolute left-1/2 top-0 h-12 w-1 -translate-x-1/2 rotate-12 rounded-full bg-[var(--bg)]" />
           </div>
 
-          <span className="text-7xl font-extrabold leading-none text-violet-300 sm:text-8xl lg:text-9xl">
+          <span className="text-7xl font-extrabold leading-none text-[var(--primary-text)] sm:text-8xl lg:text-9xl">
             4
           </span>
         </div>
@@ -42,7 +42,7 @@ const NotFound = () => {
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <Link
             to="/"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-violet-700 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-900/30 transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[image:var(--gradient-button)] px-6 py-3 text-sm font-semibold text-[var(--text)] shadow-lg transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
           >
             <FiHome />
             Volver al inicio
@@ -50,7 +50,7 @@ const NotFound = () => {
 
           <Link
             to="/"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
           >
             <FiSearch />
             Explorar el catálogo

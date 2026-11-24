@@ -7,7 +7,7 @@ export const Toast = ({ message }: ToastProps) => (
     role="status"
     aria-live="polite"
     className="
-      fixed bottom-6 left-1/2 z-[100]
+      fixed bottom-20 left-1/2 z-[100] md:bottom-32
       -translate-x-1/2
       flex items-center gap-3
       min-h-11 px-5 py-3
