@@ -55,9 +55,8 @@ const Detail = () => {
     showToast(inPlaylist ? "Quitada de Mi Playlist" : "Agregada a Mi Playlist");
   };
 
-  // En celular deja lugar arriba para el botón del menú
   return (
-    <section className="px-4 pb-6 pt-20 sm:px-8 lg:pt-6">
+    <section className="px-4 py-6 sm:px-8">
       <Link
         to="/"
         className="inline-flex items-center gap-1 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold hover:bg-[var(--surface-2)]"

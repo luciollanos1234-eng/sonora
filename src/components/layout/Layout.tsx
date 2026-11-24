@@ -10,7 +10,7 @@ const Layout = () => {
       <Navbar />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <main className="min-w-0 flex-1 pb-28">
+        <main className="min-w-0 flex-1 pb-28 pt-16 lg:pt-0">
           <Outlet />
         </main>
 
