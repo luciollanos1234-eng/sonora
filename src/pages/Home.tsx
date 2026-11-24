@@ -1,6 +1,5 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import {
   FaCompactDisc,
   FaSearch,
@@ -71,25 +70,26 @@ const Home = () => {
     <div>
       {/* Banner principal */}
       <section className="px-4 pt-6 sm:px-8 sm:pt-8">
-        <div className="flex min-h-40 flex-col gap-6 rounded-lg bg-linear-to-r from-purple-900 via-purple-800 to-fuchsia-700 p-6 text-white sm:flex-row sm:items-center sm:justify-between sm:p-8">
-          <div>
+        <div className="relative flex min-h-40 flex-col justify-center overflow-hidden rounded-lg bg-[image:var(--gradient-button)] p-6 text-[var(--text)] sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div className="relative z-10">
             <h2 className="mb-2 text-2xl font-extrabold sm:text-3xl lg:text-4xl">
-              Tu musica. Tu espacio. Tu ritmo.
+              Tu música. Tu espacio. Tu ritmo.
             </h2>
 
             <p className="text-base sm:text-lg">
-              Busca tu música favorita en nuestro catálogo
+              Buscá tu música favorita en nuestro catálogo
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-2 self-center sm:gap-4">
+          {/* En celular el disco queda de fondo, atrás del texto */}
+          <div className="absolute -bottom-4 -right-4 flex items-center gap-2 opacity-40 sm:static sm:gap-4 sm:opacity-100">
             <img
               src={Logo}
               alt="sonora"
-              className="h-20 w-20 sm:h-30 sm:w-30 lg:h-40 lg:w-40"
+              className="hidden sm:block sm:h-24 sm:w-24 lg:h-28 lg:w-28"
             />
 
-            <FaCompactDisc className="h-20 w-20 text-4xl text-black transition-transform duration-900 ease-in-out hover:rotate-180 sm:h-30 sm:w-30 sm:text-5xl lg:h-40 lg:w-40 lg:text-6xl" />
+            <FaCompactDisc aria-hidden="true" className="h-28 w-28 text-[var(--bg)] transition-transform duration-900 ease-in-out hover:rotate-180 sm:h-24 sm:w-24 lg:h-28 lg:w-28" />
           </div>
         </div>
       </section>
@@ -207,7 +207,7 @@ const Home = () => {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="min-h-11 rounded-full bg-[var(--primary)] px-5 py-2 text-sm font-semibold text-white transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-[var(--focus-color)]"
+                className="min-h-11 rounded-full bg-[var(--primary)] px-5 py-2 text-sm font-semibold text-[var(--text)] transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-[var(--focus-color)]"
               >
                 Limpiar filtros
               </button>
@@ -215,13 +215,6 @@ const Home = () => {
           </section>
         )}
       </section>
-
-      <Link
-        to="/ui-showcase"
-        className="fixed bottom-4 right-4 z-50 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-semibold text-[var(--text)] hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-      >
-        Probar UI Kit
-      </Link>
     </div>
   );
 };
