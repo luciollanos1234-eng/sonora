@@ -7,6 +7,9 @@ export interface PlaylistContextType {
   remove: (songId: string, songTitle: string) => void;
   toggle: (songId: string, songTitle: string) => void;
   removeEverywhere: (songId: string) => void;
+  playlistCount: (userId: string) => number;
+  totalSongs: number;
+  removePlaylist: (userId: string) => void;
 }
 
 export const PlaylistContext = createContext<PlaylistContextType | null>(null);
