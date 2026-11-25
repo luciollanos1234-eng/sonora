@@ -18,13 +18,11 @@ export const SongCard = ({ song }: SongCardProps) => {
   const { currentSong, isPlaying, playSong, pause } = usePlayer();
   const { showToast } = useToast();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
-  const [playlist, setPlaylist] = useState<string[]>(() =>
-    user ? getPlaylist(user.userId) : []
-  );
+  const { isInPlaylist, toggle } = usePlaylist();
 
   const isCurrent = currentSong?.id === song.id;
   const isPlayingThisSong = isCurrent && isPlaying;
-  const isAdded = !!user && playlist.includes(song.id);
+  const isAdded = !!user && isInPlaylist(song.id);
 
   const handlePlay = () => {
     if (isPlayingThisSong) {
