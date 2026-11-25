@@ -1,16 +1,30 @@
 import { useState } from "react";
-import { FiTrash2 } from "react-icons/fi";
+import { FiList, FiMusic, FiTrash2, FiUsers } from "react-icons/fi";
 
 import fallbackCover from "../assets/portadas/respaldo.png";
 import { SongsForm } from "../components/songs/SongsForm";
-import { getSongs } from "../data/initialize";
+import { getSongs, getUsers } from "../data/initialize";
 import { useToast } from "../context/useToast";
-import { STORAGE_KEYS, writeStorage } from "../utils/storage";
+import { STORAGE_KEYS, readStorage, writeStorage } from "../utils/storage";
 import type { Song } from "../types";
 
 const Admin = () => {
   const [songs, setSongs] = useState<Song[]>(() => getSongs());
   const { showToast } = useToast();
+
+  // Los totales se calculan con lo guardado, no se guardan aparte
+  const users = getUsers();
+  const playlists = readStorage<Record<string, string[]>>(STORAGE_KEYS.playlists, {});
+  let inPlaylists = 0;
+  Object.values(playlists).forEach((list) => {
+    inPlaylists += list.length;
+  });
+
+  const totals = [
+    { label: "Canciones", value: songs.length, icon: <FiMusic aria-hidden="true" /> },
+    { label: "Usuarios", value: users.length, icon: <FiUsers aria-hidden="true" /> },
+    { label: "Canciones en playlists", value: inPlaylists, icon: <FiList aria-hidden="true" /> },
+  ];
 
   const saveSongs = (nextSongs: Song[]) => {
     if (!writeStorage(STORAGE_KEYS.songs, nextSongs)) return;
@@ -28,13 +42,29 @@ const Admin = () => {
   };
 
   return (
-    <section className="px-4 pb-10 pt-20 sm:px-8 lg:pt-8">
+    <section className="px-4 pb-10 pt-6 sm:px-8 lg:pt-8">
       <header className="mb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--primary-text)]">
-          Panel administrativo
+        <h1 className="text-3xl font-extrabold">Panel de administración</h1>
+        <p className="mt-1 text-sm text-[var(--text-muted)]">
+          Gestioná el catálogo y las cuentas de Sonora.
         </p>
-        <h1 className="mt-1 text-3xl font-extrabold">Administración</h1>
       </header>
+
+      {/* Totales */}
+      <div className="mb-8 grid grid-cols-3 gap-3 sm:gap-4">
+        {totals.map((total) => (
+          <article
+            key={total.label}
+            className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-3 sm:p-5"
+          >
+            <span className="mb-3 hidden size-9 items-center justify-center rounded-[var(--radius-control)] bg-[var(--surface-3)] text-[var(--primary-text)] sm:flex">
+              {total.icon}
+            </span>
+            <p className="text-2xl font-extrabold sm:text-3xl">{total.value}</p>
+            <p className="text-xs text-[var(--text-muted)] sm:text-sm">{total.label}</p>
+          </article>
+        ))}
+      </div>
 
       <SongsForm onSave={addSong} fallbackCover={fallbackCover} />
 
