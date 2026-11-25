@@ -14,6 +14,7 @@ import { SongsForm } from "../components/songs/SongsForm";
 import { Modal } from "../components/ui/Modal";
 import { getSongs, getUsers } from "../data/initialize";
 import { useToast } from "../context/useToast";
+import { usePlayer } from "../context/usePlayer";
 import { normalize } from "../utils/normalize";
 import { STORAGE_KEYS, readStorage, writeStorage } from "../utils/storage";
 import type { Song } from "../types";
@@ -31,7 +32,10 @@ const Admin = () => {
   const [tab, setTab] = useState<Tab>("canciones");
   const [search, setSearch] = useState("");
   const [formOpen, setFormOpen] = useState(false);
+  // Canción que se está editando (null = ninguna)
+  const [editingSong, setEditingSong] = useState<Song | null>(null);
   const { showToast } = useToast();
+  const player = usePlayer();
 
   // Los totales se calculan con lo guardado, no se guardan aparte
   const users = getUsers();
@@ -64,6 +68,14 @@ const Admin = () => {
     saveSongs([song, ...songs]);
     setFormOpen(false);
     showToast("Canción agregada");
+  };
+
+  // Conserva el id, así la canción sigue en las playlists
+  const saveEdit = (song: Song) => {
+    saveSongs(songs.map((item) => (item.id === song.id ? song : item)));
+    player.updateSong(song);
+    setEditingSong(null);
+    showToast("Cambios guardados");
   };
 
   const removeSong = (song: Song) => {
@@ -218,8 +230,7 @@ const Admin = () => {
                       </td>
                       <td className="p-3">
                         <div className="flex justify-end gap-2">
-                          {/* Editar se conecta en SON-018 */}
-                          <button type="button" disabled aria-label={`Editar ${song.title}`} className={editClass}>
+                          <button type="button" onClick={() => setEditingSong(song)} aria-label={`Editar ${song.title}`} className={editClass}>
                             <FiEdit2 aria-hidden="true" />
                             Editar
                           </button>
@@ -263,7 +274,7 @@ const Admin = () => {
                   <span className="shrink-0 rounded-full bg-[var(--surface-3)] px-2.5 py-1 text-xs">{song.genre}</span>
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-2">
-                  <button type="button" disabled aria-label={`Editar ${song.title}`} className={editClass}>
+                  <button type="button" onClick={() => setEditingSong(song)} aria-label={`Editar ${song.title}`} className={editClass}>
                     <FiEdit2 aria-hidden="true" />
                     Editar
                   </button>
@@ -302,6 +313,13 @@ const Admin = () => {
 
       <Modal open={formOpen} title="Agregar canción" onClose={() => setFormOpen(false)}>
         <SongsForm onSave={addSong} genres={genres} />
+      </Modal>
+
+      {/* Mismo formulario, con los datos de la canción cargados */}
+      <Modal open={editingSong !== null} title="Editar canción" onClose={() => setEditingSong(null)}>
+        {editingSong && (
+          <SongsForm key={editingSong.id} song={editingSong} onSave={saveEdit} genres={genres} />
+        )}
       </Modal>
     </section>
   );
