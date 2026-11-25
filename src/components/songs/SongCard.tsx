@@ -33,17 +33,13 @@ export const SongCard = ({ song }: SongCardProps) => {
   };
 
   const handlePlaylist = () => {
-    if (!user) {
-      setLoginModalOpen(true);
-      return;
-    }
+  if (!user) {
+    setLoginModalOpen(true);
+    return;
+  }
 
-    const updated = toggleSongInPlaylist(user.userId, song.id);
-    setPlaylist(updated);
-    showToast(
-      isAdded ? "Quitada de Mi Playlist" : "Agregada a Mi Playlist"
-    );
-  };
+  toggle(song.id, song.title);
+};
 
   return (
     <>
