@@ -87,7 +87,8 @@ const Admin = () => {
     const css = getComputedStyle(document.documentElement);
     const result = await Swal.fire({
       icon: "warning",
-      title: `¿Eliminar ${song.title}?`,
+      // titleText muestra el nombre como texto, sin interpretar HTML
+      titleText: `¿Eliminar ${song.title}?`,
       text: "Se borra del catálogo y de las playlists de todos los usuarios. No se puede deshacer.",
       showCancelButton: true,
       confirmButtonText: "Eliminar canción",
