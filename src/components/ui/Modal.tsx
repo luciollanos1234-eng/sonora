@@ -6,6 +6,7 @@ interface ModalProps {
   children: ReactNode;
   onClose: () => void;
   onConfirm?: () => void;
+  showCancel?: boolean;
 }
 
 export const Modal = ({
@@ -14,6 +15,7 @@ export const Modal = ({
   children,
   onClose,
   onConfirm,
+  showCancel = true,
 }: ModalProps) => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -108,37 +110,29 @@ export const Modal = ({
           {children}
         </div>
 
-        <footer className="flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="
-              min-h-11 px-4 rounded-xl
-              bg-[var(--surface-3)]
-              text-[var(--text)] text-sm font-semibold
-              focus-visible:outline-2
-              focus-visible:outline-[var(--focus-color)]
-            "
-          >
-            Cancelar
-          </button>
+        {(showCancel || onConfirm) && (
+  <footer className="flex justify-end gap-3">
+    {showCancel && (
+      <button
+        type="button"
+        onClick={onClose}
+        className="min-h-11 px-4 rounded-xl bg-[var(--surface-3)] text-[var(--text)] text-sm font-semibold"
+      >
+        Cancelar
+      </button>
+    )}
 
-          {onConfirm && (
-            <button
-              type="button"
-              onClick={onConfirm}
-              className="
-                min-h-11 px-4 rounded-xl
-                bg-[var(--primary)] text-[var(--text)]
-                text-sm font-semibold
-                focus-visible:outline-2
-                focus-visible:outline-[var(--focus-color)]
-              "
-            >
-              Confirmar
-            </button>
-          )}
-        </footer>
+    {onConfirm && (
+      <button
+        type="button"
+        onClick={onConfirm}
+        className="min-h-11 px-4 rounded-xl bg-[var(--primary)] text-[var(--text)] text-sm font-semibold"
+      >
+        Confirmar
+      </button>
+    )}
+  </footer>
+)}
       </section>
     </div>
   );
