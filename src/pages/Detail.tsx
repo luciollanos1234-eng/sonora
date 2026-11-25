@@ -39,8 +39,8 @@ const Detail = () => {
   const location = useLocation();
 
   // Ids de la playlist del usuario (vacía si no hay sesión)
-  const [playlist, setPlaylist] = useState<string[]>(() => (user ? getPlaylist(user.userId) : []));
-  const inPlaylist = !!song && !!user && playlist.includes(song.id);
+  const { isInPlaylist, toggle } = usePlaylist();
+  const inPlaylist = !!song && !!user && isInPlaylist(song.id);
 
   // Sin sesión lleva al login y después vuelve a esta canción
   const handlePlaylist = () => {
