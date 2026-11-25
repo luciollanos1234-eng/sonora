@@ -1,29 +1,19 @@
 import {
-  createContext,
-  useContext,
+  useCallback,
   useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 
+import { LoginRequiredModal } from "../components/songs/LoginRequiredModal";
+import { STORAGE_KEYS, readStorage, writeStorage } from "../utils/storage";
+import { PlaylistContext } from "./playlist-context";
 import { useAuth } from "./useAuth";
 import { useToast } from "./useToast";
-import {
-  STORAGE_KEYS,
-  readStorage,
-  writeStorage,
-} from "../utils/storage";
 
+// { [userId]: [songId, ...] }
 type Playlists = Record<string, string[]>;
-
-interface PlaylistContextType {
-  songIds: string[];
-  isInPlaylist: (songId: string) => boolean;
-  add: (songId: string, songTitle: string) => void;
-  remove: (songId: string, songTitle: string) => void;
-  toggle: (songId: string, songTitle: string) => void;
-}
 
 const isPlaylists = (value: unknown): value is Playlists => {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -31,86 +21,96 @@ const isPlaylists = (value: unknown): value is Playlists => {
   }
 
   return Object.values(value).every(
-    (ids) =>
-      Array.isArray(ids) &&
-      ids.every((id) => typeof id === "string")
+    (ids) => Array.isArray(ids) && ids.every((id) => typeof id === "string")
   );
 };
 
-const PlaylistContext = createContext<PlaylistContextType | null>(null);
-
-export const PlaylistProvider = ({
-  children,
-}: {
-  children: ReactNode;
-}) => {
+export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const userId = user?.userId ?? null;
 
   const [playlists, setPlaylists] = useState<Playlists>(() =>
     readStorage<Playlists>(STORAGE_KEYS.playlists, {}, isPlaylists)
   );
+  const [loginPromptOpen, setLoginPromptOpen] = useState(false);
 
+  // Cada usuario ve solo su lista; sin sesión no hay lista
   const songIds = useMemo(
-    () => (user ? playlists[user.userId] ?? [] : []),
-    [playlists, user]
+    () => (userId ? (playlists[userId] ?? []) : []),
+    [playlists, userId]
   );
 
   useEffect(() => {
     writeStorage(STORAGE_KEYS.playlists, playlists);
   }, [playlists]);
 
-  const isInPlaylist = (songId: string) => songIds.includes(songId);
+  const isInPlaylist = useCallback(
+    (songId: string) => songIds.includes(songId),
+    [songIds]
+  );
 
-  const add = (songId: string, songTitle: string) => {
-    if (!user || songIds.includes(songId)) return;
+  const add = useCallback(
+    (songId: string, songTitle: string) => {
+      // Visitante: en vez de agregar, abre el modal
+      if (!userId) {
+        setLoginPromptOpen(true);
+        return;
+      }
 
-    setPlaylists((previous) => ({
-      ...previous,
-      [user.userId]: [...(previous[user.userId] ?? []), songId],
-    }));
+      // Sin duplicados
+      if (songIds.includes(songId)) return;
 
-    showToast(`Agregaste ${songTitle} a Mi Playlist`);
-  };
+      setPlaylists((previous) => {
+        const current = previous[userId] ?? [];
+        if (current.includes(songId)) return previous;
+        return { ...previous, [userId]: [...current, songId] };
+      });
 
-  const remove = (songId: string, songTitle: string) => {
-    if (!user || !songIds.includes(songId)) return;
+      showToast(`Agregaste ${songTitle} a Mi Playlist`);
+    },
+    [userId, songIds, showToast]
+  );
 
-    setPlaylists((previous) => ({
-      ...previous,
-      [user.userId]: (previous[user.userId] ?? []).filter(
-        (id) => id !== songId
-      ),
-    }));
+  const remove = useCallback(
+    (songId: string, songTitle: string) => {
+      if (!userId || !songIds.includes(songId)) return;
 
-    showToast(`Quitaste ${songTitle} de Mi Playlist`);
-  };
+      setPlaylists((previous) => ({
+        ...previous,
+        [userId]: (previous[userId] ?? []).filter((id) => id !== songId),
+      }));
 
-  const toggle = (songId: string, songTitle: string) => {
-    if (isInPlaylist(songId)) {
-      remove(songId, songTitle);
-    } else {
-      add(songId, songTitle);
-    }
-  };
+      showToast(`Quitaste ${songTitle} de Mi Playlist`);
+    },
+    [userId, songIds, showToast]
+  );
+
+  const toggle = useCallback(
+    (songId: string, songTitle: string) => {
+      if (songIds.includes(songId)) {
+        remove(songId, songTitle);
+      } else {
+        add(songId, songTitle);
+      }
+    },
+    [songIds, add, remove]
+  );
+
+  const closeLoginPrompt = useCallback(() => setLoginPromptOpen(false), []);
+
+  const value = useMemo(
+    () => ({ songIds, isInPlaylist, add, remove, toggle }),
+    [songIds, isInPlaylist, add, remove, toggle]
+  );
 
   return (
-    <PlaylistContext.Provider
-      value={{ songIds, isInPlaylist, add, remove, toggle }}
-    >
+    <PlaylistContext.Provider value={value}>
       {children}
+      <LoginRequiredModal
+        open={loginPromptOpen && !userId}
+        onClose={closeLoginPrompt}
+      />
     </PlaylistContext.Provider>
   );
-};
-
-export const usePlaylist = () => {
-  const context = useContext(PlaylistContext);
-
-  if (!context) {
-    throw new Error(
-      "usePlaylist debe utilizarse dentro de PlaylistProvider"
-    );
-  }
-
-  return context;
 };
