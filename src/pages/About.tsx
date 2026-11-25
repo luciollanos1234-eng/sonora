@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FiSearch } from "react-icons/fi";
 
 const About = () => {
   return (
@@ -203,8 +204,33 @@ const About = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Local Storage
+            LocalStorage
           </a>
+          <br />
+          <p className="text-xs">
+            Todo se guarda en el navegador con el LocalStorage, las portadas son
+            ilustraciones propias.
+          </p>
+        </div>
+      </div>
+      <br />
+      <div className="flex">
+        <div className="m-2">
+          <Link
+            to="/"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+          >
+            <FiSearch />
+            Explorar el catálogo
+          </Link>
+        </div>
+        <div className="m-2">
+          <Link
+            to="https://github.com/luciollanos1234-eng/sonora.git"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+          >
+            Ver el Repositorio
+          </Link>
         </div>
       </div>
     </section>
