@@ -1,22 +1,25 @@
+
+
 const About = () => {
   return (
     <section className="px-4 pb-10 pt-20 sm:px-8 lg:pt-8">
-      <div className="mx-auto max-w-3xl rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--primary-text)]">
-          Acerca de nosotros
-        </p>
-        <h1 className="mt-2 text-3xl font-extrabold">Tu música, tu espacio</h1>
-        <div className="mt-6 space-y-4 leading-relaxed text-[var(--text-muted)]">
-          <p>
-            Sonora es una aplicación web creada para explorar canciones, descubrir
-            artistas y guardar una playlist propia.
-          </p>
-          <p>
-            El proyecto funciona con datos locales y ofrece una experiencia
-            responsiva en escritorio y dispositivos móviles.
-          </p>
+     <div className="relative flex min-h-40 flex-col justify-center overflow-hidden rounded-lg bg-[image:var(--gradient-button)] p-6 text-[var(--text)] sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div className="relative z-10">
+            <p>Acerca de nosotros</p>
+            <h2 className="mb-2 text-2xl font-extrabold sm:text-3xl lg:text-4xl">
+              Tu música. Tu espacio. Tu ritmo.
+            </h2>
+
+            <p className="text-base sm:text-lg">
+              Buscá tu música favorita en nuestro catálogo
+            </p>
+          </div>
+
+          {/* En celular el disco queda de fondo, atrás del texto */}
+          <div className="absolute -bottom-4 -right-4 flex items-center gap-2 opacity-40 sm:static sm:gap-4 sm:opacity-100">
+          
+          </div>
         </div>
-      </div>
     </section>
   );
 };
