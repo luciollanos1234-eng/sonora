@@ -9,7 +9,7 @@ Sonora es una aplicación web musical para explorar un catálogo de canciones, e
 - **Tablero Trello:** https://trello.com/invite/b/6af7f76ce83e57d36d39625c/ATTI1f95e379451c8dd95c0a0c787e69ef7e7570324A/sonora.
 - **Mockups / diseño:**
 - <img width="1440" height="1240" alt="mockup-01-inicio" src="https://github.com/user-attachments/assets/70627219-3d39-4467-b468-cda43828d263" />
--<img width="780" height="1688" alt="celular-21-inicio" src="https://github.com/user-attachments/assets/df725963-2a66-4ae6-98d2-87d08fb2e243" />
+  
 
 
 
