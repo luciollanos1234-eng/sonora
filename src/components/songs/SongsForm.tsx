@@ -2,61 +2,100 @@ import { useForm } from "react-hook-form";
 import type { Song } from "../../types";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
+import FormAlert from "../auth/FormAlert";
+import Cover from "./Cover";
 
 interface SongFormValues {
   title: string;
   artist: string;
   album: string;
-  year: number;
+  year: string;
   genre: string;
+  duration: string;
   cover: string;
   audioUrl: string;
 }
 
 interface SongsFormProps {
   onSave: (song: Song) => void;
-  fallbackCover: string;
+  // Si viene una canción, el formulario sirve para editarla
+  song?: Song;
+  genres: string[];
 }
 
-export const SongsForm = ({ onSave, fallbackCover }: SongsFormProps) => {
+// Acepta URLs completas o rutas locales como las portadas del seed
+const URL_PATTERN = {
+  value: /^(https?:\/\/|\/)\S+$/,
+  message: "La URL tiene que empezar con http://, https:// o /.",
+};
+
+// 222000 ms -> "3:42"
+const msToTime = (ms: number) => {
+  const totalSeconds = Math.floor(ms / 1000);
+  const seconds = String(totalSeconds % 60).padStart(2, "0");
+  return `${Math.floor(totalSeconds / 60)}:${seconds}`;
+};
+
+export const SongsForm = ({ onSave, song, genres }: SongsFormProps) => {
   const {
     register,
     handleSubmit,
-    reset,
+    watch,
     formState: { errors },
-  } = useForm<SongFormValues>();
+  } = useForm<SongFormValues>({
+    defaultValues: {
+      title: song?.title ?? "",
+      artist: song?.artist ?? "",
+      album: song?.album ?? "",
+      year: song ? String(song.year) : "",
+      genre: song?.genre ?? "",
+      duration: song?.duration ? msToTime(song.duration) : "",
+      cover: song?.cover ?? "",
+      audioUrl: song?.audioUrl ?? "",
+    },
+  });
+
+  const currentYear = new Date().getFullYear();
+  const errorCount = Object.keys(errors).length;
+  const coverPreview = watch("cover");
 
   const submit = (values: SongFormValues) => {
-    const id = `${values.title}-${crypto.randomUUID()}`
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
+    // "3:42" -> 222000 ms; sin duración queda en 0
+    let duration = 0;
+    if (values.duration) {
+      const [minutes, seconds] = values.duration.split(":");
+      duration = (Number(minutes) * 60 + Number(seconds)) * 1000;
+    }
 
     onSave({
-      id,
+      id: song ? song.id : crypto.randomUUID(),
       title: values.title.trim(),
       artist: values.artist.trim(),
       album: values.album.trim(),
       year: Number(values.year),
-      genre: values.genre.trim(),
-      cover: values.cover.trim() || fallbackCover,
+      genre: values.genre,
+      cover: values.cover.trim(),
       audioUrl: values.audioUrl.trim(),
-      duration: 0,
+      duration,
     });
-    reset();
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(submit)}
-      className="grid gap-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5 sm:grid-cols-2"
-    >
+    <form onSubmit={handleSubmit(submit)} noValidate className="mt-4 grid gap-4 sm:grid-cols-2">
+      {errorCount > 0 && (
+        <div className="sm:col-span-2">
+          <FormAlert>
+            {errorCount === 1
+              ? "Revisá el campo marcado para guardar la canción."
+              : `Revisá los ${errorCount} campos marcados para guardar la canción.`}
+          </FormAlert>
+        </div>
+      )}
+
       <Input
-        label="Título"
+        label="Nombre"
         error={errors.title?.message}
-        {...register("title", { required: "Ingresá el título." })}
+        {...register("title", { required: "Ingresá el nombre." })}
       />
       <Input
         label="Artista"
@@ -70,35 +109,89 @@ export const SongsForm = ({ onSave, fallbackCover }: SongsFormProps) => {
       />
       <Input
         label="Año"
-        type="number"
+        inputMode="numeric"
         error={errors.year?.message}
         {...register("year", {
           required: "Ingresá el año.",
-          valueAsNumber: true,
-          min: { value: 1900, message: "Ingresá un año válido." },
+          validate: (value) => {
+            const year = Number(value);
+            return (
+              (Number.isInteger(year) && year >= 1900 && year <= currentYear) ||
+              `El año va de 1900 a ${currentYear}.`
+            );
+          },
         })}
       />
-      <Input
-        label="Género"
-        error={errors.genre?.message}
-        {...register("genre", { required: "Ingresá el género." })}
-      />
-      <Input
-        label="URL de portada"
-        placeholder="Opcional"
-        {...register("cover")}
-      />
-      <Input
-        label="URL de audio"
-        placeholder="Opcional"
-        className="sm:col-span-2"
-        {...register("audioUrl")}
-      />
-      <div className="sm:col-span-2">
-        <Button type="submit" className="w-full sm:w-auto">
-          Agregar canción
-        </Button>
+
+      {/* Género: lista con los géneros del catálogo */}
+      <div className="flex flex-col gap-2">
+        <label htmlFor="song-genre" className="text-sm font-semibold text-[var(--text)]">
+          Género
+        </label>
+        <select
+          id="song-genre"
+          aria-invalid={!!errors.genre}
+          aria-describedby={errors.genre ? "song-genre-error" : undefined}
+          className={`min-h-11 rounded-[var(--radius-control)] border bg-[var(--surface-2)] px-4 text-sm text-[var(--text)] ${
+            errors.genre ? "border-[var(--danger)]" : "border-[var(--border)]"
+          }`}
+          {...register("genre", { required: "Elegí un género." })}
+        >
+          <option value="">Elegí un género</option>
+          {genres.map((genre) => (
+            <option key={genre} value={genre}>
+              {genre}
+            </option>
+          ))}
+        </select>
+        {errors.genre && (
+          <p id="song-genre-error" role="alert" className="text-sm text-[var(--danger)]">
+            {errors.genre.message}
+          </p>
+        )}
       </div>
+
+      <Input
+        label="Duración"
+        placeholder="3:42"
+        error={errors.duration?.message}
+        {...register("duration", {
+          pattern: { value: /^\d{1,2}:[0-5]\d$/, message: "Usá el formato mm:ss, por ejemplo 3:42." },
+        })}
+      />
+
+      {/* Portada con vista previa */}
+      <div className="flex items-end gap-3 sm:col-span-2">
+        <div className="flex-1">
+          <Input
+            label="URL de la portada"
+            placeholder="https://..."
+            error={errors.cover?.message}
+            {...register("cover", { required: "Ingresá la URL de la portada.", pattern: URL_PATTERN })}
+          />
+        </div>
+        {coverPreview && (
+          <Cover
+            key={coverPreview}
+            src={coverPreview}
+            alt="Vista previa de la portada"
+            className="size-16 shrink-0 rounded-[var(--radius-cover)] object-cover"
+          />
+        )}
+      </div>
+
+      <div className="sm:col-span-2">
+        <Input
+          label="URL del audio"
+          placeholder="Opcional"
+          error={errors.audioUrl?.message}
+          {...register("audioUrl", { pattern: URL_PATTERN })}
+        />
+      </div>
+
+      <Button type="submit" className="sm:col-span-2">
+        {song ? "Guardar cambios" : "Guardar canción"}
+      </Button>
     </form>
   );
 };

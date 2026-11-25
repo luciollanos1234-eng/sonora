@@ -97,11 +97,22 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
     [songIds, add, remove]
   );
 
+  // Saca una canción borrada desde Admin de las playlists de todos los usuarios
+  const removeEverywhere = useCallback((songId: string) => {
+    setPlaylists((previous) => {
+      const next: Playlists = {};
+      Object.keys(previous).forEach((id) => {
+        next[id] = previous[id].filter((item) => item !== songId);
+      });
+      return next;
+    });
+  }, []);
+
   const closeLoginPrompt = useCallback(() => setLoginPromptOpen(false), []);
 
   const value = useMemo(
-    () => ({ songIds, isInPlaylist, add, remove, toggle }),
-    [songIds, isInPlaylist, add, remove, toggle]
+    () => ({ songIds, isInPlaylist, add, remove, toggle, removeEverywhere }),
+    [songIds, isInPlaylist, add, remove, toggle, removeEverywhere]
   );
 
   return (
