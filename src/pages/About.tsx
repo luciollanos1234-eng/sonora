@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const About = () => {
   return (
     <section className="px-4 pb-10 pt-20 sm:px-8 lg:pt-8">
@@ -39,6 +41,20 @@ const About = () => {
                 <p className="text-sm text-[var(--primary-text)]">
                   (que hizo en el proyecto)
                 </p>
+                <span className="chip flex items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 m-1 h-10 w-auto text-xs font-semibold text-[var(--text)]  transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]">
+                  <img
+                    src="https://github.com/lioneldebortoli.png"
+                    className="chip-img h-5 rounded-full"
+                    alt="github avatar"
+                  />
+                  <Link
+                    to="https://github.com/lioneldebortoli"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GitHub: lioneldebortoli
+                  </Link>
+                </span>
               </div>
             </div>
           </div>
@@ -59,6 +75,21 @@ const About = () => {
                 <p className="text-sm text-[var(--primary-text)]">
                   (que hizo en el proyecto)
                 </p>
+
+                <span className="chip flex items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 m-1 h-10 w-auto text-xs font-semibold text-[var(--text)]  transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]">
+                  <img
+                    src="https://github.com/luciollanos1234-eng.png"
+                    className="chip-img h-5 rounded-full"
+                    alt="github avatar"
+                  />
+                  <Link
+                    to="https://github.com/luciollanos1234-eng"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GitHub: luciollanos1234-eng
+                  </Link>
+                </span>
               </div>
             </div>
           </div>
@@ -79,6 +110,20 @@ const About = () => {
                 <p className="text-sm text-[var(--primary-text)]">
                   (que hizo en el proyecto)
                 </p>
+                <span className="chip flex items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 m-1 h-10 w-auto text-xs font-semibold text-[var(--text)]  transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]">
+                  <img
+                    src="https://github.com/facualvarez829-afk.png"
+                    className="chip-img h-5 rounded-full"
+                    alt="github avatar"
+                  />
+                  <Link
+                    to="https://github.com/facualvarez829-afk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GitHub: facualvarez829-afk
+                  </Link>
+                </span>
               </div>
             </div>
           </div>
