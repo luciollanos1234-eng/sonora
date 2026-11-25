@@ -34,7 +34,6 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
   );
   const [loginPromptOpen, setLoginPromptOpen] = useState(false);
 
-  // Cada usuario ve solo su lista; sin sesión no hay lista
   const songIds = useMemo(
     () => (userId ? (playlists[userId] ?? []) : []),
     [playlists, userId],
@@ -51,13 +50,11 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 
   const add = useCallback(
     (songId: string, songTitle: string) => {
-      // Visitante: en vez de agregar, abre el modal
       if (!userId) {
         setLoginPromptOpen(true);
         return;
       }
 
-      // Sin duplicados
       if (songIds.includes(songId)) return;
 
       setPlaylists((previous) => {
@@ -96,7 +93,6 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
     [songIds, add, remove],
   );
 
-  // Saca una canción borrada desde Admin de las playlists de todos los usuarios
   const removeEverywhere = useCallback((songId: string) => {
     setPlaylists((previous) => {
       const next: Playlists = {};
