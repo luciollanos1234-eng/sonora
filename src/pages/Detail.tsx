@@ -1,60 +1,56 @@
-import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { FiChevronLeft, FiDisc, FiCalendar, FiTag, FiClock, FiPause, FiPlay, FiPlus, FiSearch } from "react-icons/fi";
+import { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import {
+  FiChevronLeft,
+  FiDisc,
+  FiCalendar,
+  FiTag,
+  FiClock,
+  FiPause,
+  FiPlay,
+  FiPlus,
+  FiSearch,
+} from "react-icons/fi";
 import { getSongs } from "../data/initialize";
 import Cover from "../components/songs/Cover";
 import { formatTime } from "../utils/formatTime";
 import { Button } from "../components/ui/Button";
 import { usePlayer } from "../context/usePlayer";
 import { SongCard } from "../components/songs/SongCard";
-import { useAuth } from "../context/useAuth";
-import { useToast } from "../context/useToast";
-import { getPlaylist, toggleSongInPlaylist } from "../utils/playlists";
+import { usePlaylist } from "../context/usePlaylist";
 
 const Detail = () => {
   const { id } = useParams();
   const songs = getSongs();
-  // Busca la canción por el id de la URL en sonora_songs
   const song = songs.find((s) => s.id === id);
 
-  // Primero las del mismo género o artista, sin repetir la actual
   const similar = song
-    ? songs.filter((s) => s.id !== song.id && (s.genre === song.genre || s.artist === song.artist))
+    ? songs.filter(
+        (s) =>
+          s.id !== song.id &&
+          (s.genre === song.genre || s.artist === song.artist),
+      )
     : [];
-  // Después el resto, para completar hasta 5
-  const others = song ? songs.filter((s) => s.id !== song.id && !similar.includes(s)) : [];
+  const others = song
+    ? songs.filter((s) => s.id !== song.id && !similar.includes(s))
+    : [];
   const recommended = [...similar, ...others].slice(0, 5);
 
-  // El título de la pestaña es el nombre de la canción; al cambiar de detalle vuelve arriba
   const songTitle = song?.title;
   useEffect(() => {
-    document.title = songTitle ? `${songTitle} · Sonora` : "Canción no encontrada · Sonora";
+    document.title = songTitle
+      ? `${songTitle} · Sonora`
+      : "Canción no encontrada · Sonora";
     window.scrollTo(0, 0);
   }, [id, songTitle]);
   const { currentSong, isPlaying, playSong, pause } = usePlayer();
   const isThisPlaying = !!song && currentSong?.id === song.id && isPlaying;
-  const { user } = useAuth();
-  const { showToast } = useToast();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { isInPlaylist, toggle } = usePlaylist();
+  const inPlaylist = !!song && isInPlaylist(song.id);
 
-  // Ids de la playlist del usuario (vacía si no hay sesión)
-  const [playlist, setPlaylist] = useState<string[]>(() => (user ? getPlaylist(user.userId) : []));
-  const inPlaylist = !!song && !!user && playlist.includes(song.id);
-
-  // Sin sesión lleva al login y después vuelve a esta canción
   const handlePlaylist = () => {
-    if (!song) return;
-
-    if (!user) {
-      navigate("/login", { state: { from: location.pathname } });
-      return;
-    }
-
-    setPlaylist(toggleSongInPlaylist(user.userId, song.id));
-    showToast(inPlaylist ? "Quitada de Mi Playlist" : "Agregada a Mi Playlist");
+    if (song) toggle(song.id, song.title);
   };
-
   return (
     <section className="px-4 py-6 sm:px-8">
       <Link
@@ -68,49 +64,86 @@ const Detail = () => {
       {song ? (
         <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-end">
           <div className="relative mx-auto w-full max-w-[260px] shrink-0 sm:max-w-xs md:mx-0">
-            <div aria-hidden="true" className="absolute inset-4 rounded-[var(--radius-card)] bg-[var(--primary)] opacity-40 blur-3xl" />
-            <Cover src={song.cover} alt={`Portada de ${song.album}`} className="relative aspect-square w-full rounded-[var(--radius-card)] object-cover shadow-2xl" />
+            <div
+              aria-hidden="true"
+              className="absolute inset-4 rounded-[var(--radius-card)] bg-[var(--primary)] opacity-40 blur-3xl"
+            />
+            <Cover
+              src={song.cover}
+              alt={`Portada de ${song.album}`}
+              className="relative aspect-square w-full rounded-[var(--radius-card)] object-cover shadow-2xl"
+            />
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--primary-text)]">Canción</p>
-            <h1 className="mt-2 text-4xl font-extrabold sm:text-5xl">{song.title}</h1>
-            <p className="mt-1 text-lg text-[var(--text-muted)]">{song.artist}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--primary-text)]">
+              Canción
+            </p>
+            <h1 className="mt-2 text-4xl font-extrabold sm:text-5xl">
+              {song.title}
+            </h1>
+            <p className="mt-1 text-lg text-[var(--text-muted)]">
+              {song.artist}
+            </p>
             <dl className="mt-6 grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:gap-8">
               <div className="flex items-center gap-3">
-                <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-[var(--radius-control)] bg-[var(--surface-2)] text-[var(--primary-text)]">
+                <span
+                  aria-hidden="true"
+                  className="flex size-10 items-center justify-center rounded-[var(--radius-control)] bg-[var(--surface-2)] text-[var(--primary-text)]"
+                >
                   <FiDisc />
                 </span>
                 <div>
-                  <dt className="text-[11px] uppercase tracking-wider text-[var(--text-muted)]">Álbum</dt>
+                  <dt className="text-[11px] uppercase tracking-wider text-[var(--text-muted)]">
+                    Álbum
+                  </dt>
                   <dd className="font-semibold">{song.album}</dd>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-[var(--radius-control)] bg-[var(--surface-2)] text-[var(--primary-text)]">
+                <span
+                  aria-hidden="true"
+                  className="flex size-10 items-center justify-center rounded-[var(--radius-control)] bg-[var(--surface-2)] text-[var(--primary-text)]"
+                >
                   <FiCalendar />
                 </span>
                 <div>
-                  <dt className="text-[11px] uppercase tracking-wider text-[var(--text-muted)]">Año</dt>
+                  <dt className="text-[11px] uppercase tracking-wider text-[var(--text-muted)]">
+                    Año
+                  </dt>
                   <dd className="font-semibold">{song.year}</dd>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-[var(--radius-control)] bg-[var(--surface-2)] text-[var(--primary-text)]">
+                <span
+                  aria-hidden="true"
+                  className="flex size-10 items-center justify-center rounded-[var(--radius-control)] bg-[var(--surface-2)] text-[var(--primary-text)]"
+                >
                   <FiTag />
                 </span>
                 <div>
-                  <dt className="text-[11px] uppercase tracking-wider text-[var(--text-muted)]">Género</dt>
+                  <dt className="text-[11px] uppercase tracking-wider text-[var(--text-muted)]">
+                    Género
+                  </dt>
                   <dd className="font-semibold">{song.genre}</dd>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-[var(--radius-control)] bg-[var(--surface-2)] text-[var(--primary-text)]">
+                <span
+                  aria-hidden="true"
+                  className="flex size-10 items-center justify-center rounded-[var(--radius-control)] bg-[var(--surface-2)] text-[var(--primary-text)]"
+                >
                   <FiClock />
                 </span>
                 <div>
-                  <dt className="text-[11px] uppercase tracking-wider text-[var(--text-muted)]">Duración</dt>
+                  <dt className="text-[11px] uppercase tracking-wider text-[var(--text-muted)]">
+                    Duración
+                  </dt>
                   {/* duration viene en milisegundos */}
-                  <dd className="font-semibold">{song.duration ? formatTime(song.duration / 1000) : "Sin dato"}</dd>
+                  <dd className="font-semibold">
+                    {song.duration
+                      ? formatTime(song.duration / 1000)
+                      : "Sin dato"}
+                  </dd>
                 </div>
               </div>
             </dl>
@@ -120,16 +153,23 @@ const Detail = () => {
                 onClick={() => (isThisPlaying ? pause() : playSong(song))}
                 className="whitespace-nowrap rounded-[var(--radius-pill)] px-6"
               >
-                {isThisPlaying ? <FiPause aria-hidden="true" /> : <FiPlay aria-hidden="true" />}
+                {isThisPlaying ? (
+                  <FiPause aria-hidden="true" />
+                ) : (
+                  <FiPlay aria-hidden="true" />
+                )}
                 {isThisPlaying ? "Pausar" : "Reproducir"}
               </Button>
               <Button
                 variant={inPlaylist ? "added" : "outline"}
                 onClick={handlePlaylist}
+                aria-pressed={inPlaylist}
                 className="whitespace-nowrap rounded-[var(--radius-pill)] px-6"
               >
                 {!inPlaylist && <FiPlus aria-hidden="true" />}
-                {inPlaylist ? "En Mi Playlist · Quitar" : "Agregar a Mi Playlist"}
+                {inPlaylist
+                  ? "En Mi Playlist · Quitar"
+                  : "Agregar a Mi Playlist"}
               </Button>
             </div>
           </div>
@@ -152,14 +192,24 @@ const Detail = () => {
       {!song && (
         /* Canción inexistente o borrada desde Admin */
         <div className="mx-auto mt-12 flex max-w-md flex-col items-center text-center">
-          <div aria-hidden="true" className="relative flex size-32 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]">
+          <div
+            aria-hidden="true"
+            className="relative flex size-32 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]"
+          >
             <div className="absolute inset-3 rounded-full border border-[var(--border)]" />
             <div className="absolute inset-6 rounded-full border border-[var(--border)]" />
             <span className="size-8 rounded-full bg-[var(--primary)]" />
-            <span className="absolute -right-2 -top-2 flex size-10 items-center justify-center rounded-full bg-[var(--surface-3)] text-lg font-bold text-[var(--primary-text)]">?</span>
+            <span className="absolute -right-2 -top-2 flex size-10 items-center justify-center rounded-full bg-[var(--surface-3)] text-lg font-bold text-[var(--primary-text)]">
+              ?
+            </span>
           </div>
-          <h1 className="mt-8 text-2xl font-extrabold sm:text-3xl">No encontramos esta canción</h1>
-          <p className="mt-3 text-sm text-[var(--text-muted)]">Puede que la hayan quitado del catálogo o que el enlace esté mal escrito.</p>
+          <h1 className="mt-8 text-2xl font-extrabold sm:text-3xl">
+            No encontramos esta canción
+          </h1>
+          <p className="mt-3 text-sm text-[var(--text-muted)]">
+            Puede que la hayan quitado del catálogo o que el enlace esté mal
+            escrito.
+          </p>
           <div className="mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <Link
               to="/"
