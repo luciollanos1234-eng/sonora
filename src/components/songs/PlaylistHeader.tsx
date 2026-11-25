@@ -2,7 +2,7 @@ import { FaMusic, FaPlay } from "react-icons/fa";
 
 import type { Song } from "../../types";
 import { formatTotalDuration } from "../../utils/formatTime";
-import Cover from "../songs/Cover";
+import Cover from "./Cover";
 
 interface PlaylistHeaderProps {
   songs: Song[];
@@ -20,7 +20,6 @@ export const PlaylistHeader = ({
     songs.reduce((total, song) => total + song.duration, 0)
   );
 
-  // Mosaico de 4: lo que falta se rellena con un recuadro vacío
   const mosaic = Array.from({ length: 4 }, (_, index) => songs[index]);
 
   const count = `${songs.length} ${songs.length === 1 ? "canción" : "canciones"}`;
