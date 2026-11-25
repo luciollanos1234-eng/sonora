@@ -17,6 +17,9 @@ export interface PlayerContextType {
   progress: number;
   duration: number;
   seek: (seconds: number) => void;
+  // Avisan al reproductor que una canción se editó o se borró desde Admin
+  updateSong: (song: Song) => void;
+  removeSong: (songId: string) => void;
 }
 
 export const PlayerContext = createContext<PlayerContextType | null>(null);
