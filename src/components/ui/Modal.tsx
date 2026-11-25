@@ -6,6 +6,9 @@ interface ModalProps {
   children: ReactNode;
   onClose: () => void;
   onConfirm?: () => void;
+  showCancel?: boolean;
+  icon?: ReactNode;
+  centered?: boolean;
 }
 
 export const Modal = ({
@@ -14,6 +17,9 @@ export const Modal = ({
   children,
   onClose,
   onConfirm,
+  showCancel = true,
+  icon,
+  centered = false,
 }: ModalProps) => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -32,7 +38,7 @@ export const Modal = ({
       if (event.key === "Tab") {
         const modal = closeRef.current?.closest("[role='dialog']");
         const elements = modal?.querySelectorAll<HTMLElement>(
-          'button:not(:disabled), input:not(:disabled), [tabindex="0"]'
+          'button:not(:disabled), input:not(:disabled), a[href], [tabindex="0"]'
         );
 
         if (!elements?.length) return;
@@ -71,74 +77,75 @@ export const Modal = ({
       }}
     >
       <section
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="sonora-modal-title"
-        className="
-          w-full max-w-lg rounded-[var(--radius-modal)]
-          border border-[var(--border)]
-          bg-[var(--surface)] p-6 shadow-2xl
-        "
-      >
-        <header className="flex items-center justify-between gap-4 mb-6">
-          <h2
-            id="sonora-modal-title"
-            className="font-[var(--font-display)] text-xl font-bold"
-          >
-            {title}
-          </h2>
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="sonora-modal-title"
+  className={`
+    relative w-full rounded-[var(--radius-modal)]
+    border border-[var(--border)]
+    bg-[var(--surface)] p-6 shadow-2xl
+    ${centered ? "max-w-md" : "max-w-lg"}
+  `}
+>
+  <header
+    className={
+      centered
+        ? "mb-3 flex flex-col items-center gap-4 text-center"
+        : "flex items-center justify-between gap-4 mb-6"
+    }
+  >
+    {centered && icon}
+    <h2
+      id="sonora-modal-title"
+      className="font-[var(--font-display)] text-xl font-bold"
+    >
+      {title}
+    </h2>
 
-          <button
-            ref={closeRef}
-            type="button"
-            aria-label="Cerrar ventana"
-            onClick={onClose}
-            className="
-              size-11 rounded-full text-xl
-              hover:bg-[var(--surface-3)]
-              focus-visible:outline-2
-              focus-visible:outline-[var(--focus-color)]
-            "
-          >
-            ×
-          </button>
-        </header>
+    <button
+      ref={closeRef}
+      type="button"
+      aria-label="Cerrar ventana"
+      onClick={onClose}
+      className={`
+        size-11 rounded-full text-xl
+        hover:bg-[var(--surface-3)]
+        focus-visible:outline-2
+        focus-visible:outline-[var(--focus-color)]
+        ${centered ? "absolute right-3 top-3" : ""}
+      `}
+    >
+      ×
+    </button>
+  </header>
 
         <div className="mb-6">
           {children}
         </div>
 
-        <footer className="flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="
-              min-h-11 px-4 rounded-xl
-              bg-[var(--surface-3)]
-              text-[var(--text)] text-sm font-semibold
-              focus-visible:outline-2
-              focus-visible:outline-[var(--focus-color)]
-            "
-          >
-            Cancelar
-          </button>
+        {(showCancel || onConfirm) && (
+  <footer className="flex justify-end gap-3">
+    {showCancel && (
+      <button
+        type="button"
+        onClick={onClose}
+        className="min-h-11 px-4 rounded-xl bg-[var(--surface-3)] text-[var(--text)] text-sm font-semibold"
+      >
+        Cancelar
+      </button>
+    )}
 
-          {onConfirm && (
-            <button
-              type="button"
-              onClick={onConfirm}
-              className="
-                min-h-11 px-4 rounded-xl
-                bg-[var(--primary)] text-[var(--text)]
-                text-sm font-semibold
-                focus-visible:outline-2
-                focus-visible:outline-[var(--focus-color)]
-              "
-            >
-              Confirmar
-            </button>
-          )}
-        </footer>
+    {onConfirm && (
+      <button
+        type="button"
+        onClick={onConfirm}
+        className="min-h-11 px-4 rounded-xl bg-[var(--primary)] text-[var(--text)] text-sm font-semibold"
+      >
+        Confirmar
+      </button>
+    )}
+  </footer>
+)}
       </section>
     </div>
   );

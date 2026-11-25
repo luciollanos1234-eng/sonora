@@ -56,9 +56,20 @@ const isSession = (value: unknown): value is UserSession | null => {
   );
 };
 
-// sonora_playlists es un objeto: { [userId]: [songId] }
 const isPlaylists = (value: unknown): value is Record<string, string[]> => {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    Array.isArray(value)
+  ) {
+    return false;
+  }
+
+  return Object.values(value).every(
+    (ids) =>
+      Array.isArray(ids) &&
+      ids.every((id) => typeof id === "string")
+  );
 };
 
 const isPlayerPrefs = (value: unknown): value is PlayerPrefs => {
