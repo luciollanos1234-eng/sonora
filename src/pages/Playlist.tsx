@@ -7,16 +7,10 @@ import { getSongs } from "../data/initialize";
 import { SongCard } from "../components/songs/SongCard";
 
 const Playlist = () => {
-  // Misma fuente que las cards y el detalle: todo se actualiza sin recargar
+
   const { songIds, remove } = usePlaylist();
 
   const songs = getSongs().filter((song) => songIds.includes(song.id));
-
-  const removeSong = (songId: string) => {
-    if (!user) return;
-    setSongIds(toggleSongInPlaylist(user.userId, songId));
-    showToast("Quitada de Mi Playlist");
-  };
 
   return (
     <section className="px-4 pb-10 pt-20 sm:px-8 lg:pt-8">
