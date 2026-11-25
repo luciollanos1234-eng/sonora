@@ -64,14 +64,14 @@ const About = () => {
                 <p className="text-sm text-[var(--primary-text)]">
                   {member.tasks}
                 </p>
-                <a
+                <Link
                   className="chip m-1 flex min-h-10 w-fit items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-                  href={`https://github.com/${member.github}`}
+                  to={`https://github.com/${member.github}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   GitHub: {member.github}
-                </a>
+                </Link>
               </div>
             </article>
           ))}
@@ -81,78 +81,78 @@ const About = () => {
         <h3 className="font-bold text-lg flex">Con que lo hicimos</h3>
         <br />
         <div className="flex flex-wrap gap-2">
-          <a
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://react.dev"
+            to="https://react.dev"
             target="_blank"
             rel="noopener noreferrer"
           >
             React
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://www.typescriptlang.org"
+            to="https://www.typescriptlang.org"
             target="_blank"
             rel="noopener noreferrer"
           >
             TypeScript
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://tailwindcss.com"
+            to="https://tailwindcss.com"
             target="_blank"
             rel="noopener noreferrer"
           >
             Tailwind CSS
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://vite.dev"
+            to="https://vite.dev"
             target="_blank"
             rel="noopener noreferrer"
           >
             Vite
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://reactrouter.com"
+            to="https://reactrouter.com"
             target="_blank"
             rel="noopener noreferrer"
           >
             React Router
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://react.dev/learn/passing-data-deeply-with-context"
+            to="https://react.dev/learn/passing-data-deeply-with-context"
             target="_blank"
             rel="noopener noreferrer"
           >
             Context API
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://react-icons.github.io/react-icons/"
+            to="https://react-icons.github.io/react-icons/"
             target="_blank"
             rel="noopener noreferrer"
           >
             React Icons
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://react-hook-form.com"
+            to="https://react-hook-form.com"
             target="_blank"
             rel="noopener noreferrer"
           >
             React Hook Form
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
+            to="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
             target="_blank"
             rel="noopener noreferrer"
           >
             LocalStorage
-          </a>
+          </Link>
           <br />
           <p className="text-xs">
             Todo se guarda en el navegador con el LocalStorage, las portadas son
@@ -172,14 +172,14 @@ const About = () => {
           </Link>
         </div>
         <div className="m-2">
-          <a
-            href="https://github.com/luciollanos1234-eng/sonora"
+          <Link
+            to="https://github.com/luciollanos1234-eng/sonora"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
           >
             Ver el Repositorio
-          </a>
+          </Link>
         </div>
       </div>
     </section>
