@@ -23,11 +23,33 @@ import type { Song } from "../types";
 
 type Tab = "canciones" | "usuarios";
 
-// Clases compartidas por los botones Editar y Eliminar
 const editClass =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-[var(--surface-3)] px-4 text-sm font-semibold text-[var(--text)] disabled:cursor-not-allowed disabled:opacity-[var(--disabled-opacity)]";
 const deleteClass =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] border border-[var(--danger)] px-4 text-sm font-semibold text-[var(--danger)] transition hover:bg-[var(--danger)] hover:text-[var(--bg)] focus-visible:outline-2 focus-visible:outline-[var(--focus-color)]";
+
+const confirmDelete = async (options: {
+  title: string;
+  text: string;
+  confirmText: string;
+}) => {
+  const css = getComputedStyle(document.documentElement);
+  const result = await Swal.fire({
+    icon: "warning",
+    titleText: options.title,
+    text: options.text,
+    showCancelButton: true,
+    confirmButtonText: options.confirmText,
+    cancelButtonText: "Cancelar",
+    focusCancel: true,
+    background: css.getPropertyValue("--surface"),
+    color: css.getPropertyValue("--text"),
+    confirmButtonColor: css.getPropertyValue("--danger"),
+    cancelButtonColor: css.getPropertyValue("--surface-3"),
+  });
+
+  return result.isConfirmed;
+};
 
 const Admin = () => {
   const [songs, setSongs] = useState<Song[]>(() => getSongs());
@@ -81,27 +103,14 @@ const Admin = () => {
     showToast("Cambios guardados");
   };
 
-  // Pide confirmación antes de borrar; el foco arranca en Cancelar
   const removeSong = async (song: Song) => {
-    // Los colores salen de las variables CSS del proyecto
-    const css = getComputedStyle(document.documentElement);
-    const result = await Swal.fire({
-      icon: "warning",
-      // titleText muestra el nombre como texto, sin interpretar HTML
-      titleText: `¿Eliminar ${song.title}?`,
+    const confirmed = await confirmDelete({
+      title: `¿Eliminar ${song.title}?`,
       text: "Se borra del catálogo y de las playlists de todos los usuarios. No se puede deshacer.",
-      showCancelButton: true,
-      confirmButtonText: "Eliminar canción",
-      cancelButtonText: "Cancelar",
-      focusCancel: true,
-      background: css.getPropertyValue("--surface"),
-      color: css.getPropertyValue("--text"),
-      confirmButtonColor: css.getPropertyValue("--danger"),
-      cancelButtonColor: css.getPropertyValue("--surface-3"),
+      confirmText: "Eliminar canción",
     });
 
-    // Cancelar, Escape o tocar afuera: no se borra nada
-    if (!result.isConfirmed) return;
+    if (!confirmed) return;
 
     saveSongs(songs.filter((item) => item.id !== song.id));
     removeEverywhere(song.id);
@@ -109,7 +118,6 @@ const Admin = () => {
     showToast(`Eliminaste ${song.title}`);
   };
 
-  // Con las flechas se pasa de una pestaña a la otra
   const handleTabKeys = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
     const nextTab: Tab = tab === "canciones" ? "usuarios" : "canciones";
