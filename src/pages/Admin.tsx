@@ -1,15 +1,37 @@
-import { useState } from "react";
-import { FiList, FiMusic, FiTrash2, FiUsers } from "react-icons/fi";
+import { useState, type KeyboardEvent } from "react";
+import {
+  FiEdit2,
+  FiList,
+  FiMusic,
+  FiPlus,
+  FiSearch,
+  FiTrash2,
+  FiUsers,
+} from "react-icons/fi";
 
 import fallbackCover from "../assets/portadas/respaldo.png";
+import Cover from "../components/songs/Cover";
 import { SongsForm } from "../components/songs/SongsForm";
+import { Modal } from "../components/ui/Modal";
 import { getSongs, getUsers } from "../data/initialize";
 import { useToast } from "../context/useToast";
+import { normalize } from "../utils/normalize";
 import { STORAGE_KEYS, readStorage, writeStorage } from "../utils/storage";
 import type { Song } from "../types";
 
+type Tab = "canciones" | "usuarios";
+
+// Clases compartidas por los botones Editar y Eliminar
+const editClass =
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-[var(--surface-3)] px-4 text-sm font-semibold text-[var(--text)] disabled:cursor-not-allowed disabled:opacity-[var(--disabled-opacity)]";
+const deleteClass =
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] border border-[var(--danger)] px-4 text-sm font-semibold text-[var(--danger)] transition hover:bg-[var(--danger)] hover:text-[var(--bg)] focus-visible:outline-2 focus-visible:outline-[var(--focus-color)]";
+
 const Admin = () => {
   const [songs, setSongs] = useState<Song[]>(() => getSongs());
+  const [tab, setTab] = useState<Tab>("canciones");
+  const [search, setSearch] = useState("");
+  const [formOpen, setFormOpen] = useState(false);
   const { showToast } = useToast();
 
   // Los totales se calculan con lo guardado, no se guardan aparte
@@ -26,6 +48,11 @@ const Admin = () => {
     { label: "Canciones en playlists", value: inPlaylists, icon: <FiList aria-hidden="true" /> },
   ];
 
+  // El buscador filtra por nombre, artista o álbum
+  const filteredSongs = songs.filter((song) =>
+    normalize(`${song.title} ${song.artist} ${song.album}`).includes(normalize(search))
+  );
+
   const saveSongs = (nextSongs: Song[]) => {
     if (!writeStorage(STORAGE_KEYS.songs, nextSongs)) return;
     setSongs(nextSongs);
@@ -33,6 +60,7 @@ const Admin = () => {
 
   const addSong = (song: Song) => {
     saveSongs([song, ...songs]);
+    setFormOpen(false);
     showToast("Canción agregada");
   };
 
@@ -40,6 +68,21 @@ const Admin = () => {
     saveSongs(songs.filter((item) => item.id !== song.id));
     showToast("Canción eliminada");
   };
+
+  // Con las flechas se pasa de una pestaña a la otra
+  const handleTabKeys = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+    const nextTab: Tab = tab === "canciones" ? "usuarios" : "canciones";
+    setTab(nextTab);
+    document.getElementById(`tab-${nextTab}`)?.focus();
+  };
+
+  const tabClass = (name: Tab) =>
+    `flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] px-4 text-sm font-semibold transition ${
+      tab === name
+        ? "bg-[var(--surface-3)] text-[var(--text)]"
+        : "text-[var(--text-muted)] hover:text-[var(--text)]"
+    }`;
 
   return (
     <section className="px-4 pb-10 pt-6 sm:px-8 lg:pt-8">
@@ -51,7 +94,7 @@ const Admin = () => {
       </header>
 
       {/* Totales */}
-      <div className="mb-8 grid grid-cols-3 gap-3 sm:gap-4">
+      <div className="grid grid-cols-3 gap-3 sm:gap-4">
         {totals.map((total) => (
           <article
             key={total.label}
@@ -66,37 +109,198 @@ const Admin = () => {
         ))}
       </div>
 
-      <SongsForm onSave={addSong} fallbackCover={fallbackCover} />
+      {/* Pestañas */}
+      <div
+        role="tablist"
+        aria-label="Secciones del panel"
+        onKeyDown={handleTabKeys}
+        className="mt-6 inline-flex gap-1 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-1"
+      >
+        <button
+          type="button"
+          role="tab"
+          id="tab-canciones"
+          aria-selected={tab === "canciones"}
+          aria-controls="panel-canciones"
+          tabIndex={tab === "canciones" ? 0 : -1}
+          onClick={() => setTab("canciones")}
+          className={tabClass("canciones")}
+        >
+          <FiMusic aria-hidden="true" />
+          Canciones
+          <span className="rounded-full bg-[var(--primary)]/30 px-2 text-xs">{songs.length}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          id="tab-usuarios"
+          aria-selected={tab === "usuarios"}
+          aria-controls="panel-usuarios"
+          tabIndex={tab === "usuarios" ? 0 : -1}
+          onClick={() => setTab("usuarios")}
+          className={tabClass("usuarios")}
+        >
+          <FiUsers aria-hidden="true" />
+          Usuarios
+          <span className="rounded-full bg-[var(--surface-3)] px-2 text-xs">{users.length}</span>
+        </button>
+      </div>
 
-      <h2 className="mb-4 mt-8 text-xl font-bold">Catálogo ({songs.length})</h2>
-      <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
-        {songs.map((song) => (
-          <article
-            key={song.id}
-            className="flex items-center gap-3 border-b border-[var(--border)] p-4 last:border-b-0"
-          >
-            <img
-              src={song.cover}
-              alt=""
-              className="size-12 rounded-[var(--radius-cover)] object-cover"
-            />
-            <div className="min-w-0 flex-1">
-              <h3 className="truncate font-semibold">{song.title}</h3>
-              <p className="truncate text-sm text-[var(--text-muted)]">
-                {song.artist} · {song.album}
-              </p>
-            </div>
+      {tab === "canciones" ? (
+        <div id="panel-canciones" role="tabpanel" aria-labelledby="tab-canciones" className="mt-5">
+          {/* Buscador y botón de agregar */}
+          <div className="mb-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <label className="relative w-full sm:max-w-sm">
+              <span className="sr-only">Buscar en canciones</span>
+              <FiSearch
+                aria-hidden="true"
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
+              />
+              <input
+                type="search"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Buscar en canciones"
+                className="min-h-11 w-full rounded-full border border-[var(--border)] bg-[var(--surface)] pl-11 pr-4 text-sm text-[var(--text)] outline-none placeholder:text-[var(--text-muted)] focus-visible:border-[var(--primary-light)]"
+              />
+            </label>
             <button
               type="button"
-              onClick={() => removeSong(song)}
-              aria-label={`Eliminar ${song.title}`}
-              className="flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-control)] border border-[var(--danger)] text-[var(--danger)] transition hover:bg-[var(--danger)] hover:text-[var(--bg)] focus-visible:outline-2 focus-visible:outline-[var(--focus-color)]"
+              onClick={() => setFormOpen(true)}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-[image:var(--gradient-button)] px-5 text-sm font-semibold text-[var(--text)] hover:brightness-110"
             >
-              <FiTrash2 aria-hidden="true" />
+              <FiPlus aria-hidden="true" />
+              Agregar canción
             </button>
-          </article>
-        ))}
-      </div>
+          </div>
+
+          {filteredSongs.length === 0 && (
+            <p className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 text-center text-sm text-[var(--text-muted)]">
+              No hay canciones que coincidan con "{search}".
+            </p>
+          )}
+
+          {/* Escritorio: tabla */}
+          {filteredSongs.length > 0 && (
+            <div className="hidden overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] md:block">
+              <table className="w-full text-left text-sm">
+                <thead className="text-xs uppercase tracking-wider text-[var(--text-muted)]">
+                  <tr className="border-b border-[var(--border)]">
+                    <th className="p-3 font-semibold">Canción</th>
+                    <th className="p-3 font-semibold">Álbum</th>
+                    <th className="p-3 font-semibold">Año</th>
+                    <th className="p-3 font-semibold">Género</th>
+                    <th className="p-3 text-right font-semibold">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredSongs.map((song) => (
+                    <tr key={song.id} className="border-b border-[var(--border)] last:border-b-0">
+                      <td className="p-3">
+                        <div className="flex items-center gap-3">
+                          <Cover
+                            src={song.cover}
+                            alt=""
+                            className="size-10 shrink-0 rounded-[var(--radius-cover)] object-cover"
+                          />
+                          <div className="min-w-0">
+                            <p className="truncate font-semibold">{song.title}</p>
+                            <p className="truncate text-xs text-[var(--text-muted)]">{song.artist}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-3">{song.album}</td>
+                      <td className="p-3 tabular-nums">{song.year}</td>
+                      <td className="p-3">
+                        <span className="rounded-full bg-[var(--surface-3)] px-2.5 py-1 text-xs">{song.genre}</span>
+                      </td>
+                      <td className="p-3">
+                        <div className="flex justify-end gap-2">
+                          {/* Editar se conecta en SON-018 */}
+                          <button type="button" disabled aria-label={`Editar ${song.title}`} className={editClass}>
+                            <FiEdit2 aria-hidden="true" />
+                            Editar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => removeSong(song)}
+                            aria-label={`Eliminar ${song.title}`}
+                            className={deleteClass}
+                          >
+                            <FiTrash2 aria-hidden="true" />
+                            Eliminar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Celular: cada fila es una tarjeta */}
+          <div className="flex flex-col gap-3 md:hidden">
+            {filteredSongs.map((song) => (
+              <article
+                key={song.id}
+                className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4"
+              >
+                <div className="flex items-start gap-3">
+                  <Cover
+                    src={song.cover}
+                    alt=""
+                    className="size-14 shrink-0 rounded-[var(--radius-cover)] object-cover"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold">{song.title}</p>
+                    <p className="text-sm text-[var(--text-muted)]">
+                      {song.artist} · {song.album} · {song.year}
+                    </p>
+                  </div>
+                  <span className="shrink-0 rounded-full bg-[var(--surface-3)] px-2.5 py-1 text-xs">{song.genre}</span>
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <button type="button" disabled aria-label={`Editar ${song.title}`} className={editClass}>
+                    <FiEdit2 aria-hidden="true" />
+                    Editar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeSong(song)}
+                    aria-label={`Eliminar ${song.title}`}
+                    className={deleteClass}
+                  >
+                    <FiTrash2 aria-hidden="true" />
+                    Eliminar
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      ) : (
+        // La gestión completa de usuarios llega con SON-020
+        <div id="panel-usuarios" role="tabpanel" aria-labelledby="tab-usuarios" className="mt-5">
+          <ul className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+            {users.map((user) => (
+              <li key={user.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] p-4 last:border-b-0">
+                <div className="min-w-0">
+                  <p className="font-semibold">{user.name}</p>
+                  <p className="truncate text-sm text-[var(--text-muted)]">{user.email}</p>
+                </div>
+                <span className="rounded-full bg-[var(--surface-3)] px-2.5 py-1 text-xs">
+                  {user.role === "admin" ? "Administrador" : "Usuario"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <Modal open={formOpen} title="Agregar canción" onClose={() => setFormOpen(false)}>
+        <SongsForm onSave={addSong} fallbackCover={fallbackCover} />
+      </Modal>
     </section>
   );
 };
