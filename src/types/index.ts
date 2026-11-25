@@ -41,3 +41,5 @@ export interface UserPlaylist {
   userId: string;
   songIds: string[];
 }
+
+export type UserSummary = Omit<User, "password">;
