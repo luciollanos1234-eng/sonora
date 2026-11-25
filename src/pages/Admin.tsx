@@ -9,7 +9,6 @@ import {
   FiUsers,
 } from "react-icons/fi";
 
-import fallbackCover from "../assets/portadas/respaldo.png";
 import Cover from "../components/songs/Cover";
 import { SongsForm } from "../components/songs/SongsForm";
 import { Modal } from "../components/ui/Modal";
@@ -47,6 +46,9 @@ const Admin = () => {
     { label: "Usuarios", value: users.length, icon: <FiUsers aria-hidden="true" /> },
     { label: "Canciones en playlists", value: inPlaylists, icon: <FiList aria-hidden="true" /> },
   ];
+
+  // Géneros para la lista del formulario, sacados del catálogo
+  const genres = [...new Set(songs.map((song) => song.genre))].sort((a, b) => a.localeCompare(b, "es"));
 
   // El buscador filtra por nombre, artista o álbum
   const filteredSongs = songs.filter((song) =>
@@ -299,7 +301,7 @@ const Admin = () => {
       )}
 
       <Modal open={formOpen} title="Agregar canción" onClose={() => setFormOpen(false)}>
-        <SongsForm onSave={addSong} fallbackCover={fallbackCover} />
+        <SongsForm onSave={addSong} genres={genres} />
       </Modal>
     </section>
   );
