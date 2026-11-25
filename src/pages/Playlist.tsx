@@ -1,20 +1,14 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaMusic } from "react-icons/fa";
 import { FiTrash2 } from "react-icons/fi";
 
-import { useAuth } from "../context/useAuth";
-import { useToast } from "../context/useToast";
+import { usePlaylist } from "../context/usePlaylist";
 import { getSongs } from "../data/initialize";
-import { getPlaylist, toggleSongInPlaylist } from "../utils/playlists";
 import { SongCard } from "../components/songs/SongCard";
 
 const Playlist = () => {
-  const { user } = useAuth();
-  const { showToast } = useToast();
-  const [songIds, setSongIds] = useState<string[]>(() =>
-    user ? getPlaylist(user.userId) : []
-  );
+  // Misma fuente que las cards y el detalle: todo se actualiza sin recargar
+  const { songIds, remove } = usePlaylist();
 
   const songs = getSongs().filter((song) => songIds.includes(song.id));
 
@@ -45,7 +39,7 @@ const Playlist = () => {
               <SongCard song={song} />
               <button
                 type="button"
-                onClick={() => removeSong(song.id)}
+                onClick={() => remove(song.id, song.title)}
                 aria-label={`Quitar ${song.title} de Mi Playlist`}
                 className="absolute right-7 top-7 z-10 flex size-9 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--danger)] shadow-lg transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-[var(--focus-color)]"
               >
