@@ -18,6 +18,8 @@ export const Modal = ({
   onClose,
   onConfirm,
   showCancel = true,
+  icon,
+  centered = false,
 }: ModalProps) => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
