@@ -3,6 +3,7 @@ import type { Song } from "../../types";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import FormAlert from "../auth/FormAlert";
+import Cover from "./Cover";
 
 interface SongFormValues {
   title: string;
@@ -39,6 +40,7 @@ export const SongsForm = ({ onSave, song, genres }: SongsFormProps) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<SongFormValues>({
     defaultValues: {
@@ -55,6 +57,7 @@ export const SongsForm = ({ onSave, song, genres }: SongsFormProps) => {
 
   const currentYear = new Date().getFullYear();
   const errorCount = Object.keys(errors).length;
+  const coverPreview = watch("cover");
 
   const submit = (values: SongFormValues) => {
     // "3:42" -> 222000 ms; sin duración queda en 0
@@ -157,8 +160,9 @@ export const SongsForm = ({ onSave, song, genres }: SongsFormProps) => {
         })}
       />
 
-      <div className="sm:col-span-2">
-        <div>
+      {/* Portada con vista previa */}
+      <div className="flex items-end gap-3 sm:col-span-2">
+        <div className="flex-1">
           <Input
             label="URL de la portada"
             placeholder="https://..."
@@ -166,6 +170,14 @@ export const SongsForm = ({ onSave, song, genres }: SongsFormProps) => {
             {...register("cover", { required: "Ingresá la URL de la portada.", pattern: URL_PATTERN })}
           />
         </div>
+        {coverPreview && (
+          <Cover
+            key={coverPreview}
+            src={coverPreview}
+            alt="Vista previa de la portada"
+            className="size-16 shrink-0 rounded-[var(--radius-cover)] object-cover"
+          />
+        )}
       </div>
 
       <div className="sm:col-span-2">
