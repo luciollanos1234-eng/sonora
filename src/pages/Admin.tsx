@@ -1,4 +1,5 @@
 import { useState, type KeyboardEvent } from "react";
+import Swal from "sweetalert2";
 import {
   FiEdit2,
   FiList,
@@ -15,6 +16,7 @@ import { Modal } from "../components/ui/Modal";
 import { getSongs, getUsers } from "../data/initialize";
 import { useToast } from "../context/useToast";
 import { usePlayer } from "../context/usePlayer";
+import { usePlaylist } from "../context/usePlaylist";
 import { normalize } from "../utils/normalize";
 import { STORAGE_KEYS, readStorage, writeStorage } from "../utils/storage";
 import type { Song } from "../types";
@@ -36,6 +38,7 @@ const Admin = () => {
   const [editingSong, setEditingSong] = useState<Song | null>(null);
   const { showToast } = useToast();
   const player = usePlayer();
+  const { removeEverywhere } = usePlaylist();
 
   // Los totales se calculan con lo guardado, no se guardan aparte
   const users = getUsers();
@@ -78,9 +81,31 @@ const Admin = () => {
     showToast("Cambios guardados");
   };
 
-  const removeSong = (song: Song) => {
+  // Pide confirmación antes de borrar; el foco arranca en Cancelar
+  const removeSong = async (song: Song) => {
+    // Los colores salen de las variables CSS del proyecto
+    const css = getComputedStyle(document.documentElement);
+    const result = await Swal.fire({
+      icon: "warning",
+      title: `¿Eliminar ${song.title}?`,
+      text: "Se borra del catálogo y de las playlists de todos los usuarios. No se puede deshacer.",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar canción",
+      cancelButtonText: "Cancelar",
+      focusCancel: true,
+      background: css.getPropertyValue("--surface"),
+      color: css.getPropertyValue("--text"),
+      confirmButtonColor: css.getPropertyValue("--danger"),
+      cancelButtonColor: css.getPropertyValue("--surface-3"),
+    });
+
+    // Cancelar, Escape o tocar afuera: no se borra nada
+    if (!result.isConfirmed) return;
+
     saveSongs(songs.filter((item) => item.id !== song.id));
-    showToast("Canción eliminada");
+    removeEverywhere(song.id);
+    player.removeSong(song.id);
+    showToast(`Eliminaste ${song.title}`);
   };
 
   // Con las flechas se pasa de una pestaña a la otra
