@@ -1,6 +1,27 @@
 import { Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 
+const teamMembers = [
+  {
+    name: "Lionel Debortoli",
+    role: "Scrum Master y Developer",
+    tasks: "Coordinación del equipo y desarrollo de funcionalidades.",
+    github: "lioneldebortoli",
+  },
+  {
+    name: "Lucio Llanos",
+    role: "Líder técnico y Developer",
+    tasks: "Liderazgo técnico y desarrollo de la plataforma.",
+    github: "luciollanos1234-eng",
+  },
+  {
+    name: "Facundo Alvarez",
+    role: "Developer",
+    tasks: "Desarrollo de funcionalidades para la plataforma.",
+    github: "facualvarez829-afk",
+  },
+];
+
 const About = () => {
   return (
     <section className="px-4 pb-10 pt-20 sm:px-8 lg:pt-8">
@@ -24,110 +45,36 @@ const About = () => {
       <div className="mt-6">
         <h2 className="font-extrabold sm:text-xl lg:text-xl ">El equipo</h2>
         <br />
-        <div className="flex flex-col gap-4 sm:flex-row sm:gap-4 lg:flex-row lg:gap-4">
-          <div className="card w-96 bg-[var(--surface)] shadow-xl flex flex-col gap-4 rounded-lg border border-[var(--border)]">
-            <div className="card-body">
-              <span className="avatar">
-                <img
-                  className="avatar-img rounded-full h-20 m-5"
-                  src="https://github.com/lioneldebortoli.png"
-                  alt="avatar de Lionel Debortoli"
-                />
-              </span>
-              <div className="flex flex-col gap-1 m-5">
-                <h3 className="font-extrabold text-xl ">Lionel Debortoli</h3>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {teamMembers.map((member) => (
+            <article
+              key={member.github}
+              className="flex flex-col gap-4 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xl"
+            >
+              <img
+                className="h-20 w-20 rounded-full"
+                src={`https://github.com/${member.github}.png`}
+                alt={`Avatar de ${member.name}`}
+              />
+              <div className="flex flex-col gap-2">
+                <h3 className="text-xl font-extrabold">{member.name}</h3>
                 <p className="text-xs font-bold text-[var(--primary-light)]">
-                  Scrum Master y Desarrollador
+                  {member.role}
                 </p>
                 <p className="text-sm text-[var(--primary-text)]">
-                  (que hizo en el proyecto)
+                  {member.tasks}
                 </p>
-                <span className="chip flex items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 m-1 h-10 w-auto text-xs font-semibold text-[var(--text)]  transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]">
-                  <img
-                    src="https://github.com/lioneldebortoli.png"
-                    className="chip-img h-5 rounded-full"
-                    alt="github avatar"
-                  />
-                  <Link
-                    to="https://github.com/lioneldebortoli"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub: lioneldebortoli
-                  </Link>
-                </span>
+                <a
+                  className="chip m-1 flex min-h-10 w-fit items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+                  href={`https://github.com/${member.github}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub: {member.github}
+                </a>
               </div>
-            </div>
-          </div>
-          <div className="card w-96 bg-[var(--surface)] shadow-xl flex flex-col gap-4 rounded-lg border border-[var(--border)]">
-            <div className="card-body">
-              <span className="avatar">
-                <img
-                  className="avatar-img rounded-full h-20 m-5"
-                  src="https://github.com/luciollanos1234-eng.png"
-                  alt="avatar de Lucio llanos"
-                />
-              </span>
-              <div className="flex flex-col gap-1 m-5">
-                <h3 className="font-extrabold text-xl ">Lucio Llanos</h3>
-                <p className="text-xs font-bold text-[var(--primary-light)]">
-                  Lider tecnico y Desarrollador
-                </p>
-                <p className="text-sm text-[var(--primary-text)]">
-                  (que hizo en el proyecto)
-                </p>
-
-                <span className="chip flex items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 m-1 h-10 w-auto text-xs font-semibold text-[var(--text)]  transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]">
-                  <img
-                    src="https://github.com/luciollanos1234-eng.png"
-                    className="chip-img h-5 rounded-full"
-                    alt="github avatar"
-                  />
-                  <Link
-                    to="https://github.com/luciollanos1234-eng"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub: luciollanos1234-eng
-                  </Link>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="card w-96 bg-[var(--surface)] shadow-xl flex flex-col gap-4 rounded-lg border border-[var(--border)]">
-            <div className="card-body">
-              <span className="avatar">
-                <img
-                  className="avatar-img rounded-full h-20 m-5"
-                  src="https://github.com/facualvarez829-afk.png"
-                  alt="avatar de Facundo"
-                />
-              </span>
-              <div className="flex flex-col gap-1 m-5">
-                <h3 className="font-extrabold text-xl ">Facundo Alvarez</h3>
-                <p className="text-xs font-bold text-[var(--primary-light)]">
-                  Desarrollador
-                </p>
-                <p className="text-sm text-[var(--primary-text)]">
-                  (que hizo en el proyecto)
-                </p>
-                <span className="chip flex items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 m-1 h-10 w-auto text-xs font-semibold text-[var(--text)]  transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]">
-                  <img
-                    src="https://github.com/facualvarez829-afk.png"
-                    className="chip-img h-5 rounded-full"
-                    alt="github avatar"
-                  />
-                  <Link
-                    to="https://github.com/facualvarez829-afk"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub: facualvarez829-afk
-                  </Link>
-                </span>
-              </div>
-            </div>
-          </div>
+            </article>
+          ))}
         </div>
       </div>
       <div className="mt-6">
@@ -225,12 +172,14 @@ const About = () => {
           </Link>
         </div>
         <div className="m-2">
-          <Link
-            to="https://github.com/luciollanos1234-eng/sonora.git"
+          <a
+            href="https://github.com/luciollanos1234-eng/sonora"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
           >
             Ver el Repositorio
-          </Link>
+          </a>
         </div>
       </div>
     </section>
