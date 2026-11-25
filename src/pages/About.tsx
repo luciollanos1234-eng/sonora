@@ -30,10 +30,10 @@ const About = () => {
           <p className="text-sm font-semibold">Acerca de nosotros</p>
           <h2 className="mb-2 font-extrabold sm:text-3xl lg:text-5xl font-family-[var(--font-family-title)]">
             Quienes hacemos{" "}
-            <span className="text-[var(--primary-text)]">Sonora</span>
+            <span className="text-[var(--focus-color)] ">Sonora</span>
           </h2>
           <div>
-            <p className="max-w-xl text-left text-xs font-semibold sm:text-sm">
+            <p className="max-w-xl text-left text-xs font-semibold sm:text-sm text-[var(--text-muted)]">
               Sonora es una plataforma de música en línea que permite a los
               usuarios descubrir, escuchar y compartir canciones de diversos
               géneros. Nuestro objetivo es brindar una experiencia musical única
@@ -49,7 +49,7 @@ const About = () => {
           {teamMembers.map((member) => (
             <article
               key={member.github}
-              className="flex flex-col gap-4 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xl"
+              className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xl"
             >
               <img
                 className="h-20 w-20 rounded-full"
@@ -58,14 +58,14 @@ const About = () => {
               />
               <div className="flex flex-col gap-2">
                 <h3 className="text-xl font-extrabold">{member.name}</h3>
-                <p className="text-xs font-bold text-[var(--primary-light)]">
+                <p className="text-sm font-bold text-[var(--focus-color)]">
                   {member.role}
                 </p>
-                <p className="text-sm text-[var(--primary-text)]">
+                <p className="text-xs text-[var(--text-muted)]">
                   {member.tasks}
                 </p>
                 <Link
-                  className="chip m-1 flex min-h-10 w-fit items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+                  className="chip m-2 flex min-h-10 w-fit items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
                   to={`https://github.com/${member.github}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -153,8 +153,7 @@ const About = () => {
           >
             LocalStorage
           </Link>
-          <br />
-          <p className="text-xs">
+          <p className="text-xs p-3 text-[var(--text-muted)]">
             Todo se guarda en el navegador con el LocalStorage, las portadas son
             ilustraciones propias.
           </p>
@@ -165,7 +164,7 @@ const About = () => {
         <div className="m-2">
           <Link
             to="/"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition-[var(--transition-duration)] hover:bg-[image:var(--gradient-button)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
           >
             <FiSearch />
             Explorar el catálogo
@@ -176,7 +175,7 @@ const About = () => {
             to="https://github.com/luciollanos1234-eng/sonora"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition-[var(--transition-duration)] hover:bg-[image:var(--gradient-button)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
           >
             Ver el Repositorio
           </Link>
