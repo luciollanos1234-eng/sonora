@@ -8,8 +8,8 @@ import { Button } from "../components/ui/Button";
 import { usePlayer } from "../context/usePlayer";
 import { SongCard } from "../components/songs/SongCard";
 import { useAuth } from "../context/useAuth";
-import { useToast } from "../context/useToast";
-import { getPlaylist, toggleSongInPlaylist } from "../utils/playlists";
+import { usePlaylist } from "../context/PlaylistContext";
+import { Modal } from "../components/ui/Modal";
 
 const Detail = () => {
   const { id } = useParams();
