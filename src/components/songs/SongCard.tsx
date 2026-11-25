@@ -5,8 +5,7 @@ import { FaCheck, FaPause, FaPlay, FaPlus } from "react-icons/fa";
 import type { Song } from "../../types";
 import { useAuth } from "../../context/useAuth";
 import { usePlayer } from "../../context/usePlayer";
-import { useToast } from "../../context/useToast";
-import { getPlaylist, toggleSongInPlaylist } from "../../utils/playlists";
+import { usePlaylist } from "../../context/PlaylistContext";
 import Cover from "./Cover";
 import { Modal } from "../ui/Modal";
 
