@@ -86,6 +86,22 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     setProgress(seconds);
   };
 
+  // Si la canción editada está en la lista o sonando, muestra los datos nuevos
+  const updateSong = (song: Song) => {
+    setQueue(queue.map((s) => (s.id === song.id ? song : s)));
+    if (currentSong?.id === song.id) setCurrentSong(song);
+  };
+
+  // Si se borra la canción que suena, el reproductor se detiene y queda vacío
+  const removeSong = (songId: string) => {
+    setQueue(queue.filter((s) => s.id !== songId));
+    if (currentSong?.id === songId) {
+      setCurrentSong(null);
+      setIsPlaying(false);
+      setProgress(0);
+    }
+  };
+
   // Sin archivo o con error de audio, el progreso se simula con la duración de la canción
   const simulated = !currentSong?.audioUrl || audioError;
   // duration de la canción viene en milisegundos; si no hay, usamos 30 s
@@ -126,6 +142,8 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         // Sin canción elegida no hay duración que mostrar
         duration: !currentSong ? 0 : simulated ? simulatedDuration : duration,
         seek,
+        updateSong,
+        removeSong,
       }}
     >
       {children}

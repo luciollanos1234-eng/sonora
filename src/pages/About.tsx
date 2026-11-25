@@ -1,6 +1,27 @@
 import { Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 
+const teamMembers = [
+  {
+    name: "Lionel Debortoli",
+    role: "Scrum Master y Developer",
+    tasks: "Coordinación del equipo y desarrollo de funcionalidades.",
+    github: "lioneldebortoli",
+  },
+  {
+    name: "Lucio Llanos",
+    role: "Líder técnico y Developer",
+    tasks: "Liderazgo técnico y desarrollo de la plataforma.",
+    github: "luciollanos1234-eng",
+  },
+  {
+    name: "Facundo Alvarez",
+    role: "Developer",
+    tasks: "Desarrollo de funcionalidades para la plataforma.",
+    github: "facualvarez829-afk",
+  },
+];
+
 const About = () => {
   return (
     <section className="px-4 pb-10 pt-20 sm:px-8 lg:pt-8">
@@ -9,10 +30,10 @@ const About = () => {
           <p className="text-sm font-semibold">Acerca de nosotros</p>
           <h2 className="mb-2 font-extrabold sm:text-3xl lg:text-5xl font-family-[var(--font-family-title)]">
             Quienes hacemos{" "}
-            <span className="text-[var(--primary-text)]">Sonora</span>
+            <span className="text-[var(--focus-color)] ">Sonora</span>
           </h2>
           <div>
-            <p className="max-w-xl text-left text-xs font-semibold sm:text-sm">
+            <p className="max-w-xl text-left text-xs font-semibold sm:text-sm text-[var(--text-muted)]">
               Sonora es una plataforma de música en línea que permite a los
               usuarios descubrir, escuchar y compartir canciones de diversos
               géneros. Nuestro objetivo es brindar una experiencia musical única
@@ -24,190 +45,115 @@ const About = () => {
       <div className="mt-6">
         <h2 className="font-extrabold sm:text-xl lg:text-xl ">El equipo</h2>
         <br />
-        <div className="flex flex-col gap-4 sm:flex-row sm:gap-4 lg:flex-row lg:gap-4">
-          <div className="card w-96 bg-[var(--surface)] shadow-xl flex flex-col gap-4 rounded-lg border border-[var(--border)]">
-            <div className="card-body">
-              <span className="avatar">
-                <img
-                  className="avatar-img rounded-full h-20 m-5"
-                  src="https://github.com/lioneldebortoli.png"
-                  alt="avatar de Lionel Debortoli"
-                />
-              </span>
-              <div className="flex flex-col gap-1 m-5">
-                <h3 className="font-extrabold text-xl ">Lionel Debortoli</h3>
-                <p className="text-xs font-bold text-[var(--primary-light)]">
-                  Scrum Master y Desarrollador
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {teamMembers.map((member) => (
+            <article
+              key={member.github}
+              className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xl"
+            >
+              <img
+                className="h-20 w-20 rounded-full"
+                src={`https://github.com/${member.github}.png`}
+                alt={`Avatar de ${member.name}`}
+              />
+              <div className="flex flex-col gap-2">
+                <h3 className="text-xl font-extrabold">{member.name}</h3>
+                <p className="text-sm font-bold text-[var(--focus-color)]">
+                  {member.role}
                 </p>
-                <p className="text-sm text-[var(--primary-text)]">
-                  (que hizo en el proyecto)
+                <p className="text-xs text-[var(--text-muted)]">
+                  {member.tasks}
                 </p>
-                <span className="chip flex items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 m-1 h-10 w-auto text-xs font-semibold text-[var(--text)]  transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]">
-                  <img
-                    src="https://github.com/lioneldebortoli.png"
-                    className="chip-img h-5 rounded-full"
-                    alt="github avatar"
-                  />
-                  <Link
-                    to="https://github.com/lioneldebortoli"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub: lioneldebortoli
-                  </Link>
-                </span>
+                <Link
+                  className="chip m-2 flex min-h-10 w-fit items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+                  to={`https://github.com/${member.github}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub: {member.github}
+                </Link>
               </div>
-            </div>
-          </div>
-          <div className="card w-96 bg-[var(--surface)] shadow-xl flex flex-col gap-4 rounded-lg border border-[var(--border)]">
-            <div className="card-body">
-              <span className="avatar">
-                <img
-                  className="avatar-img rounded-full h-20 m-5"
-                  src="https://github.com/luciollanos1234-eng.png"
-                  alt="avatar de Lucio llanos"
-                />
-              </span>
-              <div className="flex flex-col gap-1 m-5">
-                <h3 className="font-extrabold text-xl ">Lucio Llanos</h3>
-                <p className="text-xs font-bold text-[var(--primary-light)]">
-                  Lider tecnico y Desarrollador
-                </p>
-                <p className="text-sm text-[var(--primary-text)]">
-                  (que hizo en el proyecto)
-                </p>
-
-                <span className="chip flex items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 m-1 h-10 w-auto text-xs font-semibold text-[var(--text)]  transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]">
-                  <img
-                    src="https://github.com/luciollanos1234-eng.png"
-                    className="chip-img h-5 rounded-full"
-                    alt="github avatar"
-                  />
-                  <Link
-                    to="https://github.com/luciollanos1234-eng"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub: luciollanos1234-eng
-                  </Link>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="card w-96 bg-[var(--surface)] shadow-xl flex flex-col gap-4 rounded-lg border border-[var(--border)]">
-            <div className="card-body">
-              <span className="avatar">
-                <img
-                  className="avatar-img rounded-full h-20 m-5"
-                  src="https://github.com/facualvarez829-afk.png"
-                  alt="avatar de Facundo"
-                />
-              </span>
-              <div className="flex flex-col gap-1 m-5">
-                <h3 className="font-extrabold text-xl ">Facundo Alvarez</h3>
-                <p className="text-xs font-bold text-[var(--primary-light)]">
-                  Desarrollador
-                </p>
-                <p className="text-sm text-[var(--primary-text)]">
-                  (que hizo en el proyecto)
-                </p>
-                <span className="chip flex items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 m-1 h-10 w-auto text-xs font-semibold text-[var(--text)]  transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]">
-                  <img
-                    src="https://github.com/facualvarez829-afk.png"
-                    className="chip-img h-5 rounded-full"
-                    alt="github avatar"
-                  />
-                  <Link
-                    to="https://github.com/facualvarez829-afk"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub: facualvarez829-afk
-                  </Link>
-                </span>
-              </div>
-            </div>
-          </div>
+            </article>
+          ))}
         </div>
       </div>
       <div className="mt-6">
         <h3 className="font-bold text-lg flex">Con que lo hicimos</h3>
         <br />
         <div className="flex flex-wrap gap-2">
-          <a
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://react.dev"
+            to="https://react.dev"
             target="_blank"
             rel="noopener noreferrer"
           >
             React
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://www.typescriptlang.org"
+            to="https://www.typescriptlang.org"
             target="_blank"
             rel="noopener noreferrer"
           >
             TypeScript
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://tailwindcss.com"
+            to="https://tailwindcss.com"
             target="_blank"
             rel="noopener noreferrer"
           >
             Tailwind CSS
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://vite.dev"
+            to="https://vite.dev"
             target="_blank"
             rel="noopener noreferrer"
           >
             Vite
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://reactrouter.com"
+            to="https://reactrouter.com"
             target="_blank"
             rel="noopener noreferrer"
           >
             React Router
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://react.dev/learn/passing-data-deeply-with-context"
+            to="https://react.dev/learn/passing-data-deeply-with-context"
             target="_blank"
             rel="noopener noreferrer"
           >
             Context API
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://react-icons.github.io/react-icons/"
+            to="https://react-icons.github.io/react-icons/"
             target="_blank"
             rel="noopener noreferrer"
           >
             React Icons
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://react-hook-form.com"
+            to="https://react-hook-form.com"
             target="_blank"
             rel="noopener noreferrer"
           >
             React Hook Form
-          </a>
-          <a
+          </Link>
+          <Link
             className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
-            href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
+            to="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
             target="_blank"
             rel="noopener noreferrer"
           >
             LocalStorage
-          </a>
-          <br />
-          <p className="text-xs">
+          </Link>
+          <p className="text-xs p-3 text-[var(--text-muted)]">
             Todo se guarda en el navegador con el LocalStorage, las portadas son
             ilustraciones propias.
           </p>
@@ -218,7 +164,7 @@ const About = () => {
         <div className="m-2">
           <Link
             to="/"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition-[var(--transition-duration)] hover:bg-[image:var(--gradient-button)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
           >
             <FiSearch />
             Explorar el catálogo
@@ -226,8 +172,10 @@ const About = () => {
         </div>
         <div className="m-2">
           <Link
-            to="https://github.com/luciollanos1234-eng/sonora.git"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            to="https://github.com/luciollanos1234-eng/sonora"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--surface-2)] px-6 py-3 text-sm font-semibold text-[var(--text)] transition-[var(--transition-duration)] hover:bg-[image:var(--gradient-button)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
           >
             Ver el Repositorio
           </Link>
