@@ -42,19 +42,16 @@ const Detail = () => {
   const { isInPlaylist, toggle } = usePlaylist();
   const inPlaylist = !!song && !!user && isInPlaylist(song.id);
 
-  // Sin sesión lleva al login y después vuelve a esta canción
-  const handlePlaylist = () => {
-    if (!song) return;
+const handlePlaylist = () => {
+  if (!song) return;
 
-    if (!user) {
-      navigate("/login", { state: { from: location.pathname } });
-      return;
-    }
+  if (!user) {
+    setLoginModalOpen(true);
+    return;
+  }
 
-    setPlaylist(toggleSongInPlaylist(user.userId, song.id));
-    showToast(inPlaylist ? "Quitada de Mi Playlist" : "Agregada a Mi Playlist");
-  };
-
+  toggle(song.id, song.title);
+};
   return (
     <section className="px-4 py-6 sm:px-8">
       <Link
