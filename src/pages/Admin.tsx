@@ -1,3 +1,4 @@
+import { UsersPanel } from "../components/auth/UsersPanel";
 import { useState, type KeyboardEvent } from "react";
 import Swal from "sweetalert2";
 import {
@@ -19,7 +20,7 @@ import { usePlayer } from "../context/usePlayer";
 import { usePlaylist } from "../context/usePlaylist";
 import { normalize } from "../utils/normalize";
 import { STORAGE_KEYS, readStorage, writeStorage } from "../utils/storage";
-import type { Song } from "../types";
+import type { Song, User, UserSummary } from "../types";
 
 type Tab = "canciones" | "usuarios";
 
@@ -56,14 +57,21 @@ const Admin = () => {
   const [tab, setTab] = useState<Tab>("canciones");
   const [search, setSearch] = useState("");
   const [formOpen, setFormOpen] = useState(false);
-  // Canción que se está editando (null = ninguna)
   const [editingSong, setEditingSong] = useState<Song | null>(null);
   const { showToast } = useToast();
   const player = usePlayer();
-  const { removeEverywhere } = usePlaylist();
 
-  // Los totales se calculan con lo guardado, no se guardan aparte
-  const users = getUsers();
+  const { removeEverywhere, playlistCount, removePlaylist } = usePlaylist();
+  const [users, setUsers] = useState<User[]>(() => getUsers());
+
+  const userSummaries: UserSummary[] = users.map((user) => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    fechaRegistro: user.fechaRegistro,
+  }));
+
   const playlists = readStorage<Record<string, string[]>>(STORAGE_KEYS.playlists, {});
   let inPlaylists = 0;
   Object.values(playlists).forEach((list) => {
@@ -116,6 +124,27 @@ const Admin = () => {
     removeEverywhere(song.id);
     player.removeSong(song.id);
     showToast(`Eliminaste ${song.title}`);
+  };
+
+  const removeUser = async (target: UserSummary) => {
+    const stored = getUsers().find((item) => item.id === target.id);
+    if (!stored || stored.role === "admin") return;
+
+    const count = playlistCount(stored.id);
+    const confirmed = await confirmDelete({
+      title: `¿Eliminar la cuenta de ${stored.name}?`,
+      text: `Se borra la cuenta y su playlist (${count} ${count === 1 ? "canción" : "canciones"}). Ya no va a poder iniciar sesión. No se puede deshacer.`,
+      confirmText: "Eliminar cuenta",
+    });
+
+    if (!confirmed) return;
+
+    const nextUsers = getUsers().filter((item) => item.id !== stored.id);
+    if (!writeStorage(STORAGE_KEYS.users, nextUsers)) return;
+
+    setUsers(nextUsers);
+    removePlaylist(stored.id);
+    showToast(`Eliminaste la cuenta de ${stored.name}`);
   };
 
   const handleTabKeys = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -326,22 +355,9 @@ const Admin = () => {
             ))}
           </div>
         </div>
-      ) : (
-        // La gestión completa de usuarios llega con SON-020
+            ) : (
         <div id="panel-usuarios" role="tabpanel" aria-labelledby="tab-usuarios" className="mt-5">
-          <ul className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
-            {users.map((user) => (
-              <li key={user.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] p-4 last:border-b-0">
-                <div className="min-w-0">
-                  <p className="font-semibold">{user.name}</p>
-                  <p className="truncate text-sm text-[var(--text-muted)]">{user.email}</p>
-                </div>
-                <span className="rounded-full bg-[var(--surface-3)] px-2.5 py-1 text-xs">
-                  {user.role === "admin" ? "Administrador" : "Usuario"}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <UsersPanel users={userSummaries} onDelete={removeUser} />
         </div>
       )}
 
@@ -349,7 +365,6 @@ const Admin = () => {
         <SongsForm onSave={addSong} genres={genres} />
       </Modal>
 
-      {/* Mismo formulario, con los datos de la canción cargados */}
       <Modal open={editingSong !== null} title="Editar canción" onClose={() => setEditingSong(null)}>
         {editingSong && (
           <SongsForm key={editingSong.id} song={editingSong} onSave={saveEdit} genres={genres} />
