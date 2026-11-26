@@ -1,14 +1,18 @@
-import aNightAtTheOpera from "../assets/portadas/a-night-at-the-opera.png";
-import afterHours from "../assets/portadas/after-hours.png";
-import cancionAnimal from "../assets/portadas/cancion-animal.png";
-import dookie from "../assets/portadas/dookie.png";
-import forLackOfABetterName from "../assets/portadas/for-lack-of-a-better-name.png";
-import goteo from "../assets/portadas/goteo.png";
-import homenajeAVioletaParra from "../assets/portadas/homenaje-a-violeta-parra.png";
-import randomAccessMemories from "../assets/portadas/random-access-memories.png";
-import timeOut from "../assets/portadas/time-out.png";
-import unVeranoSinTi from "../assets/portadas/un-verano-sin-ti.png";
-import fallbackCover from "../assets/portadas/respaldo.png";
+import bohemianRhapsody from "../assets/portadas/bohemian-rhapsody.jpg";
+import hotelCalifornia from "../assets/portadas/hotel-california.jpg";
+import deMusicaLigera from "../assets/portadas/de-musica-ligera.jpg";
+import flaca from "../assets/portadas/flaca.jpg";
+import billieJean from "../assets/portadas/billie-jean.jpg";
+import blindingLights from "../assets/portadas/blinding-lights.jpg";
+import shapeOfYou from "../assets/portadas/shape-of-you.jpg";
+import getLucky from "../assets/portadas/get-lucky.jpg";
+import strobe from "../assets/portadas/strobe.jpg";
+import takeFive from "../assets/portadas/take-five.jpg";
+import basketCase from "../assets/portadas/basket-case.jpg";
+import titiMePregunto from "../assets/portadas/titi-me-pregunto.jpg";
+import goteo from "../assets/portadas/goteo.jpg";
+import milHoras from "../assets/portadas/mil-horas.jpg";
+import graciasALaVida from "../assets/portadas/gracias-a-la-vida.jpg";
 
 import type { Song, User } from "../types";
 
@@ -20,7 +24,7 @@ export const seedSongs: Song[] = [
     album: "A Night at the Opera",
     year: 1975,
     genre: "Rock",
-    cover: aNightAtTheOpera,
+    cover: bohemianRhapsody,
     audioUrl: "",
     duration: 0,
   },
@@ -31,7 +35,7 @@ export const seedSongs: Song[] = [
     album: "Hotel California",
     year: 1976,
     genre: "Rock",
-    cover: fallbackCover,
+    cover: hotelCalifornia,
     audioUrl: "",
     duration: 0,
   },
@@ -42,7 +46,7 @@ export const seedSongs: Song[] = [
     album: "Canción Animal",
     year: 1990,
     genre: "Rock nacional",
-    cover: cancionAnimal,
+    cover: deMusicaLigera,
     audioUrl: "",
     duration: 0,
   },
@@ -53,7 +57,7 @@ export const seedSongs: Song[] = [
     album: "Vasos y besos",
     year: 1983,
     genre: "Rock nacional",
-    cover: fallbackCover,
+    cover: milHoras,
     audioUrl: "",
     duration: 0,
   },
@@ -64,7 +68,7 @@ export const seedSongs: Song[] = [
     album: "Alta Suciedad",
     year: 1997,
     genre: "Rock nacional",
-    cover: fallbackCover,
+    cover: flaca,
     audioUrl: "",
     duration: 0,
   },
@@ -75,7 +79,7 @@ export const seedSongs: Song[] = [
     album: "Thriller",
     year: 1982,
     genre: "Pop",
-    cover: fallbackCover,
+    cover: billieJean,
     audioUrl: "",
     duration: 0,
   },
@@ -86,7 +90,7 @@ export const seedSongs: Song[] = [
     album: "After Hours",
     year: 2020,
     genre: "Pop",
-    cover: afterHours,
+    cover: blindingLights,
     audioUrl: "",
     duration: 0,
   },
@@ -97,7 +101,7 @@ export const seedSongs: Song[] = [
     album: "÷ (Divide)",
     year: 2017,
     genre: "Pop",
-    cover: fallbackCover,
+    cover: shapeOfYou,
     audioUrl: "",
     duration: 0,
   },
@@ -108,7 +112,7 @@ export const seedSongs: Song[] = [
     album: "Random Access Memories",
     year: 2013,
     genre: "Electrónica",
-    cover: randomAccessMemories,
+    cover: getLucky,
     audioUrl: "",
     duration: 0,
   },
@@ -119,7 +123,7 @@ export const seedSongs: Song[] = [
     album: "For Lack of a Better Name",
     year: 2009,
     genre: "Electrónica",
-    cover: forLackOfABetterName,
+    cover: strobe,
     audioUrl: "",
     duration: 0,
   },
@@ -130,7 +134,7 @@ export const seedSongs: Song[] = [
     album: "Time Out",
     year: 1959,
     genre: "Jazz",
-    cover: timeOut,
+    cover: takeFive,
     audioUrl: "",
     duration: 0,
   },
@@ -141,7 +145,7 @@ export const seedSongs: Song[] = [
     album: "Dookie",
     year: 1994,
     genre: "Punk",
-    cover: dookie,
+    cover: basketCase,
     audioUrl: "",
     duration: 0,
   },
@@ -152,7 +156,7 @@ export const seedSongs: Song[] = [
     album: "Gracias a la vida",
     year: 1971,
     genre: "Folklore",
-    cover: homenajeAVioletaParra,
+    cover: graciasALaVida,
     audioUrl: "",
     duration: 0,
   },
@@ -163,7 +167,7 @@ export const seedSongs: Song[] = [
     album: "Un Verano Sin Ti",
     year: 2022,
     genre: "Reggaetón",
-    cover: unVeranoSinTi,
+    cover: titiMePregunto,
     audioUrl: "",
     duration: 0,
   },
