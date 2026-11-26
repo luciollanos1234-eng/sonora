@@ -70,17 +70,17 @@ export const SongCard = ({ song }: SongCardProps) => {
 
       <div className="mt-4 flex min-w-0 flex-col items-start gap-2">
         <div className="w-full min-w-0">
-          <h3
-            className="truncate font-semibold text-[var(--text)]"
+          <h2
+            className="font-semibold text-[var(--text)]"
             title={song.title}
           >
             <Link
               to={`/detalle/${song.id}`}
-              className="rounded-sm hover:text-[var(--primary-text)] focus-visible:outline-2 focus-visible:outline-[var(--focus-color)]"
+              className="-my-3 block truncate rounded-sm py-3 hover:text-[var(--primary-text)] focus-visible:outline-2 focus-visible:outline-[var(--focus-color)]"
             >
               {song.title}
             </Link>
-          </h3>
+          </h2>
 
           <p
             className="mt-1 truncate text-sm text-[var(--text-muted)]"

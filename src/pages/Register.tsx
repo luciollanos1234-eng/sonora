@@ -16,7 +16,6 @@ interface RegisterForm {
 }
 
 const Register = () => {
-  // register del AuthContext se llama igual que el de React Hook Form
   const { register: createAccount, emailExists } = useAuth();
   const { showToast } = useToast();
 
@@ -38,7 +37,6 @@ const Register = () => {
       return;
     }
 
-    // Con la sesión abierta, la ruta /registro lleva sola al inicio
     showToast(`¡Listo, ${session.name}! Ya creaste tu cuenta`);
   };
 
@@ -100,6 +98,7 @@ const Register = () => {
           autoComplete="new-password"
           error={errors.confirm?.message}
           registration={register("confirm", {
+            required: "Repetí la contraseña.",
             validate: (value) => value === getValues("password") || "Las contraseñas no coinciden.",
           })}
         />
@@ -111,7 +110,7 @@ const Register = () => {
 
       <p className="mt-6 text-center text-xs text-[var(--text-muted)]">
         ¿Ya tenés cuenta?{" "}
-        <Link to="/login" className="font-semibold text-[var(--primary-text)] hover:underline">
+        <Link to="/login" className="-my-3.5 inline-flex min-h-11 items-center font-semibold text-[var(--primary-text)] hover:underline">
           Iniciá sesión
         </Link>
       </p>

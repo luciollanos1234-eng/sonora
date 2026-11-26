@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
+import lioPhoto from "../assets/equipo/lio.jpg";
+import facuPhoto from "../assets/equipo/facu.jpg";
 
 const teamMembers = [
   {
@@ -7,6 +9,7 @@ const teamMembers = [
     role: "Scrum Master y Developer",
     tasks: "Coordinación del equipo y desarrollo de funcionalidades.",
     github: "lioneldebortoli",
+    photo: lioPhoto,
   },
   {
     name: "Lucio Llanos",
@@ -19,6 +22,7 @@ const teamMembers = [
     role: "Developer",
     tasks: "Desarrollo de funcionalidades para la plataforma.",
     github: "facualvarez829-afk",
+    photo: facuPhoto,
   },
 ];
 
@@ -28,12 +32,12 @@ const About = () => {
       <div className="relative flex min-h-40 flex-col justify-center overflow-hidden rounded-lg bg-[image:var(--gradient-button)] p-6 text-[var(--text)] sm:flex-row sm:items-center sm:justify-between sm:p-8">
         <div className="relative z-10 flex flex-col gap-2">
           <p className="text-sm font-semibold">Acerca de nosotros</p>
-          <h2 className="mb-2 font-extrabold sm:text-3xl lg:text-5xl font-family-[var(--font-family-title)]">
+          <h1 className="mb-2 text-2xl font-extrabold sm:text-3xl lg:text-5xl font-family-[var(--font-family-title)]">
             Quienes hacemos{" "}
-            <span className="text-[var(--focus-color)] ">Sonora</span>
-          </h2>
+            <span className="text-[var(--text)] underline decoration-[var(--primary-text)] decoration-4 underline-offset-8">Sonora</span>
+          </h1>
           <div>
-            <p className="max-w-xl text-left text-xs font-semibold sm:text-sm text-[var(--text-muted)]">
+            <p className="max-w-xl text-left text-xs font-semibold sm:text-sm text-[var(--text)]">
               Sonora es una plataforma de música en línea que permite a los
               usuarios descubrir, escuchar y compartir canciones de diversos
               géneros. Nuestro objetivo es brindar una experiencia musical única
@@ -52,8 +56,8 @@ const About = () => {
               className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xl"
             >
               <img
-                className="h-20 w-20 rounded-full"
-                src={`https://github.com/${member.github}.png`}
+                className="h-20 w-20 rounded-full object-cover"
+                src={member.photo ?? `https://github.com/${member.github}.png`}
                 alt={`Avatar de ${member.name}`}
               />
               <div className="flex flex-col gap-2">
@@ -65,7 +69,7 @@ const About = () => {
                   {member.tasks}
                 </p>
                 <Link
-                  className="chip m-2 flex min-h-10 w-fit items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+                  className="chip m-2 flex min-h-11 w-fit items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
                   to={`https://github.com/${member.github}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -82,7 +86,7 @@ const About = () => {
         <br />
         <div className="flex flex-wrap gap-2">
           <Link
-            className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="chip m-1 flex min-h-11 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
             to="https://react.dev"
             target="_blank"
             rel="noopener noreferrer"
@@ -90,7 +94,7 @@ const About = () => {
             React
           </Link>
           <Link
-            className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="chip m-1 flex min-h-11 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
             to="https://www.typescriptlang.org"
             target="_blank"
             rel="noopener noreferrer"
@@ -98,7 +102,7 @@ const About = () => {
             TypeScript
           </Link>
           <Link
-            className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="chip m-1 flex min-h-11 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
             to="https://tailwindcss.com"
             target="_blank"
             rel="noopener noreferrer"
@@ -106,7 +110,7 @@ const About = () => {
             Tailwind CSS
           </Link>
           <Link
-            className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="chip m-1 flex min-h-11 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
             to="https://vite.dev"
             target="_blank"
             rel="noopener noreferrer"
@@ -114,7 +118,7 @@ const About = () => {
             Vite
           </Link>
           <Link
-            className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="chip m-1 flex min-h-11 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
             to="https://reactrouter.com"
             target="_blank"
             rel="noopener noreferrer"
@@ -122,7 +126,7 @@ const About = () => {
             React Router
           </Link>
           <Link
-            className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="chip m-1 flex min-h-11 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
             to="https://react.dev/learn/passing-data-deeply-with-context"
             target="_blank"
             rel="noopener noreferrer"
@@ -130,7 +134,7 @@ const About = () => {
             Context API
           </Link>
           <Link
-            className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="chip m-1 flex min-h-11 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
             to="https://react-icons.github.io/react-icons/"
             target="_blank"
             rel="noopener noreferrer"
@@ -138,7 +142,7 @@ const About = () => {
             React Icons
           </Link>
           <Link
-            className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="chip m-1 flex min-h-11 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
             to="https://react-hook-form.com"
             target="_blank"
             rel="noopener noreferrer"
@@ -146,7 +150,7 @@ const About = () => {
             React Hook Form
           </Link>
           <Link
-            className="chip m-1 flex h-10 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+            className="chip m-1 flex min-h-11 w-auto items-center gap-2 rounded-full bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold text-[var(--text)] transition hover:bg-[var(--surface-3)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
             to="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
             target="_blank"
             rel="noopener noreferrer"

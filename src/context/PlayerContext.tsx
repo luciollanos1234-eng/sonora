@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useEffectEvent, useRef, useState, type ReactNode } from "react";
 import ReactPlayer from "react-player";
 import type { PlayerPrefs, Song } from "../types";
 import { getSongs } from "../data/initialize";
@@ -9,7 +9,6 @@ const readPrefs = () => readStorage<PlayerPrefs | null>(STORAGE_KEYS.prefs, null
 
 export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const [queue, setQueue] = useState<Song[]>(() => getSongs());
-  // Al recargar vuelve la última canción, en pausa
   const [currentSong, setCurrentSong] = useState<Song | null>(
     () => getSongs().find((s) => s.id === readPrefs()?.lastSongId) ?? null
   );
@@ -18,11 +17,8 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [audioError, setAudioError] = useState(false);
-  // useRef guarda el elemento de audio del ReactPlayer para leer y mover el tiempo
-  // (no está en el temario: solo se usa acá)
   const playerRef = useRef<HTMLVideoElement>(null);
 
-  // Guarda volumen y última canción (nunca el audio)
   useEffect(() => {
     const prefs = readPrefs();
     writeStorage(STORAGE_KEYS.prefs, {
@@ -35,10 +31,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [volume, currentSong]);
 
-  // Pone a sonar una canción y la lista desde donde se eligió
-  // La lista se lee de nuevo para incluir lo que se agregó o borró desde Admin
   const playSong = (song: Song, list: Song[] = getSongs()) => {
-    // Usa la versión guardada de la canción, que es la que tiene el audio de iTunes
     const saved = getSongs().find((s) => s.id === song.id) ?? song;
     setQueue(list);
     setCurrentSong(saved);
@@ -55,7 +48,6 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     setIsPlaying(false);
   };
 
-  // En la última canción se detiene
   const next = () => {
     const currentIndex = queue.findIndex((s) => s.id === currentSong?.id);
     if (currentIndex !== -1 && currentIndex < queue.length - 1) {
@@ -78,7 +70,6 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Mueve el audio al segundo elegido en la barra de progreso
   const seek = (seconds: number) => {
     if (playerRef.current) {
       playerRef.current.currentTime = seconds;
@@ -86,13 +77,11 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     setProgress(seconds);
   };
 
-  // Si la canción editada está en la lista o sonando, muestra los datos nuevos
   const updateSong = (song: Song) => {
     setQueue(queue.map((s) => (s.id === song.id ? song : s)));
     if (currentSong?.id === song.id) setCurrentSong(song);
   };
 
-  // Si se borra la canción que suena, el reproductor se detiene y queda vacío
   const removeSong = (songId: string) => {
     setQueue(queue.filter((s) => s.id !== songId));
     if (currentSong?.id === songId) {
@@ -102,26 +91,23 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Sin archivo o con error de audio, el progreso se simula con la duración de la canción
   const simulated = !currentSong?.audioUrl || audioError;
-  // duration de la canción viene en milisegundos; si no hay, usamos 30 s
   const simulatedDuration = currentSong?.duration ? Math.round(currentSong.duration / 1000) : 30;
 
-  // Cada segundo suma 1 al progreso; al llegar al final pasa a la siguiente
+  const playNext = useEffectEvent(() => next());
+
   useEffect(() => {
     if (!isPlaying || !simulated) return;
 
     const timer = setTimeout(() => {
       if (progress + 1 >= simulatedDuration) {
-        next();
+        playNext();
       } else {
         setProgress(progress + 1);
       }
     }, 1000);
 
     return () => clearTimeout(timer);
-    // next cambia en cada render; el efecto ya se vuelve a correr cuando cambia progress
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying, simulated, progress, simulatedDuration]);
 
   return (
@@ -139,7 +125,6 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         prev,
         progress,
         isPreview: !simulated,
-        // Sin canción elegida no hay duración que mostrar
         duration: !currentSong ? 0 : simulated ? simulatedDuration : duration,
         seek,
         updateSong,
@@ -148,7 +133,6 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     >
       {children}
 
-      {/* Un solo reproductor oculto: los controles son los de Sonora */}
       {currentSong?.audioUrl && !audioError && (
         <ReactPlayer
           ref={playerRef}

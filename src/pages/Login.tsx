@@ -16,7 +16,6 @@ interface LoginForm {
 const Login = () => {
   const { user, login } = useAuth();
   const location = useLocation();
-  // ProtectedRoute guarda en el state la página que se quería ver
   const from = (location.state as { from?: string } | null)?.from;
   const [loginError, setLoginError] = useState(false);
   const [justLoggedIn, setJustLoggedIn] = useState(false);
@@ -32,7 +31,6 @@ const Login = () => {
     const session = login(data.email, data.password);
 
     if (!session) {
-      // Un solo aviso: no decimos si falló el email o la contraseña
       setLoginError(true);
       setValue("password", "");
       return;
@@ -41,7 +39,6 @@ const Login = () => {
     setJustLoggedIn(true);
   };
 
-  // Si recién ingresó vuelve a la página que quería ver; si no, admin al panel y el resto al inicio
   if (user) {
     let destino = "/";
 
@@ -95,7 +92,7 @@ const Login = () => {
 
       <p className="mt-6 text-center text-xs text-[var(--text-muted)]">
         ¿No tenés cuenta?{" "}
-        <Link to="/registro" className="font-semibold text-[var(--primary-text)] hover:underline">
+        <Link to="/registro" className="-my-3.5 inline-flex min-h-11 items-center font-semibold text-[var(--primary-text)] hover:underline">
           Registrate
         </Link>
       </p>

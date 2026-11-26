@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import {
   FiChevronDown,
@@ -13,12 +13,10 @@ import { IconButton } from "../ui/IconButton";
 import { usePlayer } from "../../context/usePlayer";
 import { formatTime } from "../../utils/formatTime";
 
-// Reproductor para celular: barra compacta que abre la pantalla completa
 const PlayerMobile = () => {
   const {
     currentSong,
     isPlaying,
-    isPreview,
     play,
     pause,
     next,
@@ -30,8 +28,8 @@ const PlayerMobile = () => {
     setVolume,
   } = usePlayer();
   const [isOpen, setIsOpen] = useState(false);
+  const openButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Escape cierra la pantalla completa
   useEffect(() => {
     if (!isOpen) return;
 
@@ -40,15 +38,17 @@ const PlayerMobile = () => {
     };
 
     document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    const openButton = openButtonRef.current;
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      openButton?.focus();
+    };
   }, [isOpen]);
 
-  // Porcentaje para la línea de progreso de la barra compacta
   const percent = duration ? Math.min(progress / duration, 1) * 100 : 0;
 
   return (
     <>
-      {/* Barra compacta */}
       <section
         aria-label="Reproductor"
         className="relative flex items-center gap-3 border-t border-[var(--border)] bg-[var(--surface)] px-4 py-2 md:hidden"
@@ -62,10 +62,11 @@ const PlayerMobile = () => {
 
         {currentSong ? (
           <button
+            ref={openButtonRef}
             type="button"
             onClick={() => setIsOpen(true)}
             aria-label={`Abrir reproductor: ${currentSong.title}`}
-            className="flex min-w-0 flex-1 items-center gap-3 text-left"
+            className="flex min-h-11 min-w-0 flex-1 items-center gap-3 text-left"
           >
             <Cover
               src={currentSong.cover}
@@ -98,7 +99,6 @@ const PlayerMobile = () => {
         </IconButton>
       </section>
 
-      {/* Pantalla completa */}
       {isOpen && currentSong && (
         <div
           role="dialog"
@@ -110,7 +110,6 @@ const PlayerMobile = () => {
             <IconButton
               aria-label="Cerrar reproductor"
               variant="outline"
-              // Al abrir, el foco pasa adentro de la pantalla completa
               autoFocus
               onClick={() => setIsOpen(false)}
             >
@@ -148,17 +147,13 @@ const PlayerMobile = () => {
               step={1}
               value={Math.min(progress, duration || 0)}
               onChange={(e) => seek(Number(e.target.value))}
-              className="w-full accent-[var(--primary-light)]"
+              style={{ "--fill": `${percent}%` } as CSSProperties}
+              className="range w-full"
             />
             <div className="mt-1 flex justify-between text-xs tabular-nums text-[var(--text-muted)]">
               <span>{formatTime(progress)}</span>
               <span>{formatTime(duration)}</span>
             </div>
-            {isPreview && (
-              <p className="mt-2 text-center text-[11px] text-[var(--text-muted)]">
-                Vista previa de 30 s · cortesía de iTunes
-              </p>
-            )}
           </div>
 
           <div className="flex items-center justify-center gap-6">
@@ -188,7 +183,8 @@ const PlayerMobile = () => {
               step={0.01}
               value={volume}
               onChange={(e) => setVolume(Number(e.target.value))}
-              className="w-full accent-[var(--primary-light)]"
+              style={{ "--fill": `${volume * 100}%` } as CSSProperties}
+              className="range w-full"
             />
           </div>
         </div>

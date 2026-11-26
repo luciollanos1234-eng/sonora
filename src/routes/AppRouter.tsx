@@ -47,7 +47,6 @@ const AppRouter = () => {
       <PageTitle />
 
       <Routes>
-        {/* Rutas con Layout */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/detalle/:id" element={<Detail />} />
@@ -72,8 +71,6 @@ const AppRouter = () => {
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/* Rutas sin Layout */}
-        {/* Con sesión abierta, login y registro llevan al inicio (Login lo resuelve adentro) */}
         <Route path="/login" element={<Login />} />
         <Route
           path="/registro"

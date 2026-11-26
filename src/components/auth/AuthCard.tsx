@@ -9,12 +9,11 @@ interface AuthCardProps {
   children: ReactNode;
 }
 
-// Tarjeta que comparten Login y Registro
 const AuthCard = ({ title, subtitle, children }: AuthCardProps) => (
   <main className="relative min-h-screen bg-[var(--bg)] bg-[radial-gradient(ellipse_at_top,color-mix(in_srgb,var(--primary)_28%,transparent),transparent_55%)] px-4 py-6 text-[var(--text)]">
     <Link
       to="/"
-      className="inline-flex items-center gap-1 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold hover:bg-[var(--surface-2)] sm:ml-8"
+      className="inline-flex min-h-11 items-center gap-1 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold hover:bg-[var(--surface-2)] sm:ml-8"
     >
       <FiChevronLeft aria-hidden="true" />
       Volver al inicio
