@@ -7,7 +7,6 @@ const NotFound = () => {
     <section className="flex min-h-[calc(100vh-7rem)] items-start justify-center px-4 pt-16 text-center sm:pt-20 lg:pt-24">
       <div className="w-full max-w-2xl">
 
-        {/* Ilustración 404 */}
         <div className="mb-6 flex items-center justify-center gap-3 sm:gap-5">
           <span className="text-7xl font-extrabold leading-none text-[var(--primary-text)] sm:text-8xl lg:text-9xl">
             4
@@ -28,7 +27,6 @@ const NotFound = () => {
           </span>
         </div>
 
-        {/* Mensaje */}
         <h1 className="text-2xl font-extrabold tracking-tight text-[var(--text)] sm:text-3xl">
           Este tema no está en el disco
         </h1>
@@ -38,7 +36,6 @@ const NotFound = () => {
           Volvé al inicio o seguí buscando en el catálogo.
         </p>
 
-        {/* Acciones */}
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <Link
             to="/"

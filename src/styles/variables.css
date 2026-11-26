@@ -15,11 +15,9 @@
   --gradient-button: linear-gradient(135deg, #6D28D9, #9333EA);
   --gradient-progress: linear-gradient(90deg, #7C3AED, #D946EF);
 
-  /* TIPOGRAFÍA */
   --font-body: 'Inter', sans-serif;
   --font-display: 'Plus Jakarta Sans', sans-serif;
 
-  /* ESPACIADO */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -28,25 +26,21 @@
   --space-8: 32px;
   --space-12: 48px;
 
-  /* RADIOS */
   --radius-cover: 8px;
   --radius-control: 12px;
   --radius-card: 18px;
   --radius-modal: 24px;
   --radius-pill: 999px;
 
-  /* ACCESIBILIDAD */
   --focus-color: #C4B5FD;
   --focus-width: 2px;
   --focus-offset: 2px;
   --disabled-opacity: 0.5;
 
-  /* CONTROLES */
   --control-height: 44px;
   --control-padding-x: 16px;
   --control-gap: 8px;
 
-  /* TRANSICIONES */
   --transition-duration: 200ms;
   --hover-brightness: 1.1;
 }

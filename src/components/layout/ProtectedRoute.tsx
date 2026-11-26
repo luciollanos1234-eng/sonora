@@ -15,7 +15,6 @@ const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps)
   const { showToast } = useToast();
   const sinPermiso = !!user && requireAdmin && user.role !== "admin";
 
-  // El setTimeout con cleanup evita que el aviso salga dos veces en modo estricto
   useEffect(() => {
     if (!sinPermiso) return;
 
@@ -27,12 +26,10 @@ const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps)
     return () => clearTimeout(timer);
   }, [sinPermiso, showToast, navigate]);
 
-  // Sin sesión va al login y guarda a dónde quería ir
   if (!user) {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
 
-  // Con sesión pero sin rol admin: el efecto de arriba avisa y lo manda al inicio
   if (sinPermiso) return null;
 
   return <>{children}</>;

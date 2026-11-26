@@ -5,7 +5,6 @@ export interface PlayerContextType {
   currentSong: Song | null;
   queue: Song[];
   isPlaying: boolean;
-  // true si suena el preview de iTunes (no el progreso simulado)
   isPreview: boolean;
   volume: number;
   setVolume: (value: number) => void;
@@ -17,7 +16,6 @@ export interface PlayerContextType {
   progress: number;
   duration: number;
   seek: (seconds: number) => void;
-  // Avisan al reproductor que una canción se editó o se borró desde Admin
   updateSong: (song: Song) => void;
   removeSong: (songId: string) => void;
 }

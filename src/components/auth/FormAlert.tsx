@@ -6,7 +6,6 @@ interface FormAlertProps {
   children: ReactNode;
 }
 
-// Aviso de error arriba del formulario; role="alert" lo anuncia el lector de pantalla
 const FormAlert = ({ title, children }: FormAlertProps) => (
   <div
     role="alert"

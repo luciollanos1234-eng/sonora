@@ -78,10 +78,8 @@ const Admin = () => {
     { label: "Canciones en playlists", value: totalSongs, icon: <FiList aria-hidden="true" /> },
   ];
 
-  // Géneros para la lista del formulario, sacados del catálogo
   const genres = [...new Set(songs.map((song) => song.genre))].sort((a, b) => a.localeCompare(b, "es"));
 
-  // El buscador filtra por nombre, artista o álbum
   const filteredSongs = songs.filter((song) =>
     normalize(`${song.title} ${song.artist} ${song.album}`).includes(normalize(search))
   );
@@ -97,7 +95,6 @@ const Admin = () => {
     showToast("Canción agregada");
   };
 
-  // Conserva el id, así la canción sigue en las playlists
   const saveEdit = (song: Song) => {
     saveSongs(songs.map((item) => (item.id === song.id ? song : item)));
     player.updateSong(song);
@@ -164,7 +161,6 @@ const Admin = () => {
         </p>
       </header>
 
-      {/* Totales */}
       <div className="grid grid-cols-3 gap-3 sm:gap-4">
         {totals.map((total) => (
           <article
@@ -180,7 +176,6 @@ const Admin = () => {
         ))}
       </div>
 
-      {/* Pestañas */}
       <div
         role="tablist"
         aria-label="Secciones del panel"
@@ -219,7 +214,6 @@ const Admin = () => {
 
       {tab === "canciones" ? (
         <div id="panel-canciones" role="tabpanel" aria-labelledby="tab-canciones" className="mt-5">
-          {/* Buscador y botón de agregar */}
           <div className="mb-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
             <label className="relative w-full sm:max-w-sm">
               <span className="sr-only">Buscar en canciones</span>
@@ -251,7 +245,6 @@ const Admin = () => {
             </p>
           )}
 
-          {/* Escritorio: tabla */}
           {filteredSongs.length > 0 && (
             <div className="hidden overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] md:block">
               <table className="w-full text-left text-sm">
@@ -309,7 +302,6 @@ const Admin = () => {
             </div>
           )}
 
-          {/* Celular: cada fila es una tarjeta */}
           <div className="flex flex-col gap-3 md:hidden">
             {filteredSongs.map((song) => (
               <article
