@@ -19,7 +19,6 @@ import { useToast } from "../context/useToast";
 import { usePlayer } from "../context/usePlayer";
 import { usePlaylist } from "../context/usePlaylist";
 import { normalize } from "../utils/normalize";
-import { STORAGE_KEYS, readStorage, writeStorage } from "../utils/storage";
 import type { Song, User, UserSummary } from "../types";
 
 type Tab = "canciones" | "usuarios";
@@ -61,7 +60,7 @@ const Admin = () => {
   const { showToast } = useToast();
   const player = usePlayer();
 
-  const { removeEverywhere, playlistCount, removePlaylist } = usePlaylist();
+  const { removeEverywhere, playlistCount, removePlaylist, totalSongs } = usePlaylist();
   const [users, setUsers] = useState<User[]>(() => getUsers());
 
   const userSummaries: UserSummary[] = users.map((user) => ({
@@ -72,16 +71,10 @@ const Admin = () => {
     fechaRegistro: user.fechaRegistro,
   }));
 
-  const playlists = readStorage<Record<string, string[]>>(STORAGE_KEYS.playlists, {});
-  let inPlaylists = 0;
-  Object.values(playlists).forEach((list) => {
-    inPlaylists += list.length;
-  });
-
   const totals = [
     { label: "Canciones", value: songs.length, icon: <FiMusic aria-hidden="true" /> },
     { label: "Usuarios", value: users.length, icon: <FiUsers aria-hidden="true" /> },
-    { label: "Canciones en playlists", value: inPlaylists, icon: <FiList aria-hidden="true" /> },
+    { label: "Canciones en playlists", value: totalSongs, icon: <FiList aria-hidden="true" /> },
   ];
 
   // Géneros para la lista del formulario, sacados del catálogo
