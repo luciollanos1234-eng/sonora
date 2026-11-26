@@ -12,7 +12,6 @@ import { PlaylistContext } from "./playlist-context";
 import { useAuth } from "./useAuth";
 import { useToast } from "./useToast";
 
-// { [userId]: [songId, ...] }
 type Playlists = Record<string, string[]>;
 
 const isPlaylists = (value: unknown): value is Playlists => {
@@ -21,7 +20,7 @@ const isPlaylists = (value: unknown): value is Playlists => {
   }
 
   return Object.values(value).every(
-    (ids) => Array.isArray(ids) && ids.every((id) => typeof id === "string")
+    (ids) => Array.isArray(ids) && ids.every((id) => typeof id === "string"),
   );
 };
 
@@ -31,14 +30,13 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
   const userId = user?.userId ?? null;
 
   const [playlists, setPlaylists] = useState<Playlists>(() =>
-    readStorage<Playlists>(STORAGE_KEYS.playlists, {}, isPlaylists)
+    readStorage<Playlists>(STORAGE_KEYS.playlists, {}, isPlaylists),
   );
   const [loginPromptOpen, setLoginPromptOpen] = useState(false);
 
-  // Cada usuario ve solo su lista; sin sesión no hay lista
   const songIds = useMemo(
     () => (userId ? (playlists[userId] ?? []) : []),
-    [playlists, userId]
+    [playlists, userId],
   );
 
   useEffect(() => {
@@ -47,18 +45,16 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 
   const isInPlaylist = useCallback(
     (songId: string) => songIds.includes(songId),
-    [songIds]
+    [songIds],
   );
 
   const add = useCallback(
     (songId: string, songTitle: string) => {
-      // Visitante: en vez de agregar, abre el modal
       if (!userId) {
         setLoginPromptOpen(true);
         return;
       }
 
-      // Sin duplicados
       if (songIds.includes(songId)) return;
 
       setPlaylists((previous) => {
@@ -69,7 +65,7 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 
       showToast(`Agregaste ${songTitle} a Mi Playlist`);
     },
-    [userId, songIds, showToast]
+    [userId, songIds, showToast],
   );
 
   const remove = useCallback(
@@ -83,7 +79,7 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
 
       showToast(`Quitaste ${songTitle} de Mi Playlist`);
     },
-    [userId, songIds, showToast]
+    [userId, songIds, showToast],
   );
 
   const toggle = useCallback(
@@ -94,10 +90,9 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
         add(songId, songTitle);
       }
     },
-    [songIds, add, remove]
+    [songIds, add, remove],
   );
 
-  // Saca una canción borrada desde Admin de las playlists de todos los usuarios
   const removeEverywhere = useCallback((songId: string) => {
     setPlaylists((previous) => {
       const next: Playlists = {};
@@ -108,11 +103,51 @@ export const PlaylistProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
+  const playlistCount = useCallback(
+    (id: string) => playlists[id]?.length ?? 0,
+    [playlists],
+  );
+
+  const totalSongs = useMemo(
+    () =>
+      Object.values(playlists).reduce((total, list) => total + list.length, 0),
+    [playlists],
+  );
+
+  const removePlaylist = useCallback((id: string) => {
+    setPlaylists((previous) => {
+      if (!(id in previous)) return previous;
+      const next = { ...previous };
+      delete next[id];
+      return next;
+    });
+  }, []);
+
   const closeLoginPrompt = useCallback(() => setLoginPromptOpen(false), []);
 
   const value = useMemo(
-    () => ({ songIds, isInPlaylist, add, remove, toggle, removeEverywhere }),
-    [songIds, isInPlaylist, add, remove, toggle, removeEverywhere]
+    () => ({
+      songIds,
+      isInPlaylist,
+      add,
+      remove,
+      toggle,
+      removeEverywhere,
+      playlistCount,
+      totalSongs,
+      removePlaylist,
+    }),
+    [
+      songIds,
+      isInPlaylist,
+      add,
+      remove,
+      toggle,
+      removeEverywhere,
+      playlistCount,
+      totalSongs,
+      removePlaylist,
+    ],
   );
 
   return (

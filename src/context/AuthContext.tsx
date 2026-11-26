@@ -4,7 +4,6 @@ import { getUsers } from "../data/initialize";
 import { STORAGE_KEYS, readStorage, writeStorage } from "../utils/storage";
 import { AuthContext } from "./auth-context";
 
-// Arma la sesión sin la contraseña
 const toSession = (user: User): UserSession => ({
   userId: user.id,
   name: user.name,
@@ -15,10 +14,16 @@ const toSession = (user: User): UserSession => ({
 const cleanEmail = (email: string) => email.trim().toLowerCase();
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // Al recargar, arranca con la sesión guardada
-  const [user, setUser] = useState<UserSession | null>(() =>
-    readStorage<UserSession | null>(STORAGE_KEYS.session, null)
-  );
+  const [user, setUser] = useState<UserSession | null>(() => {
+    const session = readStorage<UserSession | null>(STORAGE_KEYS.session, null);
+
+    if (session && !getUsers().some((u) => u.id === session.userId)) {
+      writeStorage(STORAGE_KEYS.session, null);
+      return null;
+    }
+
+    return session;
+  });
 
   const saveSession = (session: UserSession | null) => {
     writeStorage(STORAGE_KEYS.session, session);
@@ -27,7 +32,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = (email: string, password: string) => {
     const found = getUsers().find(
-      (u) => cleanEmail(u.email) === cleanEmail(email) && u.password === password
+      (u) =>
+        cleanEmail(u.email) === cleanEmail(email) && u.password === password,
     );
 
     if (!found) return null;
@@ -37,11 +43,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return session;
   };
 
-  // El registro la usa para avisar antes de enviar
   const emailExists = (email: string) =>
     getUsers().some((u) => cleanEmail(u.email) === cleanEmail(email));
 
-  // Devuelve null si el email ya está registrado
   const register = (name: string, email: string, password: string) => {
     if (emailExists(email)) return null;
 
@@ -65,7 +69,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => saveSession(null);
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, emailExists }}>
+    <AuthContext.Provider
+      value={{ user, login, register, logout, emailExists }}
+    >
       {children}
     </AuthContext.Provider>
   );

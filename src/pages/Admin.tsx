@@ -1,3 +1,4 @@
+import { UsersPanel } from "../components/auth/UsersPanel";
 import { useState, type KeyboardEvent } from "react";
 import Swal from "sweetalert2";
 import {
@@ -18,40 +19,63 @@ import { useToast } from "../context/useToast";
 import { usePlayer } from "../context/usePlayer";
 import { usePlaylist } from "../context/usePlaylist";
 import { normalize } from "../utils/normalize";
-import { STORAGE_KEYS, readStorage, writeStorage } from "../utils/storage";
-import type { Song } from "../types";
+import { STORAGE_KEYS, writeStorage } from "../utils/storage";
+import type { Song, User, UserSummary } from "../types";
 
 type Tab = "canciones" | "usuarios";
 
-// Clases compartidas por los botones Editar y Eliminar
 const editClass =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-[var(--surface-3)] px-4 text-sm font-semibold text-[var(--text)] disabled:cursor-not-allowed disabled:opacity-[var(--disabled-opacity)]";
 const deleteClass =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] border border-[var(--danger)] px-4 text-sm font-semibold text-[var(--danger)] transition hover:bg-[var(--danger)] hover:text-[var(--bg)] focus-visible:outline-2 focus-visible:outline-[var(--focus-color)]";
+
+const confirmDelete = async (options: {
+  title: string;
+  text: string;
+  confirmText: string;
+}) => {
+  const css = getComputedStyle(document.documentElement);
+  const result = await Swal.fire({
+    icon: "warning",
+    titleText: options.title,
+    text: options.text,
+    showCancelButton: true,
+    confirmButtonText: options.confirmText,
+    cancelButtonText: "Cancelar",
+    focusCancel: true,
+    background: css.getPropertyValue("--surface"),
+    color: css.getPropertyValue("--text"),
+    confirmButtonColor: css.getPropertyValue("--danger"),
+    cancelButtonColor: css.getPropertyValue("--surface-3"),
+  });
+
+  return result.isConfirmed;
+};
 
 const Admin = () => {
   const [songs, setSongs] = useState<Song[]>(() => getSongs());
   const [tab, setTab] = useState<Tab>("canciones");
   const [search, setSearch] = useState("");
   const [formOpen, setFormOpen] = useState(false);
-  // Canción que se está editando (null = ninguna)
   const [editingSong, setEditingSong] = useState<Song | null>(null);
   const { showToast } = useToast();
   const player = usePlayer();
-  const { removeEverywhere } = usePlaylist();
 
-  // Los totales se calculan con lo guardado, no se guardan aparte
-  const users = getUsers();
-  const playlists = readStorage<Record<string, string[]>>(STORAGE_KEYS.playlists, {});
-  let inPlaylists = 0;
-  Object.values(playlists).forEach((list) => {
-    inPlaylists += list.length;
-  });
+  const { removeEverywhere, playlistCount, removePlaylist, totalSongs } = usePlaylist();
+  const [users, setUsers] = useState<User[]>(() => getUsers());
+
+  const userSummaries: UserSummary[] = users.map((user) => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    fechaRegistro: user.fechaRegistro,
+  }));
 
   const totals = [
     { label: "Canciones", value: songs.length, icon: <FiMusic aria-hidden="true" /> },
     { label: "Usuarios", value: users.length, icon: <FiUsers aria-hidden="true" /> },
-    { label: "Canciones en playlists", value: inPlaylists, icon: <FiList aria-hidden="true" /> },
+    { label: "Canciones en playlists", value: totalSongs, icon: <FiList aria-hidden="true" /> },
   ];
 
   // Géneros para la lista del formulario, sacados del catálogo
@@ -81,27 +105,14 @@ const Admin = () => {
     showToast("Cambios guardados");
   };
 
-  // Pide confirmación antes de borrar; el foco arranca en Cancelar
   const removeSong = async (song: Song) => {
-    // Los colores salen de las variables CSS del proyecto
-    const css = getComputedStyle(document.documentElement);
-    const result = await Swal.fire({
-      icon: "warning",
-      // titleText muestra el nombre como texto, sin interpretar HTML
-      titleText: `¿Eliminar ${song.title}?`,
+    const confirmed = await confirmDelete({
+      title: `¿Eliminar ${song.title}?`,
       text: "Se borra del catálogo y de las playlists de todos los usuarios. No se puede deshacer.",
-      showCancelButton: true,
-      confirmButtonText: "Eliminar canción",
-      cancelButtonText: "Cancelar",
-      focusCancel: true,
-      background: css.getPropertyValue("--surface"),
-      color: css.getPropertyValue("--text"),
-      confirmButtonColor: css.getPropertyValue("--danger"),
-      cancelButtonColor: css.getPropertyValue("--surface-3"),
+      confirmText: "Eliminar canción",
     });
 
-    // Cancelar, Escape o tocar afuera: no se borra nada
-    if (!result.isConfirmed) return;
+    if (!confirmed) return;
 
     saveSongs(songs.filter((item) => item.id !== song.id));
     removeEverywhere(song.id);
@@ -109,7 +120,27 @@ const Admin = () => {
     showToast(`Eliminaste ${song.title}`);
   };
 
-  // Con las flechas se pasa de una pestaña a la otra
+  const removeUser = async (target: UserSummary) => {
+    const stored = getUsers().find((item) => item.id === target.id);
+    if (!stored || stored.role === "admin") return;
+
+    const count = playlistCount(stored.id);
+    const confirmed = await confirmDelete({
+      title: `¿Eliminar la cuenta de ${stored.name}?`,
+      text: `Se borra la cuenta y su playlist (${count} ${count === 1 ? "canción" : "canciones"}). Ya no va a poder iniciar sesión. No se puede deshacer.`,
+      confirmText: "Eliminar cuenta",
+    });
+
+    if (!confirmed) return;
+
+    const nextUsers = getUsers().filter((item) => item.id !== stored.id);
+    if (!writeStorage(STORAGE_KEYS.users, nextUsers)) return;
+
+    setUsers(nextUsers);
+    removePlaylist(stored.id);
+    showToast(`Eliminaste la cuenta de ${stored.name}`);
+  };
+
   const handleTabKeys = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
     const nextTab: Tab = tab === "canciones" ? "usuarios" : "canciones";
@@ -318,22 +349,9 @@ const Admin = () => {
             ))}
           </div>
         </div>
-      ) : (
-        // La gestión completa de usuarios llega con SON-020
+            ) : (
         <div id="panel-usuarios" role="tabpanel" aria-labelledby="tab-usuarios" className="mt-5">
-          <ul className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
-            {users.map((user) => (
-              <li key={user.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] p-4 last:border-b-0">
-                <div className="min-w-0">
-                  <p className="font-semibold">{user.name}</p>
-                  <p className="truncate text-sm text-[var(--text-muted)]">{user.email}</p>
-                </div>
-                <span className="rounded-full bg-[var(--surface-3)] px-2.5 py-1 text-xs">
-                  {user.role === "admin" ? "Administrador" : "Usuario"}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <UsersPanel users={userSummaries} onDelete={removeUser} />
         </div>
       )}
 
@@ -341,7 +359,6 @@ const Admin = () => {
         <SongsForm onSave={addSong} genres={genres} />
       </Modal>
 
-      {/* Mismo formulario, con los datos de la canción cargados */}
       <Modal open={editingSong !== null} title="Editar canción" onClose={() => setEditingSong(null)}>
         {editingSong && (
           <SongsForm key={editingSong.id} song={editingSong} onSave={saveEdit} genres={genres} />
