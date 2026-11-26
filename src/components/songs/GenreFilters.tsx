@@ -15,7 +15,7 @@ export const GenreFilters = ({
   const allGenres = ["Todos", ...genres];
 
   return (
-    <div className="-mx-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+    <div className="-mx-4 overflow-x-auto px-4 pb-2 [scrollbar-color:var(--surface-3)_transparent] [scrollbar-width:thin] sm:mx-0 sm:px-0">
       <div
         role="group"
         aria-label="Filtrar canciones por género"
@@ -30,7 +30,7 @@ export const GenreFilters = ({
               type="button"
               aria-pressed={isSelected}
               onClick={() => onGenreChange(genre)}
-              className={`flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)] ${
+              className={`flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)] ${
                 isSelected
                   ? "border-transparent bg-[var(--primary-text)] text-[var(--bg)]"
                   : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] hover:border-[var(--primary)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]"

@@ -62,7 +62,7 @@ export const PlaylistRow = ({ song, index, queue }: PlaylistRowProps) => {
         <div className="min-w-0">
           <Link
             to={`/detalle/${song.id}`}
-            className={`block truncate font-semibold hover:text-[var(--primary-text)] ${
+            className={`-my-2.5 block truncate py-2.5 font-semibold hover:text-[var(--primary-text)] ${
               isPlayingThisSong ? "text-[var(--primary-text)]" : ""
             }`}
           >

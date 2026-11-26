@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { FiPause, FiPlay, FiSkipBack, FiSkipForward, FiVolume2 } from "react-icons/fi";
 import Cover from "../songs/Cover";
@@ -5,12 +6,10 @@ import { IconButton } from "../ui/IconButton";
 import { usePlayer } from "../../context/usePlayer";
 import { formatTime } from "../../utils/formatTime";
 
-// Barra fija de abajo para tablet y escritorio
 const Player = () => {
   const {
     currentSong,
     isPlaying,
-    isPreview,
     play,
     pause,
     next,
@@ -22,12 +21,13 @@ const Player = () => {
     setVolume,
   } = usePlayer();
 
+  const percent = duration ? Math.min(progress / duration, 1) * 100 : 0;
+
   return (
     <section
       aria-label="Reproductor"
       className="hidden grid-cols-[1fr_2fr_1fr] items-center gap-6 border-t border-[var(--border)] bg-[var(--surface)] px-6 py-3 md:grid"
     >
-      {/* Canción actual */}
       <div className="flex min-w-0 items-center gap-3">
         {currentSong ? (
           <>
@@ -39,7 +39,7 @@ const Player = () => {
             <div className="min-w-0">
               <Link
                 to={`/detalle/${currentSong.id}`}
-                className="block truncate font-semibold text-[var(--text)] hover:underline"
+                className="-my-2.5 block truncate py-2.5 font-semibold text-[var(--text)] hover:underline"
                 title={currentSong.title}
               >
                 {currentSong.title}
@@ -54,7 +54,6 @@ const Player = () => {
         )}
       </div>
 
-      {/* Controles y progreso */}
       <div className="flex flex-col items-center gap-1">
         <div className="flex items-center gap-3">
           <IconButton aria-label="Canción anterior" variant="outline" onClick={prev} disabled={!currentSong}>
@@ -85,19 +84,14 @@ const Player = () => {
             value={Math.min(progress, duration || 0)}
             onChange={(e) => seek(Number(e.target.value))}
             disabled={!currentSong}
-            className="w-full accent-[var(--primary-light)]"
+            style={{ "--fill": `${percent}%` } as CSSProperties}
+            className="range w-full"
           />
           <span className="w-10 tabular-nums">{formatTime(duration)}</span>
         </div>
 
-        {isPreview && (
-          <p className="text-[11px] text-[var(--text-muted)]">
-            Vista previa de 30 s · cortesía de iTunes
-          </p>
-        )}
       </div>
 
-      {/* Volumen */}
       <div className="flex items-center justify-end gap-2 text-[var(--text-muted)]">
         <FiVolume2 aria-hidden="true" />
         <input
@@ -109,7 +103,8 @@ const Player = () => {
           value={volume}
           onChange={(e) => setVolume(Number(e.target.value))}
           disabled={!currentSong}
-          className="w-28 accent-[var(--primary-light)]"
+          style={{ "--fill": `${volume * 100}%` } as CSSProperties}
+          className="range w-28"
         />
       </div>
     </section>

@@ -49,10 +49,9 @@ export const UIShowcase = () => {
   }, []);
 
   return (
-    <main className="ui-showcase min-h-screen bg-(--bg) text-(--text)">
+    <div className="ui-showcase min-h-screen bg-(--bg) text-(--text)">
       <div className="ui-showcase__container">
 
-        {/* ENCABEZADO */}
         <header className="ui-showcase__header">
           <Logo />
 
@@ -61,7 +60,6 @@ export const UIShowcase = () => {
           </span>
         </header>
 
-        {/* PALETA Y TIPOGRAFÍA */}
         <section className="ui-showcase__top-grid">
 
           <div>
@@ -143,7 +141,6 @@ export const UIShowcase = () => {
           </div>
         </section>
 
-        {/* BOTONES, FILTROS E INPUTS */}
         <section className="ui-showcase__middle-grid">
 
           <div className="ui-showcase__controls">
@@ -227,7 +224,6 @@ export const UIShowcase = () => {
             </div>
           </div>
 
-          {/* CARDS DE EJEMPLO */}
           <div className="ui-showcase__songs">
             <h2 className="ui-showcase__eyebrow">Card de canción</h2>
 
@@ -288,7 +284,6 @@ export const UIShowcase = () => {
           </div>
         </section>
 
-        {/* REPRODUCTOR */}
         <section className="ui-showcase__player-section">
           <h2 className="ui-showcase__eyebrow">Reproductor</h2>
 
@@ -324,7 +319,6 @@ export const UIShowcase = () => {
         </section>
       </div>
 
-      {/* MODAL */}
       <Modal
         open={modalOpen}
         title="Confirmar acción"
@@ -338,6 +332,6 @@ export const UIShowcase = () => {
           ¿Estás seguro de que querés continuar?
         </p>
       </Modal>
-    </main>
+    </div>
   );
 };

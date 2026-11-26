@@ -8,7 +8,6 @@ import { TbPlaylist } from "react-icons/tb";
 import Logo from "../../assets/Favicon.sonora.png";
 import { useAuth } from "../../context/useAuth";
 
-// Primera letra de las dos primeras palabras: "Sofía Paz" -> "SP"
 const getInitials = (name: string) =>
   name
     .split(" ")
@@ -17,7 +16,7 @@ const getInitials = (name: string) =>
     .join("");
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
-  `rounded-lg p-2 transition-colors ${
+  `flex min-h-11 items-center rounded-lg p-2 transition-colors ${
     isActive
       ? "bg-[var(--primary)]/20 text-[var(--primary-text)]"
       : "text-[var(--text-muted)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
@@ -30,7 +29,6 @@ const Navbar = () => {
 
   const closeMenu = () => setIsOpen(false);
 
-  // Escape cierra el menú del celular
   useEffect(() => {
     if (!isOpen) return;
 
@@ -50,11 +48,10 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Barra superior: solo en celular y tablet */}
       <header className="fixed inset-x-0 top-0 z-40 flex h-16 items-center justify-between border-b border-[var(--border)] bg-[var(--bg)] px-4 lg:hidden">
         <div className="flex items-center gap-2">
           <img src={Logo} alt="" className="h-9 w-9" />
-          <span className="text-lg font-bold text-[var(--text)]">sonora</span>
+          <span className="text-lg font-bold uppercase tracking-[0.2em] text-[var(--text)]">sonora</span>
         </div>
         <button
           type="button"
@@ -80,20 +77,20 @@ const Navbar = () => {
       <section
         id="sidebar-nav"
         className={`fixed inset-y-0 left-0 z-50 flex h-screen w-64 shrink-0 flex-col border-r border-[var(--border)] bg-[var(--bg)] text-[var(--text)] transition-transform duration-300 lg:sticky lg:top-0 lg:z-auto lg:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+          isOpen ? "translate-x-0" : "-translate-x-full max-lg:invisible"
         }`}
       >
         <nav className="flex h-full flex-col gap-2 overflow-y-auto p-4">
           <div className="mb-4 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <img src={Logo} alt="" className="h-16 w-16" />
-              <span className="text-xl font-bold">sonora</span>
+              <span className="text-xl font-bold uppercase tracking-[0.2em]">sonora</span>
             </div>
             <button
               type="button"
               onClick={closeMenu}
               aria-label="Cerrar menú"
-              className="rounded p-2 hover:bg-[var(--surface-2)] lg:hidden"
+              className="flex size-11 items-center justify-center rounded-lg hover:bg-[var(--surface-2)] lg:hidden"
             >
               <MdClose className="text-2xl" aria-hidden="true" />
             </button>
@@ -106,7 +103,6 @@ const Navbar = () => {
             </span>
           </NavLink>
 
-          {/* Mi Playlist solo con sesión */}
           {user && (
             <NavLink to="/playlist" className={linkClass} onClick={closeMenu}>
               <span className="flex items-center gap-2">
@@ -123,7 +119,6 @@ const Navbar = () => {
             </span>
           </NavLink>
 
-          {/* Panel solo para el rol admin */}
           {user?.role === "admin" && (
             <NavLink to="/admin" className={linkClass} onClick={closeMenu}>
               <span className="flex items-center gap-2">
@@ -155,7 +150,6 @@ const Navbar = () => {
                 </button>
               </div>
             ) : (
-              // Visitante: invitación a crear cuenta
               <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-4">
                 <p className="font-semibold text-[var(--text)]">Armá tu playlist</p>
                 <p className="mt-1 text-xs text-[var(--text-muted)]">

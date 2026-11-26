@@ -8,15 +8,12 @@ interface FormFieldProps {
   type?: "text" | "email" | "password";
   placeholder: string;
   autoComplete: string;
-  // Lo que devuelve register("campo") de React Hook Form
   registration: UseFormRegisterReturn;
   error?: string;
-  // Borde rojo sin mensaje (por ejemplo, el error general del login)
   invalid?: boolean;
   helper?: string;
 }
 
-// Campo con etiqueta, borde rojo, mensaje de error y "Mostrar" para contraseñas
 const FormField = ({
   id,
   label,
@@ -65,7 +62,7 @@ const FormField = ({
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             aria-label={showPassword ? `Ocultar ${label.toLowerCase()}` : `Mostrar ${label.toLowerCase()}`}
-            className="flex shrink-0 items-center gap-1 text-xs font-semibold text-[var(--primary-text)]"
+            className="flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-2 text-xs font-semibold text-[var(--primary-text)] hover:bg-[var(--surface-3)]"
           >
             {showPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
             {showPassword ? "Ocultar" : "Mostrar"}

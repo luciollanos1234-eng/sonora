@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import type { Song } from "../../types";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
@@ -18,18 +18,15 @@ interface SongFormValues {
 
 interface SongsFormProps {
   onSave: (song: Song) => void;
-  // Si viene una canción, el formulario sirve para editarla
   song?: Song;
   genres: string[];
 }
 
-// Acepta URLs completas o rutas locales como las portadas del seed
 const URL_PATTERN = {
   value: /^(https?:\/\/|\/)\S+$/,
   message: "La URL tiene que empezar con http://, https:// o /.",
 };
 
-// 222000 ms -> "3:42"
 const msToTime = (ms: number) => {
   const totalSeconds = Math.floor(ms / 1000);
   const seconds = String(totalSeconds % 60).padStart(2, "0");
@@ -40,7 +37,7 @@ export const SongsForm = ({ onSave, song, genres }: SongsFormProps) => {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = useForm<SongFormValues>({
     defaultValues: {
@@ -57,10 +54,9 @@ export const SongsForm = ({ onSave, song, genres }: SongsFormProps) => {
 
   const currentYear = new Date().getFullYear();
   const errorCount = Object.keys(errors).length;
-  const coverPreview = watch("cover");
+  const coverPreview = useWatch({ control, name: "cover" });
 
   const submit = (values: SongFormValues) => {
-    // "3:42" -> 222000 ms; sin duración queda en 0
     let duration = 0;
     if (values.duration) {
       const [minutes, seconds] = values.duration.split(":");
@@ -123,7 +119,6 @@ export const SongsForm = ({ onSave, song, genres }: SongsFormProps) => {
         })}
       />
 
-      {/* Género: lista con los géneros del catálogo */}
       <div className="flex flex-col gap-2">
         <label htmlFor="song-genre" className="text-sm font-semibold text-[var(--text)]">
           Género
@@ -160,7 +155,6 @@ export const SongsForm = ({ onSave, song, genres }: SongsFormProps) => {
         })}
       />
 
-      {/* Portada con vista previa */}
       <div className="flex items-end gap-3 sm:col-span-2">
         <div className="flex-1">
           <Input

@@ -55,7 +55,7 @@ const Detail = () => {
     <section className="px-4 py-6 sm:px-8">
       <Link
         to="/"
-        className="inline-flex items-center gap-1 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold hover:bg-[var(--surface-2)]"
+        className="inline-flex min-h-11 items-center gap-1 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold hover:bg-[var(--surface-2)]"
       >
         <FiChevronLeft aria-hidden="true" />
         Volver al catálogo
@@ -138,7 +138,6 @@ const Detail = () => {
                   <dt className="text-[11px] uppercase tracking-wider text-[var(--text-muted)]">
                     Duración
                   </dt>
-                  {/* duration viene en milisegundos */}
                   <dd className="font-semibold">
                     {song.duration
                       ? formatTime(song.duration / 1000)
@@ -190,7 +189,6 @@ const Detail = () => {
       )}
 
       {!song && (
-        /* Canción inexistente o borrada desde Admin */
         <div className="mx-auto mt-12 flex max-w-md flex-col items-center text-center">
           <div
             aria-hidden="true"

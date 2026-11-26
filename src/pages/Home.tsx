@@ -16,17 +16,14 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("Todos");
 
-  // Lee las canciones guardadas, no solamente las del seed.
   const songs = getSongs();
 
-  // Los géneros se generan a partir del catálogo actual.
   const genres = [
     ...new Set(songs.map((song) => song.genre).filter(Boolean)),
   ].sort((a, b) => a.localeCompare(b, "es"));
 
   const normalizedSearch = normalize(search);
 
-  // La búsqueda y el género se aplican al mismo tiempo.
   const filteredSongs = songs.filter((song) => {
     const matchesGenre =
       selectedGenre === "Todos" || song.genre === selectedGenre;
@@ -68,20 +65,18 @@ const Home = () => {
 
   return (
     <div>
-      {/* Banner principal */}
       <section className="px-4 pt-6 sm:px-8 sm:pt-8">
         <div className="relative flex min-h-40 flex-col justify-center overflow-hidden rounded-lg bg-[image:var(--gradient-button)] p-6 text-[var(--text)] sm:flex-row sm:items-center sm:justify-between sm:p-8">
           <div className="relative z-10">
-            <h2 className="mb-2 text-2xl font-extrabold sm:text-3xl lg:text-4xl">
+            <p className="mb-2 text-2xl font-extrabold sm:text-3xl lg:text-4xl">
               Tu música. Tu espacio. Tu ritmo.
-            </h2>
+            </p>
 
             <p className="text-base sm:text-lg">
               Buscá tu música favorita en nuestro catálogo
             </p>
           </div>
 
-          {/* En celular el disco queda de fondo, atrás del texto */}
           <div className="absolute -bottom-4 -right-4 flex items-center gap-2 opacity-40 sm:static sm:gap-4 sm:opacity-100">
             <img
               src={Logo}
@@ -94,12 +89,10 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Catálogo */}
       <section
         aria-labelledby="catalog-title"
         className="mt-8 space-y-5 px-4 pb-10 sm:px-8"
       >
-        {/* Título y buscador */}
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <h1
             id="catalog-title"
@@ -140,7 +133,6 @@ const Home = () => {
           </div>
         </header>
 
-        {/* Cantidad de resultados */}
         <div
           role="status"
           aria-live="polite"
@@ -159,14 +151,12 @@ const Home = () => {
           )}
         </div>
 
-        {/* Filtros por género */}
         <GenreFilters
           genres={genres}
           selectedGenre={selectedGenre}
           onGenreChange={setSelectedGenre}
         />
 
-        {/* Resultados o estado vacío */}
         {filteredSongs.length > 0 ? (
           <SongGrid songs={filteredSongs} />
         ) : (
